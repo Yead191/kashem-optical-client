@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+a.active{
+  background-color: white;
+  background: white
+}
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&display=swap');
+
+.cinzel {
+  font-family: "Cinzel", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
