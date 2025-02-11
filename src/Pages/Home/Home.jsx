@@ -5,7 +5,7 @@ import PopularProduct from '../../components/Popular Product/PopularProduct';
 
 const Home = () => {
     return (
-        <div className='bg-base-200'>
+        <div className=''>
             <Seo title={"Home | Kashem Optical"} />
             <BannerSlide></BannerSlide>
             <PopularProduct></PopularProduct>

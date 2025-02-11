@@ -35,7 +35,7 @@ const Register = () => {
         // console.log(values)
         await toast.promise(creteUser(values.email, values.password), {
             loading: "Creating account...",
-            success: <b>Signed up successfull!</b>,
+            success: <b>Signed up successfully!</b>,
             error: <b>Could not signup.</b>,
         });
         await updateUserProfile(values.name, values?.photo);

@@ -8,37 +8,41 @@ import { MdDashboard } from 'react-icons/md';
 import { PiSignIn, PiSignOut } from 'react-icons/pi';
 import useAuth from '../hooks/useAuth';
 import { FaUser } from 'react-icons/fa6';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+import { useQuery } from 'react-query';
+import useAxiosPublic from '../hooks/useAxiosPublic';
+import UpdateProfile from './UpdateProfile';
+
+
+// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
+// Modal.setAppElement('#yourAppElement');
 
 const Navbar = () => {
-    const { user, logOut } = useAuth()
+    const { user, logOut, updateUserProfile, setLoading, loading } = useAuth()
+
+
+
+    const axiosSecure = useAxiosSecure()
+    const axiosPublic = useAxiosPublic()
     // const [cart] = useCart()
     // const totalPrice = cart.reduce((total, item) => total + item.price, 0)
     // console.log(cart);
     // console.log(user);
     // const [isAdmin, isAdminLoading] = useAdmin()
 
-    const links = <div className='flex lg:items-center flex-col lg:flex-row'>
-        <li><NavLink style={{ fontVariant: 'small-caps' }} to={'/'}>Home</NavLink></li>
-        <li><NavLink style={{ fontVariant: 'small-caps' }} to={'/menu'}>Menu</NavLink></li>
-        <li><NavLink style={{ fontVariant: 'small-caps' }} to={'/order/salad'}>Products</NavLink></li>
-        {/* <li><NavLink style={{ fontVariant: 'small-caps' }} to={'/secret'}>Secret</NavLink></li> */}
-        {/* {
-            user && isAdmin && <Link to={`dashboard/adminHome`} style={{ fontVariant: 'small-caps' }} className='btn btn-ghost'>
-                <MdDashboard className='text-lg' /> Dashboard
-            </Link>
-        }
-        {
-            user && !isAdmin && <Link to={`dashboard/userHome`} style={{ fontVariant: 'small-caps' }} className='btn btn-ghost'>
-                <MdDashboard className='text-lg' /> Dashboard
-            </Link>
-        } */}
-        {/* {
-            user ?
-                <> </>
-                :
-                <li><NavLink style={{ fontVariant: 'small-caps' }} to={'/login'}>Login</NavLink></li>
 
-        } */}
+
+
+
+    const links = <div className='flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row'>
+        <NavLink className={({ isActive }) =>
+            ` ${isActive ? "text-white opacity-100 font-semibold  border-b-2 border-white rounded-none p-2 focus:outline-none focus:ring-0" : "text-white opacity-80"}`
+        }
+            style={{ fontVariant: 'small-caps' }} to={'/'}>Home</NavLink>
+        <NavLink className={({ isActive }) =>
+            `flex items-center gap-3 ${isActive ? "text-white opacity-100 font-semibold border-b-2 rounded-none p-2 focus:outline-none focus:ring-0" : "text-white opacity-80"
+            }`
+        } style={{ fontVariant: 'small-caps' }} to={'/products'}>Products</NavLink>
 
     </div>
 
@@ -60,6 +64,11 @@ const Navbar = () => {
     //     </div>
 
     // }
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+
 
     return (
         <div className="navbar fixed z-10 bg-black  text-white lg:px-28 py-0">
@@ -148,29 +157,10 @@ const Navbar = () => {
                                         Order Food
                                     </NavLink>
                                 </li>
-                                {/* {
-                                    user && isAdmin && <li>
-                                        <NavLink onClick={() => (document.getElementById("my-drawer-2").checked = false)} to={`dashboard/adminHome`} style={{ fontVariant: 'small-caps' }} className=''>
-                                            <MdDashboard className='text-lg' /> Dashboard
-                                        </NavLink>
-                                    </li>
-                                }
-                                {
-                                    user && !isAdmin && <li>
-                                        <NavLink onClick={() => (document.getElementById("my-drawer-2").checked = false)} to={`dashboard/userHome`} style={{ fontVariant: 'small-caps' }} className=''>
-                                            <MdDashboard className='text-lg' /> Dashboard
-                                        </NavLink>
-                                    </li>
-                                } */}
+
 
                             </ul>
-                            {/* {
 
-                                user && user?.email ?
-                                    <button onClick={() => handleLogout()} className=" btn bg-base-100 btn-sm  w-full md:hidden"> Sign Out <PiSignOut className='text-lg' /></button>
-                                    :
-                                    <Link onClick={() => (document.getElementById("my-drawer-2").checked = false)} to='/login' className="btn btn-sm bg-base-100 w-full md:hidden"><PiSignIn className='text-lg' /> Login</Link>
-                            } */}
                         </div>
                     </div>
                     <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-white text-xl lg:text-2xl font-semibold lg:hidden' >
@@ -247,9 +237,16 @@ const Navbar = () => {
                                 <li>
                                     <p className='text-slate-800'>{user?.displayName}</p>
                                 </li>
+
                                 <hr className='my-2' />
                                 <li>
-                                    <Link className='text-black'>
+                                    <button onClick={() => setIsModalOpen(true)} className="text-black">
+                                        <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
+                                        Edit Profile
+                                    </button>
+                                </li>
+                                <li>
+                                    <Link to={'/dashboard'} className='text-black'>
                                         <MdDashboard>
                                         </MdDashboard>
                                         Dashboard
@@ -265,11 +262,17 @@ const Navbar = () => {
 
                 {
                     user ?
-                        <button onClick={handleLogout} className="btn btn-ghost hover:bg-neutral ">Log Out</button>
+                        <button onClick={handleLogout} className="btn btn-sm bg-white hover:btn-neutral ml-2 ">Log Out</button>
                         :
                         <Link to={'/login'} className="btn btn-ghost btn-sm px-5 rounded-sm hover:bg-white hover:text-black ">Login</Link>
                 }
-            </div>
+            </div >
+            {/* Modal */}
+
+            {
+                isModalOpen && <UpdateProfile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} ></UpdateProfile>
+            }
+
             <div className="navbar-end lg:hidden">
                 <div className="flex-none ">
                     <div className="dropdown dropdown-end">
@@ -324,7 +327,14 @@ const Navbar = () => {
                             <li>
                                 <p className='text-slate-800'>{user?.displayName}</p>
                             </li>
+
                             <hr className='my-2' />
+                            <li>
+                                <button onClick={() => setIsModalOpen(true)} className="text-black">
+                                    <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
+                                    Edit Profile
+                                </button>
+                            </li>
                             <li>
                                 <Link className='text-black'>
                                     <MdDashboard>
@@ -351,7 +361,7 @@ const Navbar = () => {
 
 
             </div>
-        </div>
+        </div >
     );
 };
 
