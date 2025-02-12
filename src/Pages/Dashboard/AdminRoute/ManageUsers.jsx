@@ -4,6 +4,7 @@ import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Seo from '../../../components/Seo/Seo';
 import toast from 'react-hot-toast';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const ManageUsers = () => {
     const { user } = useAuth()
@@ -27,8 +28,11 @@ const ManageUsers = () => {
         });
         refetch()
     }
+    if (isLoading) {
+        return <Spinner></Spinner>
+    }
     return (
-        <div className='my-12'>
+        <div className='my-10 p-2'>
             <Seo title={'Users | Kashem Optical'}></Seo>
             <div className="mb-6 text-center">
                 <h2 className="text-3xl xl:text-4xl font-bold pb-3">
@@ -46,8 +50,9 @@ const ManageUsers = () => {
                                 </th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Phone no.</th>
                                 <th>Member Since</th>
-                                <th className='flex justify-end'>Action</th>
+                                <th className='flex justify-end'>Role</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,6 +78,9 @@ const ManageUsers = () => {
                                     </td>
                                     <td>
                                         {user?.email}
+                                    </td>
+                                    <td>
+                                        {user?.mobile}
                                     </td>
                                     <td>{user?.createdAt}</td>
                                     <th className="flex items-center justify-end h-full">

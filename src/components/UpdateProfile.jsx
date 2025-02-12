@@ -5,14 +5,16 @@ import useAxiosSecure from '../hooks/useAxiosSecure';
 import useAuth from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { uploadToImgbb } from './UploadImage';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
     const navigate = useNavigate()
+    const location = useLocation()
     const axiosPublic = useAxiosPublic()
     const axiosSecure = useAxiosSecure()
     const { user, updateUserProfile, } = useAuth()
     // const [loggedUser, setLoggedUser] = useState({})
+    // console.log(location);
 
     const { data: loggedUser, refetch } = useQuery({
         queryKey: ['loggedUser', user],
@@ -60,7 +62,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
     const handleSave = async () => {
         // handleProfileUpdate({ name, mobile, image });
         const updateInfo = {
-            name, mobile, image
+            name, mobile, image, email: user.email
         }
         setIsModalOpen(false);
         await toast.promise(
@@ -72,7 +74,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
             }
         );
         await axiosSecure.put(`/users/profile/${loggedUser._id}`, updateInfo)
-        navigate('/')
+        navigate(location.pathname)
         setIsOpen(false);
         refetch()
     };

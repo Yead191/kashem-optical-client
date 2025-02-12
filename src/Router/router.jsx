@@ -8,6 +8,8 @@ import Register from "../components/Register/Register";
 import DashboardIndex from "../Root/Dashboard/DashboardIndex";
 import Products from "../Pages/Products/Products";
 import ManageUsers from "../Pages/Dashboard/AdminRoute/ManageUsers";
+import ManageCategory from "../Pages/Dashboard/AdminRoute/ManageCategory";
+import ManageProducts from "../Pages/Dashboard/AdminRoute/ManageProducts";
 
 const router = createBrowserRouter([
     {
@@ -36,11 +38,19 @@ const router = createBrowserRouter([
     {
         path: '/dashboard',
         element: <DashboardIndex></DashboardIndex>,
-        children:[
+        children: [
             // admin routes
             {
                 path: 'admin/manage-users',
                 element: <ManageUsers></ManageUsers>
+            },
+            {
+                path: 'admin/manage-category',
+                element: <ManageCategory></ManageCategory>
+            },
+            {
+                path: 'admin/manage-products',
+                element: <ManageProducts></ManageProducts>
             },
         ]
     },

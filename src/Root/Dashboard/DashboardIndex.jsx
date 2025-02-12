@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     FaHome,
     FaCartPlus,
@@ -15,7 +15,8 @@ import { FaUser, FaUsers } from "react-icons/fa6";
 import { ImSpoonKnife } from "react-icons/im";
 import { IoMdMenu } from "react-icons/io";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
-import { ChartNoAxesCombined, LayoutGrid, UserRoundCog } from "lucide-react";
+import { ChartNoAxesCombined, LayoutGrid, Store, UserRoundCog } from "lucide-react";
+import Spinner from "../../components/Spinner/Spinner";
 
 
 const DashboardIndex = () => {
@@ -29,6 +30,17 @@ const DashboardIndex = () => {
         }
     };
     const isAdmin = true
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000);
+    }, [])
+    if (loading) {
+        return <Spinner></Spinner>
+    }
     return (
         <div className="drawer lg:drawer-open h-screen lato">
             {/* Drawer Toggle Checkbox */}
@@ -97,13 +109,25 @@ const DashboardIndex = () => {
                                     <li>
                                         <NavLink
                                             onClick={handleNavClick}
-                                            to={'/dashboard/manage-users'}
+                                            to={'/dashboard/admin/manage-category'}
                                             className={({ isActive }) =>
                                                 `flex items-center gap-3 ${isActive ? " rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
                                                 }`
                                             }
                                         >
                                             <LayoutGrid className="text-xs w-4 h-4"></LayoutGrid> <span>Manage Category</span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            onClick={handleNavClick}
+                                            to={'/dashboard/admin/manage-products'}
+                                            className={({ isActive }) =>
+                                                `flex items-center gap-3 ${isActive ? " rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
+                                                }`
+                                            }
+                                        >
+                                            <Store className="text-xs w-4 h-4"></Store> <span>Manage Products</span>
                                         </NavLink>
                                     </li>
 

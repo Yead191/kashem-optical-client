@@ -28,6 +28,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^7.1.5",
     "sort-by": "^1.2.0",
+    "sweetalert2": "^11.16.0",
     "swiper": "^11.2.2"
   },
   "devDependencies": {

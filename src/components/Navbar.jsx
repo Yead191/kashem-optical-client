@@ -71,7 +71,7 @@ const Navbar = () => {
 
 
     return (
-        <div className="navbar fixed z-10 bg-black  text-white lg:px-28 py-0">
+        <div className="navbar fixed z-10 bg-black bg-opacity-90  text-white lg:px-28 py-0">
             <div className='navbar-start '>
                 <div className="drawer lg:hidden flex items-center">
                     <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -233,18 +233,20 @@ const Navbar = () => {
                             </div>
                             <ul
                                 tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                                className="menu menu-sm dropdown-content bg-base-100 rounded-md z-[1] mt-3 w-52 p-2 shadow">
                                 <li>
                                     <p className='text-slate-800'>{user?.displayName}</p>
                                 </li>
 
                                 <hr className='my-2' />
-                                <li>
-                                    <button onClick={() => setIsModalOpen(true)} className="text-black">
-                                        <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
-                                        Edit Profile
-                                    </button>
-                                </li>
+                                {
+                                    user && <li>
+                                        <button onClick={() => setIsModalOpen(true)} className="text-black">
+                                            <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
+                                            Update Profile
+                                        </button>
+                                    </li>
+                                }
                                 <li>
                                     <Link to={'/dashboard'} className='text-black'>
                                         <MdDashboard>
@@ -323,20 +325,22 @@ const Navbar = () => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-md z-[1] mt-3 w-52 p-2 shadow">
                             <li>
                                 <p className='text-slate-800'>{user?.displayName}</p>
                             </li>
 
                             <hr className='my-2' />
+                            {
+                                user && <li>
+                                    <button onClick={() => setIsModalOpen(true)} className="text-black">
+                                        <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
+                                        Update Profile
+                                    </button>
+                                </li>
+                            }
                             <li>
-                                <button onClick={() => setIsModalOpen(true)} className="text-black">
-                                    <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
-                                    Edit Profile
-                                </button>
-                            </li>
-                            <li>
-                                <Link className='text-black'>
+                                <Link to={'/dashboard'} className='text-black'>
                                     <MdDashboard>
                                     </MdDashboard>
                                     Dashboard

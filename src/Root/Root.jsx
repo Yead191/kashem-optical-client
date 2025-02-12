@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Outlet } from 'react-router-dom';
+import Spinner from '../components/Spinner/Spinner';
 
 const Root = () => {
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000);
+    }, [])
+    if (loading) {
+        return <Spinner></Spinner>
+    }
     return (
         <div className='flex flex-col min-h-screen lato'>
             <nav className='h-[64px]'>
