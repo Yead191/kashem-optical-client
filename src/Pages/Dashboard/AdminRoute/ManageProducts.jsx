@@ -6,10 +6,12 @@ import { useQuery } from 'react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { MdOutlineMoreHoriz } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import UpdateProductModal from '../../../components/Modal/UpdateProductModal';
 
 const ManageProducts = () => {
     const axiosSecure = useAxiosSecure()
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const { data: products = [], refetch } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
@@ -47,6 +49,14 @@ const ManageProducts = () => {
         });
     }
 
+    const [updateItem, setUpdateItem] = useState({})
+
+    const handleUpdateProduct = item => {
+        setUpdateItem(item)
+        setUpdateModalOpen(true)
+
+    }
+
 
 
     return (
@@ -69,6 +79,12 @@ const ManageProducts = () => {
                 refetch={refetch}
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+            />
+            <UpdateProductModal
+                updateItem={updateItem}
+                refetch={refetch}
+                isOpen={updateModalOpen}
+                onClose={() => setUpdateModalOpen(false)}
             />
 
             <div className='container mx-auto'>
@@ -117,7 +133,10 @@ const ManageProducts = () => {
                                     <td>{product?.gender}</td>
                                     <td>{product?.origin}</td>
                                     <td>{product?.price}</td>
-                                    <td>{product?.status}</td>
+                                    <td className={product?.status === 'In Stock' ? 'text-green-600' : 'text-red-500'}>
+                                        {product?.status}
+
+                                    </td>
                                     <th className="flex items-center justify-end h-full">
                                         <div className="dropdown dropdown-end">
                                             <button tabIndex={0} className="btn btn-sm btn-ghost">
@@ -125,7 +144,7 @@ const ManageProducts = () => {
                                             </button>
                                             <ul tabIndex={0} className="dropdown-content rounded-md menu p-2 shadow bg-base-100 w-48 z-40">
                                                 <li>
-                                                    <button className='font-normal'>Update Product</button>
+                                                    <button onClick={() => handleUpdateProduct(product)} className='font-normal'>Update Product</button>
                                                 </li>
                                                 <li>
                                                     <button onClick={() => handleDelete(product._id)} className="text-red-500 font-normal">Delete Product</button>
