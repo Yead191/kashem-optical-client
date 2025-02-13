@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Category({ category }) {
     return (
-        <Link to={`/product/${category?.name}`}>
+        <Link to={`/products?category=${category?.name}`}>
             <div
                 className="bg-cover bg-no-repeat  object-cover  p-4 bg-black/60 bg-blend-overlay text-white rounded-md"
                 style={{ backgroundImage: `url('${category?.image}')` }}

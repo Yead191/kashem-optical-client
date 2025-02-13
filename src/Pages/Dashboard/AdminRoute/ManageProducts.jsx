@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Seo from '../../../components/Seo/Seo';
 import { IoMdAddCircle } from 'react-icons/io';
 import AddProductModal from '../../../components/Modal/AddProductModal';
@@ -7,18 +7,39 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { MdOutlineMoreHoriz } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import UpdateProductModal from '../../../components/Modal/UpdateProductModal';
+import { Menu } from "@headlessui/react";
+import { Filter } from 'lucide-react';
+import useCategory from '../../../hooks/useCategory';
+
 
 const ManageProducts = () => {
     const axiosSecure = useAxiosSecure()
+    const [categories, categoriesLoading] = useCategory();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
-    const { data: products = [], refetch } = useQuery({
-        queryKey: ['products'],
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+
+    const { data: products = [], isLoading, refetch } = useQuery({
+        queryKey: ['products', selectedCategory,],
         queryFn: async () => {
-            const res = await axiosSecure.get('/products')
-            return res.data
+            const res = await axiosSecure.get(`/products?search=${searchTerm}&category=${selectedCategory}`);
+            return res.data;
         }
-    })
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [searchTerm, selectedCategory, refetch]);
+
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category.name);
+    };
+
+    const handleClearFilter = () => {
+        setSelectedCategory("");
+    };
 
     // console.log(products);
     const handleDelete = id => {
@@ -68,7 +89,91 @@ const ManageProducts = () => {
                 </h2>
             </div>
             {/* Button to open modal */}
-            <div className="flex justify-end mb-4">
+
+            {/*  */}
+
+
+            {/*  */}
+
+
+
+
+
+            <div className="flex justify-between items-center mb-10">
+                <div className='flex flex-row-reverse gap-2 items-center '>
+                    <div className="join flex justify-center items-center relative">
+                        <div className="relative">
+                            <input
+                                className="input input-sm input-bordered min-w-64 md:min-w-96"
+                                placeholder="Search By Name"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            {searchTerm && (
+                                <button
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                    onClick={() => setSearchTerm("")}
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+                        {/* <div className="indicator">
+                        <button onClick={handleSearch} className="btn btn-sm join-item">
+                            Search
+                        </button>
+                    </div> */}
+                    </div>
+
+                    <div className='flex items-center gap-2'>
+                        
+                        <div className="relative">
+                            <Menu as="div" className="relative inline-block text-left">
+                                {({ open }) => (
+                                    <>
+                                        <Menu.Button className={`btn btn-sm flex items-center gap-2 ${selectedCategory && 'btn-success'}`}>
+                                            <span className='hidden md:flex'>Filter</span>
+                                            <Filter className="inline-flex" />
+                                        </Menu.Button>
+
+                                        {open && (
+                                            <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200 z-10">
+                                                <Menu.Items className="p-2">
+                                                    {categoriesLoading ? (
+                                                        <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                                                    ) : categories.length > 0 ? (
+                                                        categories?.map((category, index) => (
+                                                            <Menu.Item key={index}>
+                                                                {({ active }) => (
+                                                                    <button
+                                                                        onClick={() => handleCategorySelect(category)}
+                                                                        className={`block w-full text-left px-4 py-2 text-sm rounded-md ${selectedCategory === category?.name ? "bg-gray-200" : "hover:bg-base-300"}`}
+                                                                    >
+                                                                        {category?.name}
+                                                                    </button>
+                                                                )}
+                                                            </Menu.Item>
+                                                        ))
+                                                    ) : (
+                                                        <div className="px-4 py-2 text-sm text-gray-500">No categories found</div>
+                                                    )}
+                                                    <div className="mt-2">
+                                                        <button
+                                                            onClick={handleClearFilter}
+                                                            className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                                                        >
+                                                            Clear Filter
+                                                        </button>
+                                                    </div>
+                                                </Menu.Items>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </Menu>
+                        </div>
+                    </div>
+                </div>
                 <button onClick={() => setIsModalOpen(true)} className="btn  btn-neutral btn-sm rounded-md font-normal flex items-center gap-2">
                     <IoMdAddCircle className="text-lg" />
                     Add New Product

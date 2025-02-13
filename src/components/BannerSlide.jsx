@@ -28,7 +28,7 @@ const BannerSlide = () => {
                 <SwiperSlide>
 
                     <div className="lg:h-[80vh]">
-                        <img className="w-full h-full object-cover " src={banner1} alt="" />
+                        <img className="w-full h-full object-cover object-bottom" src={banner1} alt="" />
                     </div>
 
 
