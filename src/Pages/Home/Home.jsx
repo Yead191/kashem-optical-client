@@ -26,7 +26,7 @@ const Home = () => {
                 className="grid
          grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-4 gap-4 container mx-auto"
             >
-                {categories.slice(0, 6)?.map((category) => (
+                {categories?.map((category) => (
                     <Category category={category} key={category._id} />
                 ))}
             </div>
