@@ -42,7 +42,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
     // console.log(loggedUser);
 
 
-    const [name, setName] = useState(loggedUser?.name);
+    const [name, setName] = useState(loggedUser?.name );
     const [mobile, setMobile] = useState(loggedUser?.mobile);
     const [image, setImage] = useState(loggedUser?.image);
 

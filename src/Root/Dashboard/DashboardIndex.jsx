@@ -10,7 +10,7 @@ import {
     FaShoppingBag,
     FaEnvelope,
 } from "react-icons/fa";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, ScrollRestoration } from "react-router-dom";
 import { FaUser, FaUsers } from "react-icons/fa6";
 import { ImSpoonKnife } from "react-icons/im";
 import { IoMdMenu } from "react-icons/io";
@@ -43,6 +43,7 @@ const DashboardIndex = () => {
     }
     return (
         <div className="drawer lg:drawer-open h-screen lato">
+            <ScrollRestoration />
             {/* Drawer Toggle Checkbox */}
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col">

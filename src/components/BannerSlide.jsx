@@ -19,23 +19,23 @@ const BannerSlide = () => {
                     dynamicBullets: true,
                 }}
                 autoplay={{
-                    delay: 2500,
+                    delay: 1500,
                     disableOnInteraction: false,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
-                className="mySwiper"
+                className="mySwiper lg:h-[70vh]"
             >
                 <SwiperSlide>
 
-                    <div className="lg:h-[80vh]">
-                        <img className="w-full h-full object-cover object-bottom" src={banner1} alt="" />
+                    <div className="">
+                        <img className="w-full h-full  object-bottom" src={banner1} alt="" />
                     </div>
 
 
                 </SwiperSlide>
                 <SwiperSlide>
 
-                    <div className="lg:h-[80vh]">
+                    <div className="">
                         <img className="w-full h-full object-cover " src={banner2} alt="" />
                     </div>
 
@@ -43,7 +43,7 @@ const BannerSlide = () => {
                 </SwiperSlide>
                 <SwiperSlide>
 
-                    <div className="lg:h-[80vh]">
+                    <div className="">
                         <img className="w-full h-full object-cover " src={banner3} alt="" />
                     </div>
 

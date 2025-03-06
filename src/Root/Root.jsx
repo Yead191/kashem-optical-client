@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 import Spinner from '../components/Spinner/Spinner';
 
 const Root = () => {
@@ -18,6 +18,7 @@ const Root = () => {
     }
     return (
         <div className='flex flex-col min-h-screen lato'>
+            <ScrollRestoration />
             <nav className='h-[64px]'>
                 <Navbar></Navbar>
             </nav>

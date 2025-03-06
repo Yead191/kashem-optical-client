@@ -12,6 +12,7 @@ import { IoWarningOutline } from 'react-icons/io5';
 import useAuth from '../../hooks/useAuth';
 import Seo from '../Seo/Seo';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
+import SocialLogin from '../SocialLogin/SocialLogin';
 
 
 
@@ -75,7 +76,7 @@ const Register = () => {
                 {/* Right Section */}
                 <div className="p-8 lg:w-1/2 flex flex-col justify-center items-center">
                     <h2 className="text-3xl font-bold mb-4 text-gray-800">Create Account</h2>
-                    {/* <SocialLogin></SocialLogin> */}
+                    <SocialLogin></SocialLogin>
 
                     <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
                         <input

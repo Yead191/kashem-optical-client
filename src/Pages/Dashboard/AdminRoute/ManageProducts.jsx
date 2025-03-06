@@ -131,7 +131,7 @@ const ManageProducts = () => {
                             <Menu as="div" className="relative inline-block text-left">
                                 {({ open }) => (
                                     <>
-                                        <Menu.Button className={`btn btn-sm flex items-center gap-2 ${selectedCategory && 'btn-success'}`}>
+                                        <Menu.Button className={`btn btn-sm flex items-center gap-2 ${selectedCategory && 'btn-neutral'}`}>
                                             <span className='hidden md:flex'>Filter</span>
                                             <Filter className="inline-flex" />
                                         </Menu.Button>

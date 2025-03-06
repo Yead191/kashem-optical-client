@@ -11,6 +11,7 @@ import axios from 'axios';
 
 import { Helmet } from 'react-helmet-async';
 import useAuth from '../../hooks/useAuth';
+import SocialLogin from '../../components/SocialLogin/SocialLogin';
 // import SocialLogin from '../components/SocialLogin';
 
 
@@ -63,7 +64,7 @@ const Login = () => {
                 {/* Left Section */}
                 <div className="p-8 lg:w-1/2 flex flex-col justify-center items-center">
                     <h2 className="text-3xl font-bold mb-4 text-gray-800">Sign In</h2>
-                    {/* <SocialLogin></SocialLogin> */}
+                    <SocialLogin></SocialLogin>
                     <form onSubmit={handleLogin} className='w-full'>
                         <input
                             name='email'

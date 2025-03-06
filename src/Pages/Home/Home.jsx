@@ -9,7 +9,7 @@ const Home = () => {
     const [categories, categoriesLoading, refetch] = useCategory()
     console.log(categories);
     return (
-        <div className='lg:-mt-[64px]'>
+        <div className=''>
             <Seo title={"Home | Kashem Optical"} />
             <BannerSlide></BannerSlide>
             <div className="mb-6 text-center my-12 mx-auto">

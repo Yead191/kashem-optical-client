@@ -58,7 +58,7 @@ const ManageCategory = () => {
 
     return (
         <div className='my-10 container mx-auto p-2'>
-            <Helmet> <title>Category | Kashem Optical</title> </Helmet>
+            <Seo title={'Category | Kashem Optical'}></Seo>
             <div className="mb-6 text-center">
                 <h2 className="text-3xl xl:text-4xl font-bold pb-3">
                     <span className="text-blue-600">Manage</span> Category

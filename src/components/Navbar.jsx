@@ -36,11 +36,11 @@ const Navbar = () => {
 
     const links = <div className='flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row'>
         <NavLink className={({ isActive }) =>
-            ` ${isActive ? "text-white opacity-100 font-semibold  border-b-2 border-white rounded-none p-2 focus:outline-none focus:ring-0" : "text-white opacity-80"}`
+            ` ${isActive ? "text-black opacity-100 font-semibold  border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0" : "text-black opacity-80"}`
         }
             style={{ fontVariant: 'small-caps' }} to={'/'}>Home</NavLink>
         <NavLink className={({ isActive }) =>
-            `flex items-center gap-3 ${isActive ? "text-white opacity-100 font-semibold border-b-2 rounded-none p-2 focus:outline-none focus:ring-0" : "text-white opacity-80"
+            `flex items-center gap-3 ${isActive ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0" : "text-black opacity-80"
             }`
         } style={{ fontVariant: 'small-caps' }} to={'/products'}>Products</NavLink>
 
@@ -71,7 +71,7 @@ const Navbar = () => {
 
 
     return (
-        <div className="navbar fixed z-10 bg-black bg-opacity-90  text-white lg:px-28 py-0">
+        <div className="navbar fixed z-10 bg-gradient-to-r from-base-100 via-sky-50 to-white bg-opacity-60 lg:px-28 xl:px-32 py-0 border-b">
             <div className='navbar-start '>
                 <div className="drawer lg:hidden flex items-center">
                     <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -87,7 +87,7 @@ const Navbar = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                className="inline-block h-5 w-5 stroke-current text-white">
+                                className="inline-block h-5 w-5 stroke-current text-black">
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
@@ -110,7 +110,7 @@ const Navbar = () => {
                                 </h5>
                                 <label
                                     htmlFor="my-drawer-2"
-                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-black cursor-pointer"
                                 >
                                     <svg
                                         className="w-3 h-3"
@@ -163,12 +163,12 @@ const Navbar = () => {
 
                         </div>
                     </div>
-                    <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-white text-xl lg:text-2xl font-semibold lg:hidden' >
+                    <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl  font-bold lg:hidden' >
                         KO
                     </Link>
                 </div>
 
-                <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-white text-xl lg:text-2xl xl:text-3xl font-semibold hidden lg:flex' >
+                <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl xl:text-[34px] font-bold hidden lg:flex' >
                     Kashem Optical
                 </Link>
             </div>
@@ -235,20 +235,20 @@ const Navbar = () => {
                                 tabIndex={0}
                                 className="menu menu-sm dropdown-content bg-base-100 rounded-md z-[1] mt-3 w-52 p-2 shadow">
                                 <li>
-                                    <p className='text-slate-800'>{user?.displayName}</p>
+                                    <p className='text-slate-800'>{user?.displayName || user?.name}</p>
                                 </li>
 
                                 <hr className='my-2' />
                                 {
-                                    user && <li>
-                                        <button onClick={() => setIsModalOpen(true)} className="text-black">
+                                    user && <li className=''>
+                                        <button onClick={() => setIsModalOpen(true)} className="text-black py-1">
                                             <FaUser className='text-sm w-3 h-3 inline-flex items-center' />
                                             Update Profile
                                         </button>
                                     </li>
                                 }
                                 <li>
-                                    <Link to={'/dashboard'} className='text-black'>
+                                    <Link to={'/dashboard'} className='text-black py-1'>
                                         <MdDashboard>
                                         </MdDashboard>
                                         Dashboard
@@ -264,9 +264,9 @@ const Navbar = () => {
 
                 {
                     user ?
-                        <button onClick={handleLogout} className="btn btn-sm bg-white hover:btn-neutral ml-2 ">Log Out</button>
+                        <button onClick={handleLogout} className="btn btn-neutral btn-sm px-5 rounded-md ml-2">Log Out</button>
                         :
-                        <Link to={'/login'} className="btn btn-ghost btn-sm px-5 rounded-sm hover:bg-white hover:text-black ">Login</Link>
+                        <Link to={'/login'} className="btn btn-neutral btn-sm px-5 rounded-md">Login</Link>
                 }
             </div >
             {/* Modal */}
