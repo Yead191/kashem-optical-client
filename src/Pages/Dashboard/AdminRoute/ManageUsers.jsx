@@ -5,10 +5,14 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Seo from '../../../components/Seo/Seo';
 import toast from 'react-hot-toast';
 import Spinner from '../../../components/Spinner/Spinner';
+import Select from 'react-select';
+import { useState } from 'react';
+
 
 const ManageUsers = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
+    const [selectedRoles, setSelectedRoles] = useState({});
 
 
     const { data: users = [], isLoading, refetch } = useQuery({
@@ -18,15 +22,17 @@ const ManageUsers = () => {
             return res.data
         }
     })
-    const handleRoleChange = async (id, val) => {
-        // console.log(id, val);
+    const handleRoleChange = async (id, selectedOption) => {
+        const role = selectedOption.value;
+        setSelectedRoles((prev) => ({ ...prev, [id]: role }));
 
-        await toast.promise(axiosSecure.patch(`/users/${id}/${val}`), {
+        await toast.promise(axiosSecure.patch(`/users/${id}/${role}`), {
             loading: "Updating role...",
             success: <b>Role updated successfully!</b>,
             error: <b>Could not update.</b>,
         });
-        refetch()
+
+        refetch();
     }
     if (isLoading) {
         return <Spinner></Spinner>
@@ -84,16 +90,19 @@ const ManageUsers = () => {
                                     </td>
                                     <td>{user?.createdAt}</td>
                                     <th className="flex items-center justify-end h-full">
-                                        <select
-                                            className="select select-bordered select-sm"
-                                            defaultValue={user?.role}
-                                            onChange={(e) => handleRoleChange(user._id, e.target.value)}
-
-                                        >
-                                            <option disabled>Select Role</option>
-                                            <option value="User">User</option>
-                                            <option value="Admin">Admin</option>
-                                        </select>
+                                        <Select
+                                        isSearchable={false}
+                                            className="w-32"
+                                            value={{
+                                                value: selectedRoles[user._id] || user.role,
+                                                label: selectedRoles[user._id] || user.role
+                                            }}
+                                            onChange={(selectedOption) => handleRoleChange(user._id, selectedOption)}
+                                            options={[
+                                                { value: 'User', label: 'User' },
+                                                { value: 'Admin', label: 'Admin' }
+                                            ]}
+                                        />
                                     </th>
 
                                 </tr>)

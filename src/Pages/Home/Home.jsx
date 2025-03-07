@@ -7,7 +7,7 @@ import Category from '../../components/Category';
 
 const Home = () => {
     const [categories, categoriesLoading, refetch] = useCategory()
-    console.log(categories);
+    // console.log(categories);
     return (
         <div className=''>
             <Seo title={"Home | Kashem Optical"} />

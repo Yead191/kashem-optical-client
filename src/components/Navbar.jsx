@@ -12,6 +12,7 @@ import useAxiosSecure from '../hooks/useAxiosSecure';
 import { useQuery } from 'react-query';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 import UpdateProfile from './UpdateProfile';
+import useCategory from '../hooks/useCategory';
 
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
@@ -24,6 +25,8 @@ const Navbar = () => {
 
     const axiosSecure = useAxiosSecure()
     const axiosPublic = useAxiosPublic()
+    const [categories, categoriesLoading] = useCategory();
+
     // const [cart] = useCart()
     // const totalPrice = cart.reduce((total, item) => total + item.price, 0)
     // console.log(cart);
@@ -43,6 +46,8 @@ const Navbar = () => {
             `flex items-center gap-3 ${isActive ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0" : "text-black opacity-80"
             }`
         } style={{ fontVariant: 'small-caps' }} to={'/products'}>Products</NavLink>
+
+
 
     </div>
 
@@ -168,13 +173,28 @@ const Navbar = () => {
                     </Link>
                 </div>
 
-                <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl xl:text-[34px] font-bold hidden lg:flex' >
+                <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl xl:text-[28px] font-bold hidden lg:flex' >
                     Kashem Optical
                 </Link>
             </div>
             <div className="navbar-end hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 gap-3 ">
                     {links}
+                    {/* <li>
+                        <details>
+                            <summary>Products</summary>
+                            <ul className="p-2 w-40">
+                                {
+                                    categories?.map(category =>
+
+                                        <li><Link to={`/products?category=${category?.name}`}>{category.name}</Link></li>
+                                    )
+                                }
+
+                            </ul>
+                        </details>
+                    </li> */}
+
                 </ul>
 
 
