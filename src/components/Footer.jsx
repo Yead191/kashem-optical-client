@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <div className='bg-gradient-to-r from-base-200 border-t md:items-center md:justify-center'>
+        <div className=' from-base-100 border-t md:items-center md:justify-center'>
             <div className='md:text-center p-2'>
                 <h1 style={{fontVariant: 'small-caps'}} className='font-bold text-4xl pt-16'>Kashem Optical</h1>
                 <p className='text-base text-gray-500 leading-4 mt-3 mb-7 '>Leading the way in cutting-edge technology and innovation.</p>

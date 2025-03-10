@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { MdDashboard } from 'react-icons/md';
+import { Typewriter } from 'react-simple-typewriter';
 
 import { PiSignIn, PiSignOut } from 'react-icons/pi';
 import useAuth from '../hooks/useAuth';
@@ -169,12 +170,32 @@ const Navbar = () => {
                         </div>
                     </div>
                     <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl  font-bold lg:hidden' >
-                        KO
+                        <Typewriter
+                            words={['Kashem Optical', 'KO']}
+                            loop={true}
+                            cursor
+                            cursorStyle="."
+                            typeSpeed={90}
+                            deleteSpeed={70}
+                            delaySpeed={1000}
+                        />
                     </Link>
                 </div>
 
                 <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl xl:text-[28px] font-bold hidden lg:flex' >
-                    Kashem Optical
+                    {/* Kashem <span className='text-blue-500 ml-1'> Optical</span> */}
+
+                    <Typewriter
+                        words={['Kashem Optical', 'KO']}
+                        loop={true}
+                        cursor
+                        cursorStyle="."
+                        typeSpeed={90}
+                        deleteSpeed={70}
+                        delaySpeed={1000}
+                    />
+
+
                 </Link>
             </div>
             <div className="navbar-end hidden lg:flex">
@@ -254,9 +275,13 @@ const Navbar = () => {
                             <ul
                                 tabIndex={0}
                                 className="menu menu-sm dropdown-content bg-base-100 rounded-md z-[1] mt-3 w-52 p-2 shadow">
-                                <li>
-                                    <p className='text-slate-800'>{user?.displayName || user?.name}</p>
+                                <li >
+                                    <p className='text-slate-800 mb-0 flex flex-col justify-start items-start space-y-0'>
+                                        {user?.displayName || user?.name || "No User"}
+                                        <span className='text-xs mt-0 block'>{user?.email}</span>
+                                    </p>
                                 </li>
+
 
                                 <hr className='my-2' />
                                 {

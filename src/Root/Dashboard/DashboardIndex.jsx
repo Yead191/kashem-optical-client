@@ -10,17 +10,31 @@ import {
     FaShoppingBag,
     FaEnvelope,
 } from "react-icons/fa";
-import { Link, NavLink, Outlet, ScrollRestoration } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Link, NavLink, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 import { FaUser, FaUsers } from "react-icons/fa6";
 import { ImSpoonKnife } from "react-icons/im";
 import { IoMdMenu } from "react-icons/io";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { ChartNoAxesCombined, LayoutGrid, Store, UserRoundCog } from "lucide-react";
 import Spinner from "../../components/Spinner/Spinner";
+import useAuth from "../../hooks/useAuth";
+import { ArchiveBoxXMarkIcon, ChevronDownIcon, PencilIcon, Square2StackIcon, TrashIcon } from '@heroicons/react/16/solid';
+import { LogOut } from "lucide-react";
+import UpdateProfile from "../../components/UpdateProfile";
+import { ArrowUpDownIcon } from "lucide-react";
+import toast from "react-hot-toast";
+import { LogIn } from "lucide-react";
+
 
 
 const DashboardIndex = () => {
     // const [cart] = useCart()
+    const { user, logOut } = useAuth()
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate()
+
+
     const cart = 2
 
     const handleNavClick = () => {
@@ -38,9 +52,19 @@ const DashboardIndex = () => {
             setLoading(false)
         }, 1000);
     }, [])
+
+    const handleLogOut = () => {
+        logOut()
+        toast.success('LoggedOut Successfully!')
+        navigate('/')
+
+    }
+
+
     if (loading) {
         return <Spinner></Spinner>
     }
+
     return (
         <div className="drawer lg:drawer-open h-screen lato">
             <ScrollRestoration />
@@ -181,8 +205,65 @@ const DashboardIndex = () => {
 
                         </ul>
                     </div>
+                    {/* add dropdown here */}
+                    <div className="p-4">
+                        <Menu as="div" className="relative inline-block text-left w-full">
+                            <MenuButton className="w-full  flex items-center gap-2 bg-base-200 py-1.5 px-3 rounded-md text-sm font-semibold text-black border transition hover:scale-105 duration-200">
+                                <img src={user?.photoURL || "https://www.citypng.com/public/uploads/preview/hd-man-user-illustration-icon-transparent-png-701751694974843ybexneueic.png"} alt="User" className="w-8 h-8 object-cover rounded-full" />
+                                <div className="text-left">
+                                    <p className="mb-0">
+                                        {user?.displayName?.length > 14 ? user.displayName.slice(0, 14) + "..." : user?.displayName || "No User"}
+                                    </p>
+                                    <p className="text-xs font-extralight ">{user?.email}</p>
+
+                                </div>
+                                <ArrowUpDownIcon className="w-4"></ArrowUpDownIcon>
+                            </MenuButton>
+                            <MenuItems className="absolute bottom-full mb-2 w-52 origin-bottom-right rounded-xl border border-black/10 bg-base-100 p-1 text-sm text-black">
+                                <MenuItem>
+                                    <button onClick={() => setIsModalOpen(true)} className="group flex items-center gap-2 font-medium w-full text-left px-4 py-2 hover:bg-base-200 hover:rounded-md">
+                                        <PencilIcon className="size-4 fill-black/30" />
+                                        Update Profile
+                                    </button>
+
+                                </MenuItem>
+                                <MenuItem>
+                                    <Link to={'/'} className="group flex items-center gap-2 font-medium w-full text-left px-4 py-2 hover:bg-base-200 hover:rounded-md">
+                                        <FaHome className="size-4 fill-black/30" />
+                                        Home
+                                    </Link>
+
+                                </MenuItem>
+                                <hr />
+
+                                <MenuItem>
+                                    {
+                                        user ?
+                                            <button onClick={handleLogOut} className="group flex gap-2 items-center font-medium w-full text-left px-4 py-2 hover:bg-base-200 hover:rounded-md text-red-500">
+                                                <LogOut  className="size-4 " />
+
+                                                Logout
+                                            </button>
+                                            :
+                                            <Link to={'/login'} className="group flex gap-2 items-center font-medium w-full text-left px-4 py-2 hover:bg-base-200 hover:rounded-md text-green-500">
+                                                <LogIn className="size-4 " />
+                                                Login
+                                            </Link>
+                                    }
+
+
+                                </MenuItem>
+
+                            </MenuItems>
+                        </Menu>
+                    </div>
                 </div>
             </div>
+            {/* Modal */}
+
+            {
+                isModalOpen && <UpdateProfile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} ></UpdateProfile>
+            }
         </div>
     );
 };

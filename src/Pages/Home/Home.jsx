@@ -5,6 +5,7 @@ import PopularProduct from '../../components/Popular Product/PopularProduct';
 import useCategory from '../../hooks/useCategory';
 import Category from '../../components/Category';
 
+
 const Home = () => {
     const [categories, categoriesLoading, refetch] = useCategory()
     // console.log(categories);
@@ -31,6 +32,7 @@ const Home = () => {
                 ))}
             </div>
             <PopularProduct></PopularProduct>
+
         </div>
     );
 };

@@ -10,6 +10,7 @@ import Products from "../Pages/Products/Products";
 import ManageUsers from "../Pages/Dashboard/AdminRoute/ManageUsers";
 import ManageCategory from "../Pages/Dashboard/AdminRoute/ManageCategory";
 import ManageProducts from "../Pages/Dashboard/AdminRoute/ManageProducts";
+import Statistics from "../Pages/Dashboard/AdminRoute/Statistics";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
         element: <DashboardIndex></DashboardIndex>,
         children: [
             // admin routes
+            {
+                path: 'admin/statistics',
+                element: <Statistics></Statistics>
+            },
             {
                 path: 'admin/manage-users',
                 element: <ManageUsers></ManageUsers>

@@ -9,6 +9,7 @@ import 'react-dropdown/style.css';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import Seo from '../../components/Seo/Seo';
 import Select from 'react-select'
+import { ArrowDownUp } from 'lucide-react';
 
 const Products = () => {
     const axiosPublic = useAxiosPublic();
@@ -98,7 +99,12 @@ const Products = () => {
                             options={sortOptions}
                             value={sortOptions.find(option => option.value === sortPrice) || sortPrice}
                             onChange={handleSortChange}
-                            placeholder='Sort by Price'
+                            placeholder={
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <ArrowDownUp size={16} />
+                                  <span>Price</span>
+                                </div>
+                              }
                             isClearable
                             isSearchable={false}
                             className='w-48'
@@ -180,14 +186,14 @@ const Products = () => {
                 </div>
 
                 {/* Main Content */}
-                <div className='w-full lg:w-3/4'>
+                <div className='w-full '>
                     <div className="mb-4">
                         <h2 className="text-xl font-semibold">All Results</h2>
                         <p className="text-gray-500">{products.length} products found</p>
                     </div>
                     {
                         products.length ?
-                            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 w-full place-items-center place-content-center justify-center items-center'>
+                            <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4  gap-4 w-full place-items-center place-content-center justify-center items-center'>
                                 {products?.map(product => (
                                     <div key={product._id} className='rounded-xl bg-white shadow-lg hover:border hover:border-[#b21000] flex flex-col border border-base-200 w-full h-full'>
                                         <img className='mx-auto pt-8 px-2 mb-7 object-cover h-[180px] md:h-[200px] lg:h-[260px] hover:transition hover:scale-110 hover:duration-700' src={product?.image} alt='' />

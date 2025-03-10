@@ -74,9 +74,9 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
             }
         );
         await axiosSecure.put(`/users/profile/${loggedUser._id}`, updateInfo)
+        refetch()
         navigate(location.pathname)
         setIsOpen(false);
-        refetch()
     };
 
     return (
@@ -86,6 +86,12 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                     <div className="modal modal-open">
                         <div className="modal-box">
                             <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+
+                            {user?.photoURL && (
+                                    <div className="flex items-center justify-center mt-2">
+                                        <img src={user.photoURL} className=" h-32 rounded-lg object-cover  " alt="Profile Image" />
+                                    </div>
+                                )}
 
                             {/* Name Input */}
                             <div className="mb-4">
@@ -129,11 +135,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                                     accept="image/*"
                                     onChange={handleUpload}
                                 />
-                                {user?.photoURL && (
-                                    <div className="mt-2">
-                                        <img src={user.photoURL} className="w-16 h-16 rounded-full" alt="Profile Image" />
-                                    </div>
-                                )}
+                                
                             </div>
 
                             <div className="modal-action">
