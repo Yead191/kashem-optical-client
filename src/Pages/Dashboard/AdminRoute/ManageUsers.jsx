@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -7,25 +7,30 @@ import toast from 'react-hot-toast';
 import Spinner from '../../../components/Spinner/Spinner';
 import Select from 'react-select';
 import { useState } from 'react';
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { Input, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import clsx from 'clsx';
 import { ChevronDownIcon } from 'lucide-react';
 import { CheckIcon } from 'lucide-react';
+
 
 const roles = ['User', 'Admin'];
 const ManageUsers = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
     const [selectedRoles, setSelectedRoles] = useState({});
+    const [searchTerm, setSearchTerm] = useState("")
 
 
     const { data: users = [], isLoading, refetch } = useQuery({
         queryKey: ['users', user],
         queryFn: async () => {
-            const res = await axiosSecure.get('/users')
+            const res = await axiosSecure.get(`/users?search=${searchTerm}`)
             return res.data
         }
     })
+    useEffect(() => {
+        refetch();
+    }, [searchTerm, refetch]);
     const handleRoleChange = async (id, selectedRole) => {
         setSelectedRoles((prev) => ({ ...prev, [id]: selectedRole }));
 
@@ -49,6 +54,15 @@ const ManageUsers = () => {
                 </h2>
             </div>
             <div className='container mx-auto'>
+                <Input
+                    className={clsx(
+                        'my-3 block w-full md:w-56 rounded-lg border bg-black/5 py-1.5 px-3 text-sm/6 text-black',
+                        'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                    )}
+                    placeholder='Search User'
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <div className="overflow-x-auto">
                     <table className="table">
                         {/* head */}
@@ -93,7 +107,7 @@ const ManageUsers = () => {
                                     </td>
                                     <td>{user?.createdAt}</td>
                                     <th className="flex items-center justify-end h-full">
-                                    <Listbox value={selectedRoles[user._id] || user.role} onChange={(role) => handleRoleChange(user._id, role)}>
+                                        <Listbox value={selectedRoles[user._id] || user.role} onChange={(role) => handleRoleChange(user._id, role)}>
                                             <div className="relative w-32">
                                                 <ListboxButton
                                                     className={clsx(
@@ -119,7 +133,7 @@ const ManageUsers = () => {
                                                         <ListboxOption
                                                             key={roleIndex}
                                                             value={role}
-                                                            className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 pl-3 pr-9 select-none text-black data-[focus]:bg-black/10"
+                                                            className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 pl-3 pr-9 select-none text-sm text-black data-[focus]:bg-black/10"
                                                         >
                                                             <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
                                                             {role}

@@ -42,7 +42,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
     // console.log(loggedUser);
 
 
-    const [name, setName] = useState(loggedUser?.name );
+    const [name, setName] = useState(loggedUser?.name);
     const [mobile, setMobile] = useState(loggedUser?.mobile);
     const [image, setImage] = useState(loggedUser?.image);
 
@@ -64,7 +64,6 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
         const updateInfo = {
             name, mobile, image, email: user.email
         }
-        setIsModalOpen(false);
         await toast.promise(
             updateUserProfile(name, image ? image : user.photoURL),
             {
@@ -76,7 +75,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
         await axiosSecure.put(`/users/profile/${loggedUser._id}`, updateInfo)
         refetch()
         navigate(location.pathname)
-        setIsOpen(false);
+        setIsModalOpen(false);
     };
 
     return (
@@ -88,10 +87,10 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                             <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
 
                             {user?.photoURL && (
-                                    <div className="flex items-center justify-center mt-2">
-                                        <img src={user.photoURL} className=" h-32 rounded-lg object-cover  " alt="Profile Image" />
-                                    </div>
-                                )}
+                                <div className="flex items-center justify-center mt-2">
+                                    <img src={user.photoURL} className=" h-32 rounded-lg object-cover  " alt="Profile Image" />
+                                </div>
+                            )}
 
                             {/* Name Input */}
                             <div className="mb-4">
@@ -135,7 +134,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                                     accept="image/*"
                                     onChange={handleUpload}
                                 />
-                                
+
                             </div>
 
                             <div className="modal-action">
@@ -144,7 +143,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                                 </button>
                                 <button disabled={imageLoading} onClick={handleSave} className="btn btn-sm btn-neutral rounded-md px-7">
                                     {
-                                        imageLoading? 'Please Wait...' : "Update Profile"
+                                        imageLoading ? 'Please Wait...' : "Update Profile"
                                     }
                                 </button>
                             </div>
