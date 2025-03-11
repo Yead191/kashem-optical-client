@@ -146,7 +146,7 @@ const ManageUsers = () => {
                                                     anchor="bottom"
                                                     transition
                                                     className={clsx(
-                                                        'absolute z-10   rounded-xl border border-white/5 bg-base-100  p-1 shadow-lg',
+                                                        'absolute z-10   rounded-b-lg border border-white/5 bg-base-100  p-1 shadow-lg',
                                                         'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
                                                     )}
                                                 >

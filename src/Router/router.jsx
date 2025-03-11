@@ -11,6 +11,7 @@ import ManageUsers from "../Pages/Dashboard/AdminRoute/ManageUsers";
 import ManageCategory from "../Pages/Dashboard/AdminRoute/ManageCategory";
 import ManageProducts from "../Pages/Dashboard/AdminRoute/ManageProducts";
 import Statistics from "../Pages/Dashboard/AdminRoute/Statistics";
+import ManageBanners from "../Pages/Dashboard/AdminRoute/ManageBanners";
 
 const router = createBrowserRouter([
     {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             {
                 path: 'admin/manage-products',
                 element: <ManageProducts></ManageProducts>
+            },
+            {
+                path: 'admin/manage-banners',
+                element: <ManageBanners></ManageBanners>
             },
         ]
     },

@@ -172,9 +172,9 @@ const Products = () => {
                                     type='checkbox'
                                     checked={selectedCategory === category.name}
                                     onChange={() => handleCategorySelect(category)}
-                                    className='mr-2'
+                                    className='mr-2 cursor-pointer'
                                 />
-                                <label>{category.name}</label>
+                                <label className='text-gray-500'>{category.name}</label>
                             </div>
                         ))}
                         {

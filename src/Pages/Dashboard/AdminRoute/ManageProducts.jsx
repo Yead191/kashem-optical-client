@@ -7,9 +7,11 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { MdOutlineMoreHoriz } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import UpdateProductModal from '../../../components/Modal/UpdateProductModal';
-import { Menu } from "@headlessui/react";
 import { Filter } from 'lucide-react';
 import useCategory from '../../../hooks/useCategory';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { PencilIcon } from 'lucide-react';
+import { TrashIcon } from '@heroicons/react/16/solid';
 
 
 const ManageProducts = () => {
@@ -126,7 +128,7 @@ const ManageProducts = () => {
                     </div>
 
                     <div className='flex items-center gap-2'>
-                        
+
                         <div className="relative">
                             <Menu as="div" className="relative inline-block text-left">
                                 {({ open }) => (
@@ -243,19 +245,39 @@ const ManageProducts = () => {
 
                                     </td>
                                     <th className="flex items-center justify-end h-full">
-                                        <div className="dropdown dropdown-end">
-                                            <button tabIndex={0} className="btn btn-sm btn-ghost">
+                                        <Menu as="div" className="relative inline-block text-left">
+                                            <MenuButton className="btn btn-sm btn-ghost">
                                                 <MdOutlineMoreHoriz size={22} />
-                                            </button>
-                                            <ul tabIndex={0} className="dropdown-content rounded-md menu p-2 shadow bg-base-100 w-48 z-40">
-                                                <li>
-                                                    <button onClick={() => handleUpdateProduct(product)} className='font-normal'>Update Product</button>
-                                                </li>
-                                                <li>
-                                                    <button onClick={() => handleDelete(product._id)} className="text-red-500 font-normal">Delete Product</button>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            </MenuButton>
+                                            <MenuItems className="absolute right-0 w-48 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-40">
+                                                <div className="p-1">
+                                                    <MenuItem>
+                                                        {({ active }) => (
+                                                            <button
+                                                                onClick={() => handleUpdateProduct(product)}
+                                                                className={`${active ? 'bg-gray-100' : 'bg-white'
+                                                                    } group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-normal text-gray-700 `}
+                                                            >
+                                                                 <PencilIcon className="size-4 fill-white/30" />
+                                                                Update Product
+                                                            </button>
+                                                        )}
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        {({ active }) => (
+                                                            <button
+                                                                onClick={() => handleDelete(product._id)}
+                                                                className={`${active ? 'bg-red-100' : 'bg-white'
+                                                                    } group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-normal text-red-500`}
+                                                            >
+                                                                <TrashIcon className="size-4 -mt-1 fill-black/60" />
+                                                                Delete Product
+                                                            </button>
+                                                        )}
+                                                    </MenuItem>
+                                                </div>
+                                            </MenuItems>
+                                        </Menu>
                                     </th>
 
                                 </tr>)

@@ -8,6 +8,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useCategory from '../../../hooks/useCategory';
 import { MdOutlineMoreHoriz } from 'react-icons/md';
 import UpdateCategory from '../../../components/Modal/UpdateCategory';
+import { PencilIcon, TrashIcon } from '@heroicons/react/16/solid';
 
 const ManageCategory = () => {
     const axiosSecure = useAxiosSecure()
@@ -159,12 +160,17 @@ const ManageCategory = () => {
                                         <button tabIndex={0} className="btn btn-sm btn-ghost">
                                             <MdOutlineMoreHoriz size={22} />
                                         </button>
-                                        <ul tabIndex={0} className="dropdown-content rounded-md menu p-2 shadow bg-base-100 w-48 z-40">
+                                        <ul tabIndex={0} className="dropdown-content rounded-md menu p-2 shadow font-normal bg-base-100 w-48 z-40">
                                             <li>
-                                                <button onClick={() => handleCategoryUpdate(category._id)}>Update Category</button>
+                                                <button onClick={() => handleCategoryUpdate(category._id)}>
+                                                    <PencilIcon className="size-4 fill-black/30"></PencilIcon>
+                                                    Update Category</button>
                                             </li>
                                             <li>
-                                                <button className="text-red-500">Delete Category</button>
+                                                <button className="text-red-500">
+                                                <TrashIcon className="size-4 -mt-1 fill-black/40" />
+                                                    
+                                                    Delete Category</button>
                                             </li>
                                         </ul>
                                     </div>

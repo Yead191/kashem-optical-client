@@ -278,7 +278,7 @@ const Navbar = () => {
                                 <li >
                                     <p className='text-slate-800 mb-0 flex flex-col justify-start items-start space-y-0'>
                                         {user?.displayName || user?.name || "No User"}
-                                        <span className='text-xs mt-0 block'>{user?.email}</span>
+                                        <span className='text-xs -mt-2 text-purple-500 block'>{user?.email}</span>
                                     </p>
                                 </li>
 
@@ -394,7 +394,7 @@ const Navbar = () => {
 
                             {
                                 user ?
-                                    <button onClick={handleLogout} className="btn btn-sm btn-neutral mt-2 ">Log Out</button>
+                                    <button onClick={handleLogout} className="btn btn-sm bg-black mt-2 font-normal  text-white">Log Out</button>
                                     :
 
                                     <Link to={'/login'} className=''>

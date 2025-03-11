@@ -11,7 +11,7 @@ import {
     FaEnvelope,
 } from "react-icons/fa";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Link, NavLink, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
+import { Link, Navigate, NavLink, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 import { FaUser, FaUsers } from "react-icons/fa6";
 import { ImSpoonKnife } from "react-icons/im";
 import { IoMdMenu } from "react-icons/io";
@@ -25,6 +25,7 @@ import UpdateProfile from "../../components/UpdateProfile";
 import { ArrowUpDownIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { LogIn } from "lucide-react";
+import { TicketSlash } from "lucide-react";
 
 
 
@@ -33,6 +34,13 @@ const DashboardIndex = () => {
     const { user, logOut } = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate()
+    const isAdmin = true
+    
+    useEffect(() => {
+        if (isAdmin) {
+            navigate("/dashboard/admin/statistics");
+        }
+    }, [isAdmin, navigate]);
 
 
     const cart = 2
@@ -43,7 +51,6 @@ const DashboardIndex = () => {
             drawerCheckbox.checked = false;
         }
     };
-    const isAdmin = true
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -64,6 +71,7 @@ const DashboardIndex = () => {
     if (loading) {
         return <Spinner></Spinner>
     }
+
 
     return (
         <div className="drawer lg:drawer-open h-screen lato">
@@ -112,7 +120,7 @@ const DashboardIndex = () => {
                                             onClick={handleNavClick}
                                             to={`/dashboard/admin/statistics`}
                                             className={({ isActive }) =>
-                                                `flex items-center gap-3 ${isActive ? " rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80"
+                                                `flex items-center gap-3 ${isActive ? "-ml-2 rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80"
                                                 }`
                                             }
                                         >
@@ -124,7 +132,7 @@ const DashboardIndex = () => {
                                             onClick={handleNavClick}
                                             to={'/dashboard/admin/manage-users'}
                                             className={({ isActive }) =>
-                                                `flex items-center gap-3 ${isActive ? " rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
+                                                `flex items-center gap-3 ${isActive ? "-ml-2 rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
                                                 }`
                                             }
                                         >
@@ -136,7 +144,7 @@ const DashboardIndex = () => {
                                             onClick={handleNavClick}
                                             to={'/dashboard/admin/manage-category'}
                                             className={({ isActive }) =>
-                                                `flex items-center gap-3 ${isActive ? " rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
+                                                `flex items-center gap-3 ${isActive ? "-ml-2 rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
                                                 }`
                                             }
                                         >
@@ -148,11 +156,23 @@ const DashboardIndex = () => {
                                             onClick={handleNavClick}
                                             to={'/dashboard/admin/manage-products'}
                                             className={({ isActive }) =>
-                                                `flex items-center gap-3 ${isActive ? " rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
+                                                `flex items-center gap-3 ${isActive ? "-ml-2 rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
                                                 }`
                                             }
                                         >
                                             <Store className="text-xs w-4 h-4"></Store> <span>Manage Products</span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            onClick={handleNavClick}
+                                            to={'/dashboard/admin/manage-banners'}
+                                            className={({ isActive }) =>
+                                                `flex items-center gap-3 ${isActive ? "-ml-2 rounded-md bg-neutral text-white p-2 opacity-100" : "text-slate-800 opacity-80 "
+                                                }`
+                                            }
+                                        >
+                                            <TicketSlash className="text-xs w-4 h-4"></TicketSlash> <span>Manage Banners</span>
                                         </NavLink>
                                     </li>
 
@@ -240,7 +260,7 @@ const DashboardIndex = () => {
                                     {
                                         user ?
                                             <button onClick={handleLogOut} className="group flex gap-2 items-center font-medium w-full text-left px-4 py-2 hover:bg-base-200 hover:rounded-md text-red-500">
-                                                <LogOut  className="size-4 " />
+                                                <LogOut className="size-4 " />
 
                                                 Logout
                                             </button>
