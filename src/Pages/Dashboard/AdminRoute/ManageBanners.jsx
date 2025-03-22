@@ -11,6 +11,7 @@ import { Ellipsis } from 'lucide-react';
 import { Minus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { Switch } from '@headlessui/react';
 
 const ManageBanners = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,15 +24,26 @@ const ManageBanners = () => {
         }
     })
     // console.log(banners);
-    const handleStatus = async (id, val) => {
-        // console.log(id, val);
-        await toast.promise(axiosSecure.patch(`/banner/status/${id}`, { status: val }), {
+    // const handleStatus = async (id, val) => {
+    //     // console.log(id, val);
+    //     await toast.promise(axiosSecure.patch(`/banner/status/${id}`, { status: val }), {
+    //         loading: "Updating Status...",
+    //         success: "Status Updated Successfully!",
+    //         error: "Could not Update!"
+    //     });
+    //     refetch();
+    // };
+    const handleStatusToggle = async (id, currentStatus) => {
+        const newStatus = currentStatus === 'added' ? 'removed' : 'added';
+        await toast.promise(axiosSecure.patch(`/banner/status/${id}`, { status: newStatus }), {
             loading: "Updating Status...",
             success: "Status Updated Successfully!",
             error: "Could not Update!"
         });
         refetch();
     };
+
+
     // console.log(products);
     const handleDelete = id => {
         Swal.fire({
@@ -116,8 +128,19 @@ const ManageBanners = () => {
                                             {banner?.title}
                                         </td>
                                         <td>{banner?.createdAt}</td>
-                                        <td className={`${banner?.status === 'added' ? "text-green-500" : ""}`}>
-                                            {banner?.status}
+                                        <td>
+                                            <Switch
+                                                checked={banner?.status === 'added'}
+                                                onChange={() => handleStatusToggle(banner._id, banner?.status)}
+                                                className={`relative inline-flex h-6 w-11 items-center rounded-full 
+            ${banner?.status === 'added' ? 'bg-green-500' : 'bg-gray-300'}`}
+                                            >
+                                                <span className="sr-only">Toggle Banner Status</span>
+                                                <span
+                                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition
+                ${banner?.status === 'added' ? 'translate-x-6' : 'translate-x-1'}`}
+                                                />
+                                            </Switch>
                                         </td>
                                         <td className='flex justify-end'>
                                             <Menu as="div" className="relative inline-block text-left">
@@ -130,7 +153,7 @@ const ManageBanners = () => {
                                                     <div className="py-1">
 
                                                         {/* Add/Remove Banner */}
-                                                        <Menu.Item>
+                                                        {/* <Menu.Item>
                                                             {
                                                                 banner?.status === 'added' ?
                                                                     <button
@@ -149,7 +172,7 @@ const ManageBanners = () => {
                                                                         Add Banner
                                                                     </button>
                                                             }
-                                                        </Menu.Item>
+                                                        </Menu.Item> */}
 
                                                         {/* Update Banner */}
                                                         <Menu.Item>

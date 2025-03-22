@@ -17,7 +17,7 @@ const Root = () => {
         return <Spinner></Spinner>
     }
     return (
-        <div className='flex flex-col min-h-screen lato'>
+        <div className='flex flex-col min-h-screen lekas'>
             <ScrollRestoration />
             <nav className='h-[64px]'>
                 <Navbar></Navbar>

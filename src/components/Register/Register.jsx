@@ -78,7 +78,11 @@ const Register = () => {
                     <h2 className="text-3xl font-bold mb-4 text-gray-800">Create Account</h2>
                     <SocialLogin></SocialLogin>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
+                    <motion.form
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.3 }}
+                        onSubmit={handleSubmit(onSubmit)} className='w-full'>
                         <input
 
                             {...register("name", {
@@ -130,13 +134,17 @@ const Register = () => {
                         {errors.password?.type === 'minLength' &&
                             <p className='text-red-500 mb-1 inline-flex items-center gap-1'> <IoWarningOutline /> Password Must be more than 6 Character </p>
                         }
-                        <div className='flex justify-center items-center'>
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.4 }}
+                            className='flex justify-center items-center'>
 
                             <button className="bg-neutral  text-white  px-6 py-2 rounded-md font-medium transition hover:scale-110">
                                 SIGN UP
                             </button>
-                        </div>
-                    </form>
+                        </motion.div>
+                    </motion.form>
 
 
                 </div>

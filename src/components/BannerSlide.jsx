@@ -35,7 +35,7 @@ const BannerSlide = () => {
                     disableOnInteraction: false,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
-                className="mySwiper lg:h-[70vh]"
+                className="mySwiper lg:h-[60vh]"
             >
                 {
                     banners?.map(banner =>

@@ -12,12 +12,17 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-separator": "^1.1.2",
+    "@radix-ui/react-slot": "^1.1.2",
     "axios": "^1.7.9",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "firebase": "^11.3.0",
     "localforage": "^1.10.0",
     "lottie-react": "^2.4.1",
-    "lucide-react": "^0.475.0",
+    "lucide-react": "^0.483.0",
     "match-sorter": "^8.0.0",
     "motion": "^12.4.2",
     "react": "^19.0.0",
@@ -34,7 +39,9 @@
     "react-simple-typewriter": "^5.0.1",
     "sort-by": "^1.2.0",
     "sweetalert2": "^11.16.0",
-    "swiper": "^11.2.2"
+    "swiper": "^11.2.2",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

@@ -10,6 +10,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import Seo from '../../components/Seo/Seo';
 import Select from 'react-select'
 import { ArrowDownUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Products = () => {
     const axiosPublic = useAxiosPublic();
@@ -19,6 +20,49 @@ const Products = () => {
     const initialCategory = searchParams.get("category") || "";
     const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const [sortPrice, setSortPrice] = useState("");
+    const [selectedGender, setSelectedGender] = useState(searchParams.get("gender") || "");
+    const [selectedBrand, setSelectedBrand] = useState(searchParams.get("brand") || "");
+    const [selectedMaterial, setSelectedMaterial] = useState(searchParams.get("material") || "");
+    const [priceRange, setPriceRange] = useState([0, 10000]);
+
+    
+    // Fetch filter options
+    const { data: filterOptions = {}, isLoading: filterLoading } = useQuery({
+        queryKey: ['filterOptions'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/filter-options');
+            return res.data;
+        }
+    });
+
+    useEffect(() => {
+        if (filterOptions.priceRange) {
+            setPriceRange([filterOptions.priceRange.min, filterOptions.priceRange.max]);
+        }
+    }, [filterOptions,]);
+
+    // console.log(filterOptions.priceRange);
+
+    useEffect(() => {
+        const params = {};
+        if (selectedCategory) params.category = selectedCategory;
+        if (selectedGender) params.gender = selectedGender;
+        if (selectedBrand) params.brand = selectedBrand;
+        if (selectedMaterial) params.material = selectedMaterial;
+        if (sortPrice) params.sort = sortPrice;
+        setSearchParams(params, { replace: true });
+    }, [selectedCategory, selectedGender, selectedBrand, selectedMaterial, setSearchParams]);
+
+
+
+    // Sync selectedCategory with search params on mount or param change
+    useEffect(() => {
+        const categoryFromParams = searchParams.get('category') || '';
+        if (categoryFromParams !== selectedCategory) {
+            setSelectedCategory(categoryFromParams);
+        }
+    }, [searchParams]);
+
 
     const sortOptions = [
         { value: "asc", label: "Low to High" },
@@ -26,27 +70,30 @@ const Products = () => {
     ];
 
     const { data: products = [], isLoading, refetch } = useQuery({
-        queryKey: ['products', selectedCategory, sortPrice],
+        queryKey: ['products', selectedCategory, selectedGender, selectedBrand, selectedMaterial, sortPrice],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/products?search=${searchTerm}&category=${selectedCategory}&sort=${sortPrice}`);
+            const res = await axiosPublic.get(`/products?search=${searchTerm}&category=${selectedCategory}&gender=${selectedGender}&brand=${selectedBrand}&material=${selectedMaterial}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&sort=${sortPrice}`);
             return res.data;
-        },
-        select: (data) => {
-            if (sortPrice === 'asc') {
-                // Sort the products by price in ascending order
-                return data.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-            } else if (sortPrice === 'desc') {
-                // Sort the products by price in descending order
-                return data.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-            }
-            return data;
         }
     });
+    // console.log(products);
+    // Update search params and refetch when filters change
+    useEffect(() => {
+        setSearchParams({ category: selectedCategory, sort: sortPrice }, { replace: true });
+        refetch();
+    }, [selectedCategory, sortPrice, searchTerm, setSearchParams, refetch]);
+
+
 
     useEffect(() => {
-        setSearchParams({ category: selectedCategory, sort: sortPrice });
-        refetch();
-    }, [searchTerm, selectedCategory, sortPrice, setSearchParams, refetch]);
+        const handler = setTimeout(() => {
+            refetch();
+        }, 500);
+    
+        return () => clearTimeout(handler);
+    }, [priceRange]);
+
+
 
     const handleCategorySelect = (category) => {
         setSortPrice('')
@@ -54,11 +101,15 @@ const Products = () => {
     };
 
     const handleClearFilter = () => {
-        setSearchTerm("")
-        setSortPrice('')
+        setSearchTerm("");
+        setSortPrice("");
         setSelectedCategory("");
+        setSelectedGender("");
+        setSelectedBrand("");
+        setSelectedMaterial("");
+        setPriceRange([filterOptions.priceRange?.min || 0, filterOptions.priceRange?.max || 10000]);
+        refetch();
     };
-
     const handleSortChange = (selectedOption) => {
         setSortPrice(selectedOption ? selectedOption.value : "");
     };
@@ -93,6 +144,7 @@ const Products = () => {
                         <Search className='absolute left-2 top-1/2 -translate-y-1/2 w-4' />
                     </div>
 
+
                     <div className='flex items-center justify-between'>
 
                         <Select
@@ -101,10 +153,10 @@ const Products = () => {
                             onChange={handleSortChange}
                             placeholder={
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <ArrowDownUp size={16} />
-                                  <span>Price</span>
+                                    <ArrowDownUp size={16} />
+                                    <span>Price</span>
                                 </div>
-                              }
+                            }
                             isClearable
                             isSearchable={false}
                             className='w-48'
@@ -160,28 +212,101 @@ const Products = () => {
             </div>
             <div className='container mx-auto flex flex-col lg:flex-row gap-4  p-2'>
 
+
                 {/* Sidebar */}
                 <div className="w-full lg:w-64 shrink-0 lg:block hidden">
+                    <aside className='w-full bg-white p-4 rounded-lg shadow-md border sticky top-20'>
+                        <h3 className='text-lg font-semibold mb-3'>Filters</h3>
 
+                        {/* Categories */}
+                        <div className='mb-6'>
+                            <h4 className='font-medium mb-2'>Categories</h4>
+                            {categoriesLoading ? <p>Loading...</p> : categories.map(category => (
+                                <div key={category._id} className='flex items-center mb-2'>
+                                    <input
+                                        type='checkbox'
+                                        checked={selectedCategory === category.name}
+                                        onChange={() => setSelectedCategory(category.name)}
+                                        className='mr-2 cursor-pointer'
+                                    />
+                                    <label className='text-gray-500'>{category.name}</label>
+                                </div>
+                            ))}
+                        </div>
 
-                    <aside className='w-full  bg-white p-4 rounded-lg shadow-md border sticky top-20'>
-                        <h3 className='text-lg font-semibold mb-3'>Filter by Categories</h3>
-                        {categoriesLoading ? <p>Loading...</p> : categories.map(category => (
-                            <div key={category._id} className='flex items-center mb-2'>
+                        {/* Price Range */}
+                        <div className='mb-6'>
+                            <h4 className='font-medium mb-2'>Price Range</h4>
+                            <div className='flex gap-2'>
                                 <input
-                                    type='checkbox'
-                                    checked={selectedCategory === category.name}
-                                    onChange={() => handleCategorySelect(category)}
-                                    className='mr-2 cursor-pointer'
+                                    type='number'
+                                    value={priceRange[0]}
+                                    onChange={(e) => setPriceRange([parseFloat(e.target.value), priceRange[1]])}
+                                    className='input input-bordered input-sm w-full'
+                                    min={filterOptions.priceRange?.min || 0}
                                 />
-                                <label className='text-gray-500'>{category.name}</label>
+                                <span>-</span>
+                                <input
+                                    type='number'
+                                    value={priceRange[1]}
+                                    onChange={(e) => setPriceRange([priceRange[0], parseFloat(e.target.value)])}
+                                    className='input input-bordered input-sm w-full'
+                                    max={filterOptions.priceRange?.max || 10000}
+                                />
                             </div>
-                        ))}
-                        {
-                            selectedCategory &&
-                            <button onClick={handleClearFilter} className='text-red-500 text-sm mt-2'>Clear Filter</button>
+                        </div>
 
-                        }
+                        {/* Gender */}
+                        <div className='mb-6'>
+                            <h4 className='font-medium mb-2'>Gender</h4>
+                            {filterOptions.genders?.map(gender => (
+                                <div key={gender} className='flex items-center mb-2'>
+                                    <input
+                                        type='checkbox'
+                                        checked={selectedGender === gender}
+                                        onChange={() => setSelectedGender(gender)}
+                                        className='mr-2 cursor-pointer'
+                                    />
+                                    <label className='text-gray-500'>{gender}</label>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Brands */}
+                        <div className='mb-6'>
+                            <h4 className='font-medium mb-2'>Brands</h4>
+                            {filterOptions.brands?.map(brand => (
+                                <div key={brand} className='flex items-center mb-2'>
+                                    <input
+                                        type='checkbox'
+                                        checked={selectedBrand === brand}
+                                        onChange={() => setSelectedBrand(brand)}
+                                        className='mr-2 cursor-pointer'
+                                    />
+                                    <label className='text-gray-500'>{brand}</label>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Material */}
+                        <div className='mb-6'>
+                            <h4 className='font-medium mb-2'>Material</h4>
+                            {filterOptions.materials?.map(material => (
+                                <div key={material} className='flex items-center mb-2'>
+                                    <input
+                                        type='checkbox'
+                                        checked={selectedMaterial === material}
+                                        onChange={() => setSelectedMaterial(material)}
+                                        className='mr-2 cursor-pointer'
+                                    />
+                                    <label className='text-gray-500'>{material}</label>
+                                </div>
+                            ))}
+                        </div>
+
+                        {(selectedCategory || selectedGender || selectedBrand || selectedMaterial) && (
+                            <button onClick={handleClearFilter} className='text-red-500 text-sm mt-2'>Clear All Filters</button>
+                        )}
                     </aside>
                 </div>
 
@@ -200,7 +325,7 @@ const Products = () => {
                                         <div className='p-4 flex-grow'>
                                             <h4 className='text-md md:text-xl font-bold mb-2'>{product?.name}</h4>
                                             <div className='flex items-center justify-between'>
-                                                <p className='text-[#b21000]'>৳ <span className='text-xl font-semibold'>{product?.price}</span></p>
+                                                <p className='text-[#b21000]'>৳ <span className='text-xl font-semibold'>{product?.priceNum}</span></p>
                                                 <p className='badge'>• {product?.category}</p>
                                             </div>
                                         </div>

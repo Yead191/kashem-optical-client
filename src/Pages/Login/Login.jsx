@@ -65,7 +65,11 @@ const Login = () => {
                 <div className="p-8 lg:w-1/2 flex flex-col justify-center items-center">
                     <h2 className="text-3xl font-bold mb-4 text-gray-800">Sign In</h2>
                     <SocialLogin></SocialLogin>
-                    <form onSubmit={handleLogin} className='w-full'>
+                    <motion.form
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.4 }}
+                        onSubmit={handleLogin} className='w-full'>
                         <input
                             name='email'
                             type="email"
@@ -89,15 +93,19 @@ const Login = () => {
                             </button>
                         </div>
 
-                        <div className='flex items-center justify-center'>
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.6 }}
+                            className='flex items-center justify-center'>
 
                             <button
 
                                 className={`bg-neutral  text-white 00 px-6 py-2 rounded-md font-medium transition hover:scale-110`}>
                                 SIGN IN
                             </button>
-                        </div>
-                    </form>
+                        </motion.div>
+                    </motion.form>
                 </div>
 
                 {/* Right Section */}

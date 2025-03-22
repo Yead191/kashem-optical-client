@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
+import { motion } from 'framer-motion'
 
 const SocialLogin = () => {
     const navigate = useNavigate()
@@ -30,13 +31,17 @@ const SocialLogin = () => {
             navigate('/');
     }
     return (
-        <div>
-            <div className="flex gap-3 mb-6">
-                <button onClick={handleGoogleSignIn} className="bg-gray-200 hover:bg-gray-300 rounded-xl px-5 h-10 flex  gap-3 items-center justify-center">
-                    <FcGoogle /> Sign in With Google
-                </button>
-            </div>
-        </div>
+
+        <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            className="flex gap-3 mb-6">
+            <button onClick={handleGoogleSignIn} className="bg-gray-200 hover:bg-gray-300 rounded-xl px-5 h-10 flex  gap-3 items-center justify-center">
+                <FcGoogle /> Sign in With Google
+            </button>
+        </motion.div>
+
     );
 };
 

@@ -14,13 +14,23 @@ import { useQuery } from 'react-query';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 import UpdateProfile from './UpdateProfile';
 import useCategory from '../hooks/useCategory';
+import { Button } from './ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { Disclosure } from '@headlessui/react';
+import { Separator } from '@radix-ui/react-select';
 
 
-// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-// Modal.setAppElement('#yourAppElement');
 
 const Navbar = () => {
     const { user, logOut, updateUserProfile, setLoading, loading } = useAuth()
+    const location = useLocation();
 
 
 
@@ -33,23 +43,66 @@ const Navbar = () => {
     // console.log(cart);
     // console.log(user);
     // const [isAdmin, isAdminLoading] = useAdmin()
+    const isProductsActive = () => {
+        const isExactPath = location.pathname === '/products';
+        const hasCategoryParam = new URLSearchParams(location.search).has('products');
+        return isExactPath && !hasCategoryParam;
+    };
 
 
 
 
 
-    const links = <div className='flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row'>
-        <NavLink className={({ isActive }) =>
-            ` ${isActive ? "text-black opacity-100 font-semibold  border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0" : "text-black opacity-80"}`
-        }
-            style={{ fontVariant: 'small-caps' }} to={'/'}>Home</NavLink>
-        <NavLink className={({ isActive }) =>
-            `flex items-center gap-3 ${isActive ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0" : "text-black opacity-80"
-            }`
-        } style={{ fontVariant: 'small-caps' }} to={'/products'}>Products</NavLink>
+    const links = <div className="flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row">
+        <NavLink
+            className={({ isActive }) =>
+                `${isActive ? 'text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0' : 'text-black opacity-80'}`
+            }
+            style={{ fontVariant: 'small-caps' }}
+            to="/"
+        >
+            Home
+        </NavLink>
 
+        {/* Products with Dropdown */}
+        <div className="relative flex items-center">
+            {/* Products Link (clicking this navigates to /products) */}
+            <NavLink
+                className={() =>
+                    `flex items-center ${isProductsActive() ? 'text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0' : 'text-black opacity-80'}`
+                }
+                style={{ fontVariant: 'small-caps' }}
+                to="/products"
+            >
+                Products
+            </NavLink>
 
-
+            {/* Dropdown Trigger (clicking this opens the dropdown) */}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <button className="ml-1 p-2 focus:outline-none">
+                        <ChevronDown className="h-4 w-4 inline-flex" />
+                    </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                    {categoriesLoading ? (
+                        <DropdownMenuItem>Loading...</DropdownMenuItem>
+                    ) : (
+                        categories?.map((category) => (
+                            <DropdownMenuItem key={category?.name || category?.id}>
+                                <Link
+                                    to={`/products?category=${category?.name}`}
+                                    className="w-full text-black opacity-80 hover:opacity-100 flex gap-4"
+                                >
+                                    <img className='w-5 rounded-full object-cover' src={category?.image} alt="" />
+                                    {category?.name}
+                                </Link>
+                            </DropdownMenuItem>
+                        ))
+                    )}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     </div>
 
     const handleLogout = () => {
@@ -79,10 +132,9 @@ const Navbar = () => {
     return (
         <div className="navbar fixed z-10 bg-gradient-to-r from-base-100 via-sky-50 to-white bg-opacity-60 lg:px-28 xl:px-32 py-0 border-b">
             <div className='navbar-start '>
-                <div className="drawer lg:hidden flex items-center">
+                <div className="drawer lg:hidden flex items-center z-10">
                     <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
                     <div className="drawer-content">
-
                         <label
                             htmlFor="my-drawer-2"
                             tabIndex={0}
@@ -93,12 +145,14 @@ const Navbar = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                className="inline-block h-5 w-5 stroke-current text-black">
+                                className="inline-block h-5 w-5 stroke-current text-black"
+                            >
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"></path>
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
                             </svg>
                         </label>
                     </div>
@@ -138,40 +192,73 @@ const Navbar = () => {
                             </div>
 
                             {/* Menu Items */}
-                            <ul className="menu">
-                                <li className='text-md'>
+                            <ul className="menu space-y-2">
+                                <li className="text-md">
                                     <NavLink
                                         to="/"
-                                        onClick={() => (document.getElementById("my-drawer-2").checked = false)}
+                                        className={({ isActive }) =>
+                                            `${isActive ? 'text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2' : 'text-black opacity-80 p-2'}`
+                                        }
+                                        style={{ fontVariant: 'small-caps' }}
+                                        onClick={() => (document.getElementById('my-drawer-2').checked = false)}
                                     >
                                         Home
                                     </NavLink>
                                 </li>
-                                <li className='text-md'>
-                                    <NavLink
-                                        to="/menu"
-                                        onClick={() => (document.getElementById("my-drawer-2").checked = false)}
-                                    >
-                                        Menu
-                                    </NavLink>
-                                </li>
-                                <li className='text-md'>
-                                    <NavLink
-                                        to="/order/salad"
-                                        onClick={() => (document.getElementById("my-drawer-2").checked = false)}
-                                    >
-                                        Order Food
-                                    </NavLink>
-                                </li>
 
+                                {/* Products with Accordion for Categories */}
+                                <li className="text-md">
+                                    <Disclosure>
+                                        {({ open }) => (
+                                            <>
+                                                <div className="flex items-center p-2">
+                                                    <NavLink
+                                                        to="/products"
+                                                        className={() =>
+                                                            `flex items-center ${isProductsActive() ? 'text-black opacity-100 font-semibold border-b-2 border-black rounded-none ' : 'text-black opacity-80 '}`
+                                                        }
+                                                        style={{ fontVariant: 'small-caps' }}
+                                                        onClick={() => (document.getElementById('my-drawer-2').checked = false)}
+                                                    >
+                                                        Products
+                                                    </NavLink>
+                                                    <Disclosure.Button className="p-2 focus:outline-none">
+                                                        <ChevronDown
+                                                            className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
+                                                        />
+                                                    </Disclosure.Button>
+                                                </div>
+                                                <Disclosure.Panel className=" p-2 flex flex-col justify-start items-start space-y-1">
+                                                    {categoriesLoading ? (
+                                                        <p className="text-sm text-gray-500 p-2">Loading...</p>
+                                                    ) : (
+                                                        categories?.map((category) => (
+                                                            <NavLink
+                                                                key={category?.name || category?.id}
+                                                                to={`/products?category=${category?.name}`}
+                                                                className={({ isActive }) =>
+                                                                    `block text-sm border-b w-full ${isActive ? 'text-black opacity-100 font-semibold' : 'text-black opacity-80'}`
+                                                                }
+                                                                onClick={() => (document.getElementById('my-drawer-2').checked = false)}
+                                                            >
+                                                                {category?.name}
+                                                            </NavLink>
+                                                        ))
+                                                    )}
+                                                </Disclosure.Panel>
+                                            </>
+                                        )}
+                                    </Disclosure>
+                                </li>
 
                             </ul>
-
                         </div>
                     </div>
-                    <Link style={{ fontVariant: 'small-caps' }} to={'/'} className='text-black text-xl lg:text-2xl  font-bold lg:hidden' >
+
+                    {/* Logo */}
+                    <Link style={{ fontVariant: 'small-caps' }} to={'/'} className="text-black text-lg overflow-visible lg:text-2xl font-bold lg:hidden">
                         <Typewriter
-                            words={['Kashem Optical', 'KO']}
+                            words={['KO']}
                             loop={true}
                             cursor
                             cursorStyle="."
@@ -220,7 +307,7 @@ const Navbar = () => {
 
 
 
-                <div className="flex-none mr-5">
+                <div className="flex-none mr-5 z-0">
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                             <div className="indicator">
@@ -241,7 +328,7 @@ const Navbar = () => {
                         </div>
                         <div
                             tabIndex={0}
-                            className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
+                            className="card card-compact dropdown-content bg-base-100  mt-3 w-52 shadow">
                             <div className="card-body text-slate-800">
                                 {/* <span className="text-lg font-bold">{cart.length} Items</span>
                                     <span className="text-info">Subtotal: ${totalPrice.toFixed(2)}</span> */}
@@ -309,7 +396,7 @@ const Navbar = () => {
 
                 {
                     user ?
-                        <button onClick={handleLogout} className="btn btn-neutral btn-sm px-5 rounded-md ml-2">Log Out</button>
+                        <Button onClick={handleLogout}>Log Out</Button>
                         :
                         <Link to={'/login'} className="btn btn-neutral btn-sm px-5 rounded-md">Login</Link>
                 }
@@ -394,7 +481,7 @@ const Navbar = () => {
 
                             {
                                 user ?
-                                    <button onClick={handleLogout} className="btn btn-sm bg-black mt-2 font-normal  text-white">Log Out</button>
+                                    <Button onClick={handleLogout}>Log Out</Button>
                                     :
 
                                     <Link to={'/login'} className=''>
