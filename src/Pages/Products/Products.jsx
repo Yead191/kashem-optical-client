@@ -165,7 +165,7 @@ const Products = () => {
           <div className="relative">
             <input
               className="input input-sm input-bordered w-full md:min-w-96 py-4 pl-8"
-              placeholder="Search By Name"
+              placeholder="Search By Product Name / Brand Name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

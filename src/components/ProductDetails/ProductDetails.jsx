@@ -1,12 +1,32 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
+import { motion } from "framer-motion";
 
 // react icons
-import { FaStar } from "react-icons/fa6";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaStar,
+  FaHeart,
+  FaRegHeart,
+  FaCircle,
+  FaGlasses,
+  FaTag,
+  FaVenusMars,
+  FaMapMarkerAlt,
+  FaShieldAlt,
+  FaPalette,
+  FaBorderAll,
+  FaShapes,
+  FaCogs,
+  FaRuler,
+  FaRulerHorizontal,
+  FaWeightHanging,
+  FaLayerGroup,
+  FaGlobe,
+  FaFilePrescription,
+} from "react-icons/fa";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-import { FaCircle } from "react-icons/fa"; // For the dot icon
+// import { FaCircle } from "react-icons/fa"; // For the dot icon
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 const ProductDetails = () => {
@@ -65,7 +85,7 @@ const ProductDetails = () => {
             </div> */}
 
             {/* Main image with navigation arrows */}
-            <div className="relative h-[70vh]">
+            <div className="relative h-[40vh] md:h-[70vh]">
               <img
                 src={product?.image[currentImageIndex]}
                 alt={`${product.productName} view ${currentImageIndex + 1}`}
@@ -123,67 +143,171 @@ const ProductDetails = () => {
           <h1 className="text-[1.6rem] md:text-[1.9rem] text-gray-800 font-semibold">
             {product.productName} - {product.brandName}
           </h1>
+          {product.status && (
+            <p className="text-gray-800 flex items-center gap-2 ">
+              <FaCircle
+                className={`w-3 h-3 ${
+                  product.status === "In Stock"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              />{" "}
+              {product.status}
+            </p>
+          )}
 
-          <p className="text-gray-600 text-[0.9rem]">
-            Premium {product.category} for {product.gender}. Made with{" "}
-            {product.frameMaterial} frame in {product.frameSize} size. Origin:{" "}
-            {product.origin}
-          </p>
-
-          <div className="flex items-center gap-3">
-            <span className="text-[1.5rem] text-gray-800 font-medium">
-              ৳ {product.price.discount.discountedAmount}
-            </span>
-            <span className="text-lg text-gray-500 line-through">
+          {product.description ? (
+            <p className="text-gray-600 text-[0.9rem]">{product.description}</p>
+          ) : (
+            <p className="text-gray-600 text-[0.9rem]">
+              Premium {product.category} for {product.gender}. Made with{" "}
+              {product.frameMaterial} frame in {product.frameSize} size. Origin:{" "}
+              {product.origin}
+            </p>
+          )}
+          {product.price.discount.discountedAmount ? (
+            <div className="flex items-center gap-3">
+              <span className="text-[2rem] text-black font-semibold">
+                <span className="text-[1.5rem] mr-0.5">৳</span>
+                {product.price.discount.discountedAmount}
+              </span>
+              <span className="text-lg text-gray-500 line-through">
+                ৳{product.price.amount}
+              </span>
+            </div>
+          ) : (
+            <span className="text-[1.5rem] text-black font-semibold">
               ৳ {product.price.amount}
             </span>
-          </div>
-
-          <div className="space-y-2 border-t border-t-gray-200 pt-4">
-            <p className="font-medium text-[0.9rem] text-gray-600">
-              Specifications
-            </p>
+          )}
+          {/* specification */}
+          <p className="font-medium text-[0.9rem] text-gray-600 border-t border-t-gray-200 pt-4">
+            Specifications
+          </p>
+          <div className="space-y-2 grid grid-cols-2 text-xs md:text-sm">
             {product.brandName && (
-              <p className="text-gray-800">Brand: {product.brandName}</p>
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaTag className="w-4 h-4 text-gray-600" /> Brand:{" "}
+                {product.brandName}
+              </p>
             )}
-            {product.productName && (
-              <p className="text-gray-800">Product: {product.productName}</p>
+            {product.productType && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaGlasses className="w-4 h-4 text-gray-600" /> Product Type:{" "}
+                {product.productType}
+              </p>
+            )}
+            {product.modelNo && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaTag className="w-4 h-4 text-gray-600" /> Model No:{" "}
+                {product.modelNo}
+              </p>
             )}
             {product.category && (
-              <p className="text-gray-800">Category: {product.category}</p>
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaLayerGroup className="w-4 h-4 text-gray-600" /> Category:{" "}
+                {product.category}
+              </p>
             )}
             {product.gender && (
-              <p className="text-gray-800">Gender: {product.gender}</p>
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaVenusMars className="w-4 h-4 text-gray-600" /> Gender:{" "}
+                {product.gender}
+              </p>
             )}
             {product.origin && (
-              <p className="text-gray-800">Origin: {product.origin}</p>
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaMapMarkerAlt className="w-4 h-4 text-gray-600" /> Origin:{" "}
+                {product.origin}
+              </p>
+            )}
+            {product.warranty && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaShieldAlt className="w-4 h-4 text-gray-600" /> Warranty:{" "}
+                {product.warranty}
+              </p>
+            )}
+            {product.color && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaPalette className="w-4 h-4 text-gray-600" /> Color:{" "}
+                {product.color}
+              </p>
+            )}
+            {product.frameType && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaBorderAll className="w-4 h-4 text-gray-600" /> Frame Type:{" "}
+                {product.frameType}
+              </p>
+            )}
+            {product.frameShape && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaShapes className="w-4 h-4 text-gray-600" /> Frame Shape:{" "}
+                {product.frameShape}
+              </p>
             )}
             {product.frameMaterial && (
-              <p className="text-gray-800">
-                Frame Material: {product.frameMaterial}
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaCogs className="w-4 h-4 text-gray-600" /> Frame Material:{" "}
+                {product.frameMaterial}
+              </p>
+            )}
+            {product.templeMaterial && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaCogs className="w-4 h-4 text-gray-600" /> Temple Material:{" "}
+                {product.templeMaterial}
               </p>
             )}
             {product.frameSize && (
-              <p className="text-gray-800">Frame Size: {product.frameSize}</p>
-            )}
-            {product.status && (
               <p className="text-gray-800 flex items-center gap-2">
-                <FaCircle
-                  className={`w-3 h-3 ${
-                    product.status === "In Stock"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                />
-                {product.status}
+                <FaRuler className="w-4 h-4 text-gray-600" /> Frame Size:{" "}
+                {product.frameSize}
               </p>
             )}
-            {product.priceNum && (
-              <p className="text-gray-800">Price Number: {product.priceNum}</p>
+            {product.frameWidth && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaRulerHorizontal className="w-4 h-4 text-gray-600" /> Frame
+                Width: {product.frameWidth}
+              </p>
+            )}
+            {product.dimensions && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaRuler className="w-4 h-4 text-gray-600" /> Dimensions:{" "}
+                {product.dimensions}
+              </p>
+            )}
+            {product.weight && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaWeightHanging className="w-4 h-4 text-gray-600" /> Weight:{" "}
+                {product.weight}
+              </p>
+            )}
+            {product.weightGroup && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaWeightHanging className="w-4 h-4 text-gray-600" /> Weight
+                Group: {product.weightGroup}
+              </p>
+            )}
+            {product.frameStyle && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaShapes className="w-4 h-4 text-gray-600" /> Frame Style:{" "}
+                {product.frameStyle}
+              </p>
+            )}
+            {product.prescription && (
+              <p className="text-gray-800 flex items-center gap-2">
+                <FaFilePrescription className="w-4 h-4 text-gray-600" />{" "}
+                Prescription: {product.prescription}
+              </p>
             )}
           </div>
 
-          <div className="flex gap-4 items-center pt-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="flex gap-4 items-center pt-6"
+          >
             <div className="flex items-center bg-gray-100 rounded-md">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -217,11 +341,18 @@ const ProductDetails = () => {
               )}
               Wishlist
             </button>
-          </div>
+          </motion.div>
 
-          <button className="w-full px-6 py-3 bg-[#0FABCA] text-white rounded-md hover:bg-[#0FABCA]/90">
-            Add to Cart
-          </button>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <button className="w-full px-6 py-3 bg-[#0FABCA] text-white rounded-md hover:bg-[#0FABCA]/90">
+              Add to Cart
+            </button>
+          </motion.div>
         </div>
       </div>
     </div>

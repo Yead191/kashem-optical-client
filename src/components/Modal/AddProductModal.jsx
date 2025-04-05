@@ -568,14 +568,14 @@ const AddProductModal = ({ isOpen, onClose, refetch }) => {
               onChange={(e) => setPrescription(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label>Lens Material</Label>
             <Input
               placeholder="ex. TR90"
               value={lensMaterial}
               onChange={(e) => setLensMaterial(e.target.value)}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Watch Section Divider */}

@@ -13,11 +13,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { PencilIcon } from "lucide-react";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -31,6 +31,7 @@ import { Pencil } from "lucide-react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
   const axiosSecure = useAxiosSecure();
@@ -95,8 +96,8 @@ const ManageProducts = () => {
 
   const [updateItem, setUpdateItem] = useState({});
 
-  const handleUpdateProduct = (item) => {
-    setUpdateItem(item);
+  const handleUpdateProduct = (id) => {
+    setUpdateItem(id);
     setUpdateModalOpen(true);
   };
 
@@ -192,9 +193,7 @@ const ManageProducts = () => {
             </div>
           </div>
         </div>
-        <Button
-          onClick={() => setIsModalOpen(true)}
-        >
+        <Button onClick={() => setIsModalOpen(true)}>
           <IoMdAddCircle className="text-lg" />
           Add New Product
         </Button>
@@ -207,7 +206,7 @@ const ManageProducts = () => {
         onClose={() => setIsModalOpen(false)}
       />
       <UpdateProductModal
-        updateItem={updateItem}
+        id={updateItem}
         refetch={refetch}
         isOpen={updateModalOpen}
         onClose={() => setUpdateModalOpen(false)}
@@ -271,18 +270,16 @@ const ManageProducts = () => {
                     <TableCell>
                       {product.price?.discount?.discountedAmount > 0 ? (
                         <div>
-                          <span className="line-through text-gray-500 mr-2">
-                            {product.price.amount} {product.price.currency}
+                          <span className="mr-2">
+                            ৳{product.price?.discount?.discountedAmount}{" "}
                           </span>
-                          <span>
-                            {product.price?.discount?.discountedAmount}{" "}
-                            {product.price.currency}
+
+                          <span className="line-through text-gray-500 ">
+                            ৳{product.price.amount}
                           </span>
                         </div>
                       ) : (
-                        <span>
-                          {product.price.amount} {product.price.currency}
-                        </span>
+                        <span>৳{product.price.amount}</span>
                       )}
                     </TableCell>
                     <TableCell
@@ -302,13 +299,17 @@ const ManageProducts = () => {
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem
+                          <Link
+                            to={`/product/${product._id}`}
+                            className="flex items-center w-full"
                           >
-                            <Eye className="mr-2 h-4 w-4" />
-                            <span>Details</span>
-                          </DropdownMenuItem>
+                            <DropdownMenuItem className="w-full">
+                              <Eye className="mr-2 h-4 w-4" />
+                              <span>Details</span>
+                            </DropdownMenuItem>
+                          </Link>
                           <DropdownMenuItem
-                            onClick={() => handleUpdateProduct(product)}
+                            onClick={() => handleUpdateProduct(product._id)}
                           >
                             <Pencil className="mr-2 h-4 w-4" />
                             <span>Update Product</span>
