@@ -110,7 +110,7 @@ const ManageProducts = () => {
         </h2>
       </div>
 
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex flex-col-reverse md:flex-row gap-2 justify-start items-start md:justify-between md:items-center mb-10">
         <div className="flex flex-row-reverse gap-2 items-center">
           <div className="join flex justify-center items-center relative">
             <div className="relative">
@@ -193,10 +193,12 @@ const ManageProducts = () => {
             </div>
           </div>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>
-          <IoMdAddCircle className="text-lg" />
-          Add New Product
-        </Button>
+        <div className="flex justify-start items-start ">
+          <Button className="" onClick={() => setIsModalOpen(true)}>
+            <IoMdAddCircle className="text-lg" />
+            Add New Product
+          </Button>
+        </div>
       </div>
 
       {/* Modal Components */}

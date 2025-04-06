@@ -1,11 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import toast from "react-hot-toast";
 
 import { MdDashboard } from "react-icons/md";
 import { Typewriter } from "react-simple-typewriter";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { PiSignIn, PiSignOut } from "react-icons/pi";
 import useAuth from "../hooks/useAuth";
 import { FaUser } from "react-icons/fa6";
@@ -25,15 +29,21 @@ import { ChevronDown } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { Separator } from "@radix-ui/react-select";
+import { cn } from "@/lib/utils";
+import useCart from "@/hooks/useCart";
+import CartDropdown from "./CartDropDown";
 
 const Navbar = () => {
   const { user, logOut, updateUserProfile, setLoading, loading } = useAuth();
   const location = useLocation();
-
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const [categories, categoriesLoading] = useCategory();
+  const [cart, cartLoading, refetch] = useCart();
 
+  // Calculate the total price of items in the cart
+  const totalPrice =
+    cart?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
   // const [cart] = useCart()
   // const totalPrice = cart.reduce((total, item) => total + item.price, 0)
   // console.log(cart);
@@ -131,24 +141,28 @@ const Navbar = () => {
 
   // }
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // console.log(cart);
 
   return (
     <div className="navbar fixed z-10 bg-gradient-to-r from-base-100 via-sky-50 to-white bg-opacity-60 lg:px-28 xl:px-32 py-0 border-b">
       <div className="navbar-start ">
-        <div className="drawer lg:hidden flex items-center z-10">
-          <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        {/* drawer for small devices */}
+        <div className="drawer lg:hidden flex items-center z-20">
+          <input id="mobile-drawer" type="checkbox" className="drawer-toggle" />
+
+          {/* Drawer Toggle Button */}
           <div className="drawer-content">
             <label
-              htmlFor="my-drawer-2"
-              tabIndex={0}
+              htmlFor="mobile-drawer"
+              className="btn btn-ghost p-2"
               role="button"
-              className="btn btn-ghost lg:hidden"
+              tabIndex={0}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                className="inline-block h-5 w-5 stroke-current text-black"
+                className="h-6 w-6 stroke-current text-black"
               >
                 <path
                   strokeLinecap="round"
@@ -160,24 +174,22 @@ const Navbar = () => {
             </label>
           </div>
 
+          {/* Drawer Side Panel */}
           <div className="drawer-side">
-            <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-            <div className="bg-base-200 text-base-content min-h-full w-80 p-4 relative z-10">
-              {/* Menu Header */}
-              <div className="flex items-center justify-between border-b pb-2 mb-4">
-                <h5
-                  id="drawer-navigation-label"
-                  className="text-base font-semibold text-gray-500 uppercase dark:text-gray-400"
-                >
-                  Menu
-                </h5>
+            <label
+              htmlFor="mobile-drawer"
+              className="drawer-overlay bg-black/40"
+            ></label>
+            <div className="bg-white min-h-full w-80 p-6 shadow-xl transform transition-transform duration-300 ease-in-out">
+              {/* Header with Close Button */}
+              <div className="flex items-center justify-between mb-6">
+                <h5 className="text-lg font-bold text-gray-800">Menu</h5>
                 <label
-                  htmlFor="my-drawer-2"
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-black cursor-pointer"
+                  htmlFor="mobile-drawer"
+                  className="p-2 rounded-full hover:bg-gray-100 cursor-pointer"
                 >
                   <svg
-                    className="w-3 h-3"
-                    aria-hidden="true"
+                    className="w-5 h-5 text-gray-600"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 14 14"
@@ -190,115 +202,152 @@ const Navbar = () => {
                       d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                     />
                   </svg>
-                  <span className="sr-only">Close menu</span>
                 </label>
               </div>
 
               {/* Menu Items */}
-              <ul className="menu space-y-2">
-                <li className="text-md">
+              <ul className="space-y-2">
+                <li>
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
-                      `${
+                      cn(
+                        "block text-lg font-medium p-2 rounded-md transition-colors",
                         isActive
-                          ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2"
-                          : "text-black opacity-80 p-2"
-                      }`
+                          ? "text-blue-600 "
+                          : "text-gray-700 hover:bg-gray-100"
+                      )
                     }
                     style={{ fontVariant: "small-caps" }}
                     onClick={() =>
-                      (document.getElementById("my-drawer-2").checked = false)
+                      (document.getElementById("mobile-drawer").checked = false)
                     }
                   >
                     Home
                   </NavLink>
                 </li>
 
-                {/* Products with Accordion for Categories */}
-                <li className="text-md">
-                  <Disclosure>
-                    {({ open }) => (
-                      <>
-                        <div className="flex items-center p-2">
+                {/* Products with Collapsible Categories */}
+                <li>
+                  <Collapsible>
+                    <div className="group flex items-center justify-between">
+                      <NavLink
+                        to="/products"
+                        className={({ isActive }) =>
+                          cn(
+                            "text-lg font-medium p-2 rounded-md transition-colors flex-1",
+                            isActive
+                              ? "text-blue-600 "
+                              : "text-gray-700 hover:bg-gray-100"
+                          )
+                        }
+                        style={{ fontVariant: "small-caps" }}
+                        onClick={() =>
+                          (document.getElementById(
+                            "mobile-drawer"
+                          ).checked = false)
+                        }
+                      >
+                        Products
+                      </NavLink>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <ChevronDown
+                            className={cn(
+                              "h-5 w-5 transition-transform duration-200",
+                              location.pathname.startsWith("/products")
+                                ? "text-black"
+                                : "text-gray-700"
+                            )}
+                          />
+                        </Button>
+                      </CollapsibleTrigger>
+                    </div>
+                    <CollapsibleContent className="ml-0 mt-2 space-y-1 animate-fade-in">
+                      {categoriesLoading ? (
+                        <p className="text-sm text-gray-500 p-2">Loading...</p>
+                      ) : (
+                        categories?.map((category) => (
                           <NavLink
-                            to="/products"
-                            className={() =>
-                              `flex items-center ${
-                                isProductsActive()
-                                  ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none "
-                                  : "text-black opacity-80 "
-                              }`
-                            }
-                            style={{ fontVariant: "small-caps" }}
+                            key={category?.name || category?.id}
+                            to={`/products?category=${category?.name}`}
+                            className="block text-sm p-2 rounded-none border-b border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors"
                             onClick={() =>
                               (document.getElementById(
-                                "my-drawer-2"
+                                "mobile-drawer"
                               ).checked = false)
                             }
                           >
-                            Products
+                            {category?.name}
                           </NavLink>
-                          <Disclosure.Button className="p-2 focus:outline-none">
-                            <ChevronDown
-                              className={`h-4 w-4 transition-transform ${
-                                open ? "rotate-180" : ""
-                              }`}
-                            />
-                          </Disclosure.Button>
-                        </div>
-                        <Disclosure.Panel className=" p-2 flex flex-col justify-start items-start space-y-1">
-                          {categoriesLoading ? (
-                            <p className="text-sm text-gray-500 p-2">
-                              Loading...
-                            </p>
-                          ) : (
-                            categories?.map((category) => (
-                              <NavLink
-                                key={category?.name || category?.id}
-                                to={`/products?category=${category?.name}`}
-                                className={({ isActive }) =>
-                                  `block text-sm border-b w-full ${
-                                    isActive
-                                      ? "text-black opacity-100 font-semibold"
-                                      : "text-black opacity-80"
-                                  }`
-                                }
-                                onClick={() =>
-                                  (document.getElementById(
-                                    "my-drawer-2"
-                                  ).checked = false)
-                                }
-                              >
-                                {category?.name}
-                              </NavLink>
-                            ))
-                          )}
-                        </Disclosure.Panel>
-                      </>
-                    )}
-                  </Disclosure>
+                        ))
+                      )}
+                    </CollapsibleContent>
+                  </Collapsible>
+                </li>
+
+                {/* About Us */}
+                <li>
+                  <NavLink
+                    to="/about"
+                    className={({ isActive }) =>
+                      cn(
+                        "block text-lg font-medium p-2 rounded-md transition-colors",
+                        isActive
+                          ? "text-blue-600 "
+                          : "text-gray-700 hover:bg-gray-100"
+                      )
+                    }
+                    style={{ fontVariant: "small-caps" }}
+                    onClick={() =>
+                      (document.getElementById("mobile-drawer").checked = false)
+                    }
+                  >
+                    About Us
+                  </NavLink>
+                </li>
+
+                {/* Contact Us */}
+                <li>
+                  <NavLink
+                    to="/contact"
+                    className={({ isActive }) =>
+                      cn(
+                        "block text-lg font-medium p-2 rounded-md transition-colors",
+                        isActive
+                          ? "text-blue-600 "
+                          : "text-gray-700 hover:bg-gray-100"
+                      )
+                    }
+                    style={{ fontVariant: "small-caps" }}
+                    onClick={() =>
+                      (document.getElementById("mobile-drawer").checked = false)
+                    }
+                  >
+                    Contact Us
+                  </NavLink>
                 </li>
               </ul>
             </div>
           </div>
-
-          {/* Logo */}
-          <Link
-            style={{ fontVariant: "small-caps" }}
-            to={"/"}
-            className="text-black text-lg overflow-visible lg:text-2xl font-bold lg:hidden"
-          >
-            <Typewriter
-              words={["KO"]}
-              loop={true}
-              cursor
-              cursorStyle="."
-              typeSpeed={90}
-              deleteSpeed={70}
-              delaySpeed={1000}
-            />
-          </Link>
+          {/* Logo at Bottom */}
+          <div className=" ">
+            <NavLink
+              to="/"
+              className="text-black text-xl font-bold"
+              style={{ fontVariant: "small-caps" }}
+            >
+              <Typewriter
+                words={["KO"]}
+                loop={true}
+                cursor
+                cursorStyle="."
+                typeSpeed={100}
+                deleteSpeed={70}
+                delaySpeed={1000}
+              />
+            </NavLink>
+          </div>
         </div>
 
         <Link
@@ -339,48 +388,8 @@ const Navbar = () => {
         </ul>
 
         <div className="flex-none mr-5 z-0">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle"
-            >
-              <div className="indicator">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                <span className="badge badge-sm indicator-item">2</span>
-              </div>
-            </div>
-            <div
-              tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100  mt-3 w-52 shadow"
-            >
-              <div className="card-body text-slate-800">
-                {/* <span className="text-lg font-bold">{cart.length} Items</span>
-                                    <span className="text-info">Subtotal: ${totalPrice.toFixed(2)}</span> */}
-                <div className="card-actions">
-                  <Link
-                    to={"/dashboard/cart"}
-                    className="btn btn-neutral btn-block btn-sm"
-                  >
-                    View cart
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* cart dropdown */}
+          <CartDropdown cart={cart}></CartDropdown>
         </div>
 
         <div className="dropdown dropdown-end mr-2">
@@ -459,49 +468,8 @@ const Navbar = () => {
       )}
 
       <div className="navbar-end lg:hidden">
-        <div className="flex-none ">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle"
-            >
-              <div className="indicator">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                <span className="badge badge-sm indicator-item">2</span>
-              </div>
-            </div>
-            <div
-              tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
-            >
-              <div className="card-body text-slate-800">
-                {/* <span className="text-lg font-bold">{cart.length} Items</span>
-                                <span className="text-info">Subtotal: ${totalPrice.toFixed(2)}</span> */}
-                <div className="card-actions">
-                  <Link
-                    to={"/dashboard/cart"}
-                    className="btn btn-neutral btn-block"
-                  >
-                    View cart
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="flex-none mr-3">
+          <CartDropdown cart={cart}></CartDropdown>
         </div>
         <div className="dropdown dropdown-end ">
           <div className="dropdown dropdown-end">

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import { BaggageClaim, Filter, Search, Heart, Star } from "lucide-react";
 import Spinner from "../../components/Spinner/Spinner";
 import useCategory from "../../hooks/useCategory";
 import { Menu } from "@headlessui/react";
@@ -14,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
+import ProductCard from "@/components/ProductCard/ProductCard";
+import { Filter, Search } from "lucide-react";
 
 const Products = () => {
   const axiosPublic = useAxiosPublic();
@@ -33,6 +34,9 @@ const Products = () => {
     searchParams.get("material") || ""
   );
   const [selectedSize, setSelectedSize] = useState(
+    searchParams.get("size") || ""
+  );
+  const [selectedType, setSelectedType] = useState(
     searchParams.get("size") || ""
   );
   const [priceRange, setPriceRange] = useState([0, 10000]);
@@ -62,6 +66,7 @@ const Products = () => {
     if (selectedBrand) params.brand = selectedBrand;
     if (selectedMaterial) params.material = selectedMaterial;
     if (selectedSize) params.size = selectedSize;
+    if (selectedType) params.type = selectedType;
     if (sortPrice) params.sort = sortPrice;
     setSearchParams(params, { replace: true });
   }, [
@@ -69,6 +74,7 @@ const Products = () => {
     selectedGender,
     selectedBrand,
     selectedMaterial,
+    selectedType,
     sortPrice,
     setSearchParams,
   ]);
@@ -100,10 +106,11 @@ const Products = () => {
       sortPrice,
       selectedSize,
       priceRange,
+      selectedType,
     ],
     queryFn: async () => {
       const res = await axiosPublic.get(
-        `/products?search=${searchTerm}&category=${selectedCategory}&gender=${selectedGender}&brand=${selectedBrand}&material=${selectedMaterial}&size=${selectedSize}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&sort=${sortPrice}`
+        `/products?search=${searchTerm}&category=${selectedCategory}&gender=${selectedGender}&brand=${selectedBrand}&material=${selectedMaterial}&size=${selectedSize}&type=${selectedType}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&sort=${sortPrice}`
       );
       return res.data;
     },
@@ -121,6 +128,7 @@ const Products = () => {
     selectedGender,
     selectedBrand,
     selectedMaterial,
+    selectedType,
     sortPrice,
     priceRange,
     refetch,
@@ -138,6 +146,7 @@ const Products = () => {
     setSelectedGender("");
     setSelectedBrand("");
     setSelectedMaterial("");
+    setSelectedType("");
     setSelectedSize("");
     setPriceRange([
       filterOptions.priceRange?.min || 0,
@@ -328,6 +337,23 @@ const Products = () => {
                 </div>
               ))}
             </div>
+            {/* Frame Type */}
+            <div className="mb-6">
+              <h4 className="font-medium mb-2">Frame Type</h4>
+              {filterOptions.types?.map((type) => (
+                <div key={type} className="flex items-center mb-2">
+                  <Checkbox
+                    id={`type-${type}`}
+                    checked={selectedType === type}
+                    onCheckedChange={() => setSelectedType(type)}
+                    className="mr-2"
+                  />
+                  <label htmlFor={`type-${type}`} className="text-gray-500">
+                    {type}
+                  </label>
+                </div>
+              ))}
+            </div>
 
             {/* Brands */}
             <div className="mb-6">
@@ -389,7 +415,8 @@ const Products = () => {
               selectedGender ||
               selectedBrand ||
               selectedMaterial ||
-              selectedSize) && (
+              selectedSize ||
+              selectedType) && (
               <button
                 onClick={handleClearFilter}
                 className="text-red-500 text-sm mt-2"
@@ -409,99 +436,7 @@ const Products = () => {
           {products.length ? (
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4 w-full place-items-center place-content-center justify-center items-center">
               {products?.map((product) => (
-                <Link
-                  to={`/product/${product._id}`}
-                  key={product._id}
-                  className="relative rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col border border-gray-200 w-full h-full"
-                >
-                  {/* Heart Icon */}
-                  <div className="absolute top-2 right-2 z-10">
-                    <Heart className="h-5 w-5 text-gray-500 hover:text-red-500 cursor-pointer" />
-                  </div>
-
-                  {/* Product Image */}
-                  <img
-                    className="mx-auto pt-4 md:px-4 mb-4 overflow-y-hidden  object-cover  w-full hover:transition hover:scale-105 hover:duration-300 h-[180px] md:h-[200px] lg:h-[260px]"
-                    src={product?.image}
-                    alt={product?.brandName}
-                  />
-
-                  {/* Product Details */}
-                  <div className="p-4 flex flex-col flex-grow">
-                    {/* Rating */}
-                    <div className="flex items-center mb-2">
-                      <Badge
-                        variant="secondary"
-                        className="flex items-center gap-1"
-                      >
-                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                        <span>4.9</span>
-                        <span className="text-gray-500">
-                          ({Math.floor(Math.random() * 1000)})
-                        </span>
-                      </Badge>
-                    </div>
-
-                    {/* Brand Name */}
-                    <h4 className="text-md md:text-lg font-semibold mb-1">
-                      {product?.productName}
-                    </h4>
-
-                    {/* Size and Additional Info */}
-                    <p className="text-sm text-gray-500 mb-2  flex-grow">
-                      Size: {product?.frameSize} • {product?.brandName}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      {/* Price */}
-                      <div className="flex items-center gap-2 ">
-                        {product.price.discount.discountedAmount > 0 ? (
-                          <>
-                            <span className="text-lg font-semibold text-black">
-                              ৳{product.price.discount.discountedAmount}
-                            </span>
-                            <span className="text-sm text-gray-500 line-through">
-                              ৳{product.price.amount}
-                            </span>
-                            <span className="text-sm text-green-600">
-                              ({product.price.discount.percentage}% OFF)
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-lg font-semibold text-black">
-                            ৳{product.price.amount}
-                          </span>
-                        )}
-                      </div>
-                      {/* Add to Cart Button */}
-                      <div className="mt-auto">
-                        {product?.status === "In Stock" ? (
-                          <Button
-                            variant="outline"
-                            className="border-[#00bac6] text-[#00bac6] hover:bg-[#00bac6] hover:text-white"
-                          >
-                            <BaggageClaim className="h-5 w-5" />
-                            Add to Cart
-                          </Button>
-                        ) : (
-                          <Button
-                            disabled
-                            className="w-full flex items-center gap-2 rounded-md bg-red-500 hover:bg-red-600"
-                          >
-                            <BaggageClaim className="h-4 w-4" />
-                            Out of Stock
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Color Options (Static for now) */}
-                    {/* <div className="flex gap-2 mb-4">
-                      <div className="w-5 h-5 rounded-full bg-gray-800 border border-gray-300"></div>
-                      <div className="w-5 h-5 rounded-full bg-brown-500 border border-gray-300"></div>
-                      <div className="w-5 h-5 rounded-full bg-gray-300 border border-gray-300"></div>
-                    </div> */}
-                  </div>
-                </Link>
+                <ProductCard product={product}></ProductCard>
               ))}
             </div>
           ) : (

@@ -26,8 +26,12 @@ import {
   FaFilePrescription,
 } from "react-icons/fa";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-// import { FaCircle } from "react-icons/fa"; // For the dot icon
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import Spinner from "../Spinner/Spinner";
+import { Button } from "../ui/button";
+import { Minus } from "lucide-react";
+import { Plus } from "lucide-react";
+import { Heart } from "lucide-react";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -57,9 +61,12 @@ const ProductDetails = () => {
       (prev) => (prev - 1 + product.image.length) % product.image.length
     );
   };
+  const handleQuantityChange = (value) => {
+    setQuantity(Math.max(1, value));
+  };
 
   if (isLoading) {
-    return <div className="text-center py-12">Loading...</div>;
+    return <Spinner></Spinner>;
   }
 
   if (error || !product) {
@@ -308,27 +315,27 @@ const ProductDetails = () => {
             viewport={{ once: true }}
             className="flex gap-4 items-center pt-6"
           >
-            <div className="flex items-center bg-gray-100 rounded-md">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-4 py-[0.560rem] text-[1.3rem] font-[300] hover:bg-gray-100 rounded-l-md"
-              >
-                −
-              </button>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) =>
-                  setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-                }
-                className="w-10 font-medium outline-none text-[0.9rem] bg-transparent text-center"
-              />
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-4 py-[0.560rem] text-[1.3rem] font-[300] hover:bg-gray-100 rounded-r-md"
-              >
-                +
-              </button>
+            {/* Quantity Increase & Favorite */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center border rounded-md">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleQuantityChange(quantity - 1)}
+                  className="h-10 w-10 rounded-r-none"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <div className="w-12 text-center font-medium">{quantity}</div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleQuantityChange(quantity + 1)}
+                  className="h-10 w-10 rounded-l-none"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
             <button
               onClick={() => setIsFavorite(!isFavorite)}
@@ -349,9 +356,18 @@ const ProductDetails = () => {
             transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <button className="w-full px-6 py-3 bg-[#0FABCA] text-white rounded-md hover:bg-[#0FABCA]/90">
-              Add to Cart
-            </button>
+            {product.status === "In Stock" ? (
+              <button className="w-full px-6 py-3 bg-[#0FABCA] text-white rounded-md hover:bg-[#0FABCA]/90">
+                Add to Cart
+              </button>
+            ) : (
+              <button
+                disabled
+                className="w-full px-6 py-3 bg-red-400 cursor-not-allowed text-white rounded-md hover:bg-red-400/90"
+              >
+                Out Of Stock
+              </button>
+            )}
           </motion.div>
         </div>
       </div>
