@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { uploadToImgbb } from "../UploadImage";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -15,37 +12,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { FaFileUpload } from "react-icons/fa";
-import Spinner from "../Spinner/Spinner";
+import toast from "react-hot-toast";
+import { uploadToImgbb } from "../UploadImage"; // Assuming this is in the same directory structure
 
-const UpdateCategoryModal = ({
-  updateOpen,
-  setUpdateOpen,
-  updateId,
-  refetch,
-}) => {
-  const axiosSecure = useAxiosSecure();
+const AddCategoryModal = ({ open, setOpen, onSubmit }) => {
   const [imageLoading, setImageLoading] = useState(false);
-  const [category, setCategory] = useState({});
-  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null); // Store the uploaded image URL
-
-  // Fetch category data only when updateId changes
-  useEffect(() => {
-    if (updateId && updateOpen) {
-      setLoading(true);
-      axiosSecure
-        .get(`/category/${updateId}`)
-        .then((res) => {
-          setCategory(res.data);
-          setFile(res.data.image); // Set initial image from fetched data
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error fetching category:", err);
-          setLoading(false);
-        });
-    }
-  }, [updateId, axiosSecure, updateOpen]);
 
   // Handle file upload
   const handleUpload = async (e) => {
@@ -70,34 +42,27 @@ const UpdateCategoryModal = ({
     const formData = new FormData(e.target);
     const newCategory = {
       name: formData.get("categoryName"),
-      image: file || category.image, // Use new file if uploaded, otherwise keep existing
+      image: file, // Use uploaded URL or null if no new upload
       description: formData.get("description"),
     };
 
-    await toast.promise(
-      axiosSecure.patch(`/category/update/${updateId}`, newCategory),
-      {
-        loading: "Updating Category...",
-        success: <b>Updated Successfully!</b>,
-        error: <b>Could not Update.</b>,
-      }
-    );
-    refetch();
-    setUpdateOpen(false);
+    try {
+      await onSubmit(newCategory); // Pass plain object as per original functionality
+      setFile(null);
+      setOpen(false);
+    } catch (error) {
+      console.error("Error submitting category:", error);
+    }
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   return (
-    <Dialog open={updateOpen} onOpenChange={setUpdateOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Category</DialogTitle>
+          <DialogTitle>Add New Category</DialogTitle>
           <DialogDescription>
-            Enter details to update category. You can always edit or delete it
-            later.
+            Enter details to create a new category. You can always edit or
+            delete it later.
           </DialogDescription>
         </DialogHeader>
 
@@ -109,7 +74,6 @@ const UpdateCategoryModal = ({
               id="categoryName"
               type="text"
               name="categoryName"
-              defaultValue={category?.name}
               placeholder="Enter category name"
               required
             />
@@ -139,10 +103,9 @@ const UpdateCategoryModal = ({
                 </div>
               ) : (
                 <div className="w-full">
-                  <p className="text-sm mb-2">Current Image:</p>
                   <img
                     src={file}
-                    alt="Category"
+                    alt="Uploaded"
                     className="w-20 h-20 object-cover rounded-md mx-auto"
                   />
                 </div>
@@ -156,7 +119,6 @@ const UpdateCategoryModal = ({
             <Textarea
               id="description"
               name="description"
-              defaultValue={category?.description}
               placeholder="Enter short description related to category"
             />
           </div>
@@ -166,12 +128,12 @@ const UpdateCategoryModal = ({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setUpdateOpen(false)}
+              onClick={() => setOpen(false)}
             >
               Close
             </Button>
             <Button type="submit" disabled={imageLoading}>
-              {imageLoading ? "Please Wait..." : "Update Category"}
+              {imageLoading ? "Please Wait..." : "Add Category"}
             </Button>
           </DialogFooter>
         </form>
@@ -180,4 +142,4 @@ const UpdateCategoryModal = ({
   );
 };
 
-export default UpdateCategoryModal;
+export default AddCategoryModal;

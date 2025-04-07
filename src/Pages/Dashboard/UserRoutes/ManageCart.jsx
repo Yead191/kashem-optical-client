@@ -206,7 +206,7 @@ const ManageCart = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 justify-center items-center min-h-screen">
+    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 py-12">
       {/* Confetti component */}
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
@@ -324,7 +324,7 @@ const ManageCart = () => {
       </div>
 
       {/* Right Column - Customer Info Form */}
-      <div className="flex-1 md:px-8 lg:sticky lg:top-28 lg:self-start">
+      <div className="flex-1 md:px-8 lg:sticky lg:top-18 lg:self-start">
         <div className="space-y-6">
           {/* Name */}
           <div className="space-y-2">
@@ -428,7 +428,7 @@ const ManageCart = () => {
           <Button
             onClick={handleConfirmOrder}
             disabled={!cart.length}
-            className="w-full bg-[#0FABCA] hover:bg-[#0FABCA]/90 text-white"
+            className="w-full "
             size="lg"
           >
             Confirm Order

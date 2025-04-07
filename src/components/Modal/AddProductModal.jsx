@@ -136,7 +136,6 @@ const AddProductModal = ({ isOpen, onClose, refetch }) => {
       [images.length === 0, "Upload at least one Product Image to Proceed!"],
       [!brandName, "Brand Name is Required!"],
       [!productName, "Product Name is Required!"],
-      [!productType, "Product Type is Required!"],
       [!category, "Select a Category for the Product!"],
       [!gender, "Select a Gender for the Product!"],
       [!origin, "Specify the Country of Origin!"],

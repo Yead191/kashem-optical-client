@@ -144,7 +144,7 @@ const Navbar = () => {
   // console.log(cart);
 
   return (
-    <div className="navbar fixed z-10 bg-gradient-to-r from-base-100 via-sky-50 to-white bg-opacity-60 lg:px-28 xl:px-32 py-0 border-b">
+    <div className="navbar fixed z-50 bg-gradient-to-r from-base-100 via-sky-50 to-white bg-opacity-60 lg:px-28 xl:px-32 py-0 border-b">
       <div className="navbar-start ">
         {/* drawer for small devices */}
         <div className="drawer lg:hidden flex items-center z-20">

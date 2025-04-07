@@ -13,11 +13,13 @@ import { cn } from "@/lib/utils"; // Assuming you have shadcn's cn utility
 import useAuth from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import useCart from "@/hooks/useCart";
 
 const ProductCard = ({ product }) => {
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   // State to manage the Heart button (liked/unliked)
+  const [, , refetch] = useCart();
 
   const [isLiked, setIsLiked] = useState(false);
 
