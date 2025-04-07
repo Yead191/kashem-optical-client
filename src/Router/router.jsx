@@ -11,6 +11,7 @@ import ManageProducts from "../Pages/Dashboard/AdminRoute/ManageProducts";
 import Statistics from "../Pages/Dashboard/AdminRoute/Statistics";
 import ManageBanners from "../Pages/Dashboard/AdminRoute/ManageBanners";
 import ProductDetails from "@/components/ProductDetails/ProductDetails";
+import ManageCart from "@/Pages/Dashboard/UserRoutes/ManageCart";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,12 @@ const router = createBrowserRouter([
       {
         path: "admin/manage-banners",
         element: <ManageBanners></ManageBanners>,
+      },
+
+      // user routes
+      {
+        path: "manage-cart",
+        element: <ManageCart></ManageCart>,
       },
     ],
   },

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { motion } from "framer-motion";
 
@@ -32,13 +32,20 @@ import { Button } from "../ui/button";
 import { Minus } from "lucide-react";
 import { Plus } from "lucide-react";
 import { Heart } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
+import useCart from "@/hooks/useCart";
+import toast from "react-hot-toast";
+import { ShoppingCart } from "lucide-react";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
+  const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
+  const [cart, cartLoading, refetch] = useCart();
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
   const {
     data: product = {},
@@ -63,6 +70,53 @@ const ProductDetails = () => {
   };
   const handleQuantityChange = (value) => {
     setQuantity(Math.max(1, value));
+  };
+
+  // handle Add to cart
+  const handleAddToCart = async () => {
+    try {
+      if (!user) {
+        return toast.error("You Must Login Before Adding To Cart");
+      }
+
+      setIsAddedToCart(true);
+
+      const cartItem = {
+        customer: {
+          customerName: user.displayName,
+          customerEmail: user.email,
+        },
+        productId: product?._id,
+        productName: product?.productName,
+        price: product?.price?.discount?.discountedAmount
+          ? product?.price.discount.discountedAmount
+          : product?.price?.amount,
+        image: product?.image[0],
+        brandName: product?.brandName,
+        quantity: quantity,
+      };
+
+      await toast.promise(axiosPublic.post("/carts", cartItem), {
+        loading: "Adding to cart...",
+        success: <b>Product Successfully Added To Cart</b>,
+        error: (error) => {
+          const errorMessage =
+            error.response?.data?.error || error.message || "Unable To Add";
+          // Only reset isAddedToCart if the error isn't "Item already exists in cart"
+          if (errorMessage !== "Item already exists in cart") {
+            setIsAddedToCart(false);
+          }
+          return <b>{errorMessage}</b>;
+        },
+      });
+      refetch();
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+      if (isAddedToCart) {
+        refetch();
+      }
+    }
   };
 
   if (isLoading) {
@@ -337,9 +391,11 @@ const ProductDetails = () => {
                 </Button>
               </div>
             </div>
-            <button
+            <Button
               onClick={() => setIsFavorite(!isFavorite)}
-              className="py-3 border border-gray-200 rounded-md flex items-center justify-center gap-[10px] grow hover:bg-gray-50"
+              variant="outline"
+              size="lg"
+              className="w-full"
             >
               {isFavorite ? (
                 <FaHeart className="w-5 h-5 text-red-500" />
@@ -347,28 +403,59 @@ const ProductDetails = () => {
                 <FaRegHeart className="w-5 h-5 text-gray-800" />
               )}
               Wishlist
-            </button>
+            </Button>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            {product.status === "In Stock" ? (
-              <button className="w-full px-6 py-3 bg-[#0FABCA] text-white rounded-md hover:bg-[#0FABCA]/90">
-                Add to Cart
-              </button>
-            ) : (
-              <button
-                disabled
-                className="w-full px-6 py-3 bg-red-400 cursor-not-allowed text-white rounded-md hover:bg-red-400/90"
-              >
-                Out Of Stock
-              </button>
-            )}
-          </motion.div>
+          {isAddedToCart ? (
+            // Shopping & Checkout Button
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 gap-4"
+            >
+              <Link to={"/products"} className="w-full">
+                <Button
+                  className={"cursor-pointer w-full"}
+                  variant="outline"
+                  size="lg"
+                >
+                  Continue Shopping
+                </Button>
+              </Link>
+              <Link to={"/dashboard/manage-cart"} className="w-full">
+                <Button className={"cursor-pointer w-full"} size="lg">
+                  <ShoppingCart className="mr-2 h-4 w-4" /> Checkout
+                </Button>
+              </Link>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              {product.status === "In Stock" ? (
+                <Button
+                  onClick={handleAddToCart}
+                  size="lg"
+                  className="w-full cursor-pointer"
+                >
+                  Add to Cart
+                </Button>
+              ) : (
+                <Button
+                  disabled
+                  size="lg"
+                  className="w-full cursor-not-allowed bg-red-500 text-white hover:bg-red-300"
+                >
+                  Out Of Stock
+                </Button>
+              )}
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

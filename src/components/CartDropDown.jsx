@@ -22,14 +22,12 @@ const CartDropdown = ({ cart }) => {
     <DropdownMenu>
       {/* Cart Icon with Badge */}
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <ShoppingCart size={40} />
-          {cart?.length > 0 && (
-            <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center rounded-full bg-blue-600 text-white text-xs">
-              {cart?.length || 0}
-            </Badge>
-          )}
-        </Button>
+        <button className="relative flex items-center justify-center p-1 rounded-full hover:bg-gray-100">
+          <ShoppingCart size={25} />
+          <Badge className="absolute -top-1.5 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            {cart?.length || 0}
+          </Badge>
+        </button>
       </DropdownMenuTrigger>
 
       {/* Dropdown Content */}
@@ -57,7 +55,10 @@ const CartDropdown = ({ cart }) => {
                     key={item.productId}
                     className="flex items-center justify-between p-3 hover:bg-gray-50"
                   >
-                    <div className="flex items-center gap-3">
+                    <Link
+                      to={`/product/${item.productId}`}
+                      className="flex items-center gap-3"
+                    >
                       <img
                         src={item.image}
                         alt={item.productName}
@@ -71,7 +72,7 @@ const CartDropdown = ({ cart }) => {
                           {item.brandName}
                         </p>
                       </div>
-                    </div>
+                    </Link>
                     <div className="text-sm font-semibold text-gray-800">
                       ৳{(item.price * item.quantity).toFixed(2)}
                     </div>
@@ -90,7 +91,7 @@ const CartDropdown = ({ cart }) => {
             <>
               <DropdownMenuSeparator />
               <CardFooter className="p-4">
-                <Link to="/dashboard/cart" className="w-full">
+                <Link to="/dashboard/manage-cart" className="w-full">
                   <Button className="w-full">View Cart</Button>
                 </Link>
               </CardFooter>

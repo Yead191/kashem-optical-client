@@ -50,7 +50,7 @@ const DashboardIndex = () => {
   const { user, logOut } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const isAdmin = false;
+  const isAdmin = true;
 
   // useEffect(() => {
   //     if (isAdmin) {
@@ -228,6 +228,7 @@ const DashboardIndex = () => {
               >
                 <li>
                   <NavLink
+                    to={"/dashboard/user-stats"}
                     onClick={handleNavClick}
                     className={({ isActive }) =>
                       `flex items-center gap-3 ${
@@ -238,6 +239,21 @@ const DashboardIndex = () => {
                     }
                   >
                     <FaHome /> <span>User Home</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/dashboard/manage-cart"}
+                    onClick={handleNavClick}
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 ${
+                        isActive
+                          ? "text-white bg-neutral rounded-md p-2 "
+                          : "text-slate-800"
+                      }`
+                    }
+                  >
+                    <FaHome /> <span>Manage Cart</span>
                   </NavLink>
                 </li>
               </ul>

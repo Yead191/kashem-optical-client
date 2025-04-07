@@ -176,12 +176,10 @@ const AddProductModal = ({ isOpen, onClose, refetch }) => {
     const newProduct = {
       productName,
       brandName,
-      productType,
       modelNo,
       category,
       gender,
       origin,
-      manufacturer,
       warranty,
       color,
       price: {
@@ -329,26 +327,6 @@ const AddProductModal = ({ isOpen, onClose, refetch }) => {
         {/* Manufacturer & Warranty */}
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
           <div className="space-y-2">
-            <Label>Manufacturer Details</Label>
-            <Input
-              placeholder="Enter Manufacturer (e.g., Baofeng Framekart)"
-              value={manufacturer}
-              onChange={(e) => setManufacturer(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Warranty</Label>
-            <Input
-              placeholder="ex. 1 Year Manufacturer Warranty"
-              value={warranty}
-              onChange={(e) => setWarranty(e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Color & Product Type */}
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-          <div className="space-y-2">
             <Label>Color</Label>
             <Input
               placeholder="ex. Gunmetal"
@@ -357,12 +335,11 @@ const AddProductModal = ({ isOpen, onClose, refetch }) => {
             />
           </div>
           <div className="space-y-2">
-            <Label>Product Type</Label>
+            <Label>Warranty</Label>
             <Input
-              required
-              placeholder="Enter Product Type (e.g., Eyeglasses)"
-              value={productType}
-              onChange={(e) => setProductType(e.target.value)}
+              placeholder="ex. 1 Year Manufacturer Warranty"
+              value={warranty}
+              onChange={(e) => setWarranty(e.target.value)}
             />
           </div>
         </div>
