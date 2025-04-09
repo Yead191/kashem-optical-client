@@ -159,7 +159,7 @@ const ManageCart = () => {
 
     const orderData = {
       customerInfo,
-      totalPrice: subtotal + shippingCost,
+      totalPrice: subtotal,
       paymentStatus: "Pending", // Set payment status to Pending
       orderStatus: "Pending",
       date: new Date().toISOString(),
@@ -283,12 +283,12 @@ const ManageCart = () => {
           {/* Pricing Summary */}
           <div className="mt-8 space-y-2 border-t border-gray-200 pt-6">
             <div className="flex justify-between">
-              <span className="text-[1rem] text-gray-500">Subtotal</span>
+              <span className="text-[1rem] text-gray-500">Total</span>
               <span className="text-[1rem] font-medium text-gray-800">
                 ৳ {subtotal.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <span className="text-[1rem] text-gray-500">Shipping Cost</span>
               <span className="text-[1rem] font-medium text-gray-800">
                 ৳ {shippingCost}
@@ -299,7 +299,7 @@ const ManageCart = () => {
               <span className="text-[1rem] font-medium text-gray-800">
                 ৳ {(subtotal + shippingCost).toFixed(2)}
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Clear Cart Button */}

@@ -63,7 +63,7 @@ const Navbar = () => {
         className={({ isActive }) =>
           `${
             isActive
-              ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0"
+              ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
               : "text-black opacity-80"
           }`
         }
@@ -80,7 +80,7 @@ const Navbar = () => {
           className={() =>
             `flex items-center ${
               isProductsActive()
-                ? "text-black opacity-100 font-semibold border-b-2 border-black rounded-none p-2 focus:outline-none focus:ring-0"
+                ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
                 : "text-black opacity-80"
             }`
           }
