@@ -173,16 +173,14 @@ const Products = () => {
     setSortPrice(selectedOption ? selectedOption.value : "");
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  // if (isLoading) {
+  //   return <Spinner />;
+  // }
 
   // Filter Sidebar Component
   const FilterSidebar = () => (
     <div className="w-full lg:w-64 shrink-0 lg:block hidden">
-      <motion.aside
-        className="w-full bg-white  p-6 h-fit sticky top-28 shadow-md border rounded-lg"
-      >
+      <motion.aside className="w-full bg-white  p-6 h-fit sticky top-28 shadow-md border rounded-lg">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold">Filters</h2>
           <Button
@@ -672,7 +670,9 @@ const Products = () => {
             <h2 className="text-xl font-semibold">All Results</h2>
             <p className="text-gray-500">{products.length} products found</p>
           </div>
-          {products.length ? (
+          {isLoading ? (
+            <Spinner />
+          ) : products.length ? (
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4 w-full place-items-center place-content-center justify-center items-center">
               {products?.map((product) => (
                 <ProductCard product={product}></ProductCard>

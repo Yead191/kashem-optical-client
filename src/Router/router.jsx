@@ -14,6 +14,7 @@ import ManageCart from "@/Pages/Dashboard/UserRoutes/ManageCart";
 import DashboardLayout from "@/Root/Dashboard/DashboardLayout";
 import ManageOrders from "@/Pages/Dashboard/AdminRoute/ManageOrders/ManageOrders";
 import Invoice from "@/components/Invoice/Invoice";
+import ManagePatient from "@/Pages/Dashboard/AdminRoute/ManagePatient/ManagePatient";
 
 
 const router = createBrowserRouter([
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "admin/manage-banners",
         element: <ManageBanners></ManageBanners>,
+      },
+      {
+        path: "admin/manage-patient",
+        element: <ManagePatient></ManagePatient>,
       },
 
       // user routes

@@ -5,6 +5,7 @@ import {
   Home,
   LayoutGrid,
   Logs,
+  ScanEye,
   TicketSlash,
   UserRoundCog,
 } from "lucide-react";
@@ -70,15 +71,15 @@ const items = [
     role: "admin",
   },
   {
-    title: "Ask For Advertisement",
-    url: "/dashboard/manage/advertisements",
-    icon: RiAdvertisementFill,
-    role: "seller",
-  },
-  {
     title: "Sales Report",
     url: "/dashboard/sales/report",
     icon: FileSpreadsheet,
+    role: "admin",
+  },
+  {
+    title: "Manage Patient",
+    url: "/dashboard/admin/manage-patient",
+    icon: ScanEye,
     role: "admin",
   },
   {
