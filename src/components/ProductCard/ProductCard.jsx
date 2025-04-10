@@ -160,7 +160,7 @@ const ProductCard = ({ product }) => {
               <Button
                 variant="outline"
                 onClick={(e) => handleAddToCart(e)}
-                className="border-[#00bac6] text-[#00bac6] hover:bg-[#00bac6] hover:text-white"
+                className="border-black text-black hover:bg-black hover:text-white"
               >
                 <BaggageClaim className="h-5 w-5" />
                 Add to Cart

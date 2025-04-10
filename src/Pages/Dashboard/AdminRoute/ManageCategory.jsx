@@ -32,6 +32,8 @@ import {
 import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
 import AddCategoryModal from "@/components/Modal/AddCategoryModal";
 import UpdateCategoryModal from "@/components/Modal/UpdateCategory";
+import DashboardPagesHeader from "@/components/DashboardPagesHeader";
+import { LayoutGrid } from "lucide-react";
 
 const ManageCategory = () => {
   const axiosSecure = useAxiosSecure();
@@ -69,13 +71,13 @@ const ManageCategory = () => {
   };
 
   return (
-    <div className="my-10 container mx-auto p-2">
+    <div className=" container mx-auto p-2">
       <Seo title={"Category | Kashem Optical"} />
-      <div className="mb-6 text-center">
-        <h2 className="text-3xl xl:text-4xl font-bold pb-3">
-          <span className="text-blue-600">Manage</span> Category
-        </h2>
-      </div>
+      <DashboardPagesHeader
+        title={"Manage Category"}
+        subtitle={"Organize Your Product Categories"}
+        icon={LayoutGrid}
+      />
 
       {/* Button to open add modal */}
       <div className="flex justify-end mb-4">

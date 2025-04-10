@@ -12,7 +12,9 @@ import ManageBanners from "../Pages/Dashboard/AdminRoute/ManageBanners";
 import ProductDetails from "@/components/ProductDetails/ProductDetails";
 import ManageCart from "@/Pages/Dashboard/UserRoutes/ManageCart";
 import DashboardLayout from "@/Root/Dashboard/DashboardLayout";
-import ManageOrders from "@/Pages/Dashboard/AdminRoute/ManageOrders";
+import ManageOrders from "@/Pages/Dashboard/AdminRoute/ManageOrders/ManageOrders";
+import Invoice from "@/components/Invoice/Invoice";
+
 
 const router = createBrowserRouter([
   {
@@ -76,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "manage-cart",
         element: <ManageCart></ManageCart>,
+      },
+      {
+        path: "invoice/:invoiceId",
+        element: <Invoice></Invoice>,
       },
     ],
   },

@@ -10,12 +10,13 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, TicketSlash } from "lucide-react";
 import { Minus } from "lucide-react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { Switch } from "@headlessui/react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import DashboardPagesHeader from "@/components/DashboardPagesHeader";
 
 const ManageBanners = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,13 +79,9 @@ const ManageBanners = () => {
   };
 
   return (
-    <div className="container mx-auto my-8 md:my-12 p-2">
+    <div className="container mx-auto  p-2">
       <Seo title={"Banners | Kashem Optical"}></Seo>
-      <div className="mb-6 text-center">
-        <h2 className="text-3xl xl:text-4xl font-bold pb-3">
-          <span className="text-blue-600">Manage</span> Banners
-        </h2>
-      </div>
+      <DashboardPagesHeader icon={TicketSlash} title={"Manage Banners"} subtitle={"Create, edit, and showcase promotional banners"}/>
       <div className="flex justify-end">
         <Button
           onClick={() => setIsModalOpen(true)}

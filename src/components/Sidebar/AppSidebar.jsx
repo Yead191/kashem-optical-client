@@ -143,7 +143,7 @@ export function AppSidebar() {
                     <SidebarMenuButton tooltip={item.title} asChild>
                       <NavLink
                         to={item.url}
-                        className={"hover:text-[#0E82FD]"}
+                        className={"hover:text-blue-500"}
                         end
                       >
                         <item.icon />

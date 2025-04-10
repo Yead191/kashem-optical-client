@@ -8,13 +8,21 @@ import "react-dropdown/style.css";
 import { Link, useSearchParams } from "react-router-dom";
 import Seo from "../../components/Seo/Seo";
 import Select from "react-select";
-import { ArrowDownUp } from "lucide-react";
+import { ArrowDownUp, Filter, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import ProductCard from "@/components/ProductCard/ProductCard";
-import { Filter, Search } from "lucide-react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+} from "@/components/ui/drawer";
+import { motion } from "framer-motion";
 
 const Products = () => {
   const axiosPublic = useAxiosPublic();
@@ -37,11 +45,14 @@ const Products = () => {
     searchParams.get("size") || ""
   );
   const [selectedType, setSelectedType] = useState(
-    searchParams.get("size") || ""
+    searchParams.get("type") || ""
+  );
+  const [selectedColor, setSelectedColor] = useState(
+    searchParams.get("color") || ""
   );
   const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Fetch filter options
   const { data: filterOptions = {}, isLoading: filterLoading } = useQuery({
     queryKey: ["filterOptions"],
     queryFn: async () => {
@@ -67,6 +78,7 @@ const Products = () => {
     if (selectedMaterial) params.material = selectedMaterial;
     if (selectedSize) params.size = selectedSize;
     if (selectedType) params.type = selectedType;
+    if (selectedColor) params.color = selectedColor;
     if (sortPrice) params.sort = sortPrice;
     setSearchParams(params, { replace: true });
   }, [
@@ -76,10 +88,10 @@ const Products = () => {
     selectedMaterial,
     selectedType,
     sortPrice,
+    selectedColor,
     setSearchParams,
   ]);
 
-  // Sync selectedCategory with search params on mount or param change
   useEffect(() => {
     const categoryFromParams = searchParams.get("category") || "";
     if (categoryFromParams !== selectedCategory) {
@@ -103,14 +115,14 @@ const Products = () => {
       selectedGender,
       selectedBrand,
       selectedMaterial,
-      sortPrice,
       selectedSize,
       priceRange,
       selectedType,
+      selectedColor,
     ],
     queryFn: async () => {
       const res = await axiosPublic.get(
-        `/products?search=${searchTerm}&category=${selectedCategory}&gender=${selectedGender}&brand=${selectedBrand}&material=${selectedMaterial}&size=${selectedSize}&type=${selectedType}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&sort=${sortPrice}`
+        `/products?search=${searchTerm}&category=${selectedCategory}&gender=${selectedGender}&brand=${selectedBrand}&material=${selectedMaterial}&size=${selectedSize}&type=${selectedType}&color=${selectedColor}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&sort=${sortPrice}`
       );
       return res.data;
     },
@@ -129,6 +141,7 @@ const Products = () => {
     selectedBrand,
     selectedMaterial,
     selectedType,
+    selectedColor,
     sortPrice,
     priceRange,
     refetch,
@@ -148,6 +161,7 @@ const Products = () => {
     setSelectedMaterial("");
     setSelectedType("");
     setSelectedSize("");
+    setSelectedColor("");
     setPriceRange([
       filterOptions.priceRange?.min || 0,
       filterOptions.priceRange?.max || 10000,
@@ -162,6 +176,427 @@ const Products = () => {
   if (isLoading) {
     return <Spinner />;
   }
+
+  // Filter Sidebar Component
+  const FilterSidebar = () => (
+    <div className="w-full lg:w-64 shrink-0 lg:block hidden">
+      <motion.aside
+        className="w-full bg-white  p-6 h-fit sticky top-28 shadow-md border rounded-lg"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold">Filters</h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs text-red-500"
+            onClick={handleClearFilter}
+          >
+            Clear All
+          </Button>
+        </div>
+
+        {/* Categories */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Categories</h3>
+          <div className="grid grid-cols-1 gap-2">
+            {categories.map((category) => (
+              <Button
+                key={category._id}
+                variant={
+                  selectedCategory === category.name ? "default" : "outline"
+                }
+                className="justify-start text-sm h-auto py-2"
+                onClick={() => setSelectedCategory(category.name)}
+              >
+                <span className="truncate">{category.name}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Price Range */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Price Range</h3>
+          <Slider
+            value={priceRange}
+            onValueChange={setPriceRange}
+            min={filterOptions.priceRange?.min || 0}
+            max={filterOptions.priceRange?.max || 10000}
+            step={100}
+            className="mb-4"
+          />
+          <div className="flex items-center justify-between text-sm">
+            <span>৳{priceRange[0]}</span>
+            <span>৳{priceRange[1]}</span>
+          </div>
+        </div>
+
+        {/* Gender */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Gender</h3>
+          <div className="grid grid-cols-2 gap-2">
+            {filterOptions.genders?.map((gender) => (
+              <Button
+                key={gender}
+                variant={selectedGender === gender ? "default" : "outline"}
+                className="justify-start text-sm h-auto py-2"
+                onClick={() => setSelectedGender(gender)}
+              >
+                <span className="truncate">{gender}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Frame Type (Shape) */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Frame Shape</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {filterOptions.types?.map((type) => (
+              <div key={type} className="flex flex-col items-center gap-1">
+                <div
+                  className={`w-12 h-8 border-2 border-gray-300 ${
+                    type === "Round"
+                      ? "rounded-full"
+                      : type === "Square"
+                      ? "rounded-md"
+                      : type === "Rectangle"
+                      ? "rounded-sm"
+                      : type === "Cat Eye"
+                      ? "rounded-tr-2xl rounded-bl-2xl"
+                      : type === "Aviator"
+                      ? "rounded-t-xl"
+                      : "rounded-tl-2xl rounded-br-2xl"
+                  } hover:border-gray-900 cursor-pointer transition-all ${
+                    selectedType === type ? "border-gray-900" : ""
+                  }`}
+                  onClick={() => setSelectedType(type)}
+                ></div>
+                <span className="text-xs">{type}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Brands */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Brands</h3>
+          <div className="grid grid-cols-2 gap-2">
+            {filterOptions.brands?.map((brand) => (
+              <Button
+                key={brand}
+                variant={selectedBrand === brand ? "default" : "outline"}
+                className="justify-start text-sm h-auto py-2"
+                onClick={() => setSelectedBrand(brand)}
+              >
+                <span className="truncate">{brand}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Material (Type) */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Material</h3>
+          <div className="flex flex-wrap gap-3">
+            {filterOptions.materials?.map((material) => (
+              <div
+                key={material}
+                className={`flex items-center justify-center px-3 py-1 border rounded-md text-sm cursor-pointer transition-all
+          ${
+            selectedMaterial === material
+              ? "bg-gray-900 text-white border-gray-900"
+              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+          }`}
+                onClick={() => setSelectedMaterial(material)}
+                title={material}
+              >
+                {/* You can use icons if available, or just show text */}
+                {material === "Stainless Steel" ? (
+                  <span>🔩 Stainless Steel</span>
+                ) : material === "Leather" ? (
+                  <span>🧵 Leather</span>
+                ) : material === "Silicone" ? (
+                  <span>🟣 Silicone</span>
+                ) : (
+                  <span>{material}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/*  Color */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Color</h3>
+          <div className="flex flex-wrap gap-2">
+            {filterOptions.colors?.map((material) => (
+              <div key={material} className="flex flex-col items-center gap-1">
+                <div
+                  className={`w-6 h-6 rounded-full ${
+                    material.includes("Black")
+                      ? "bg-black"
+                      : material.includes("Brown")
+                      ? "bg-amber-800"
+                      : material.includes("Gray")
+                      ? "bg-gray-500"
+                      : material.includes("Blue")
+                      ? "bg-blue-500"
+                      : material.includes("Green")
+                      ? "bg-green-600"
+                      : material.includes("Red")
+                      ? "bg-red-600"
+                      : material.includes("Gold")
+                      ? "bg-yellow-500"
+                      : material.includes("Silver")
+                      ? "bg-gray-300"
+                      : "bg-gray-300"
+                  } hover:ring-2 ring-offset-2 ring-gray-900 cursor-pointer transition-all ${
+                    selectedMaterial === material ? "ring-2 ring-gray-900" : ""
+                  }`}
+                  title={material}
+                  onClick={() => setSelectedMaterial(material)}
+                ></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Frame Size */}
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Frame Size</h3>
+          <div className="grid grid-cols-2 gap-2">
+            {filterOptions.sizes?.map((size) => (
+              <Button
+                key={size}
+                variant={selectedSize === size ? "default" : "outline"}
+                className="justify-start text-sm h-auto py-2"
+                onClick={() => setSelectedSize(size)}
+              >
+                <span className="truncate">{size}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+      </motion.aside>
+    </div>
+  );
+
+  // Drawer Component for Small Devices
+  const FilterDrawer = () => (
+    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      <DrawerContent className="h-[90vh]">
+        <DrawerHeader>
+          <DrawerTitle className="text-lg font-semibold">Filters</DrawerTitle>
+          <DrawerClose className="absolute right-4 top-4">
+            <X className="h-5 w-5" />
+          </DrawerClose>
+        </DrawerHeader>
+        <div className="p-6 overflow-y-auto">
+          {/* Categories */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Categories</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((category) => (
+                <Button
+                  key={category._id}
+                  variant={
+                    selectedCategory === category.name ? "default" : "outline"
+                  }
+                  className="justify-start text-sm h-auto py-2"
+                  onClick={() => {
+                    setSelectedCategory(category.name);
+                    setIsDrawerOpen(false);
+                  }}
+                >
+                  <span className="truncate">{category.name}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Price Range */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Price Range</h3>
+            <Slider
+              value={priceRange}
+              onValueChange={setPriceRange}
+              min={filterOptions.priceRange?.min || 0}
+              max={filterOptions.priceRange?.max || 10000}
+              step={100}
+              className="mb-4"
+            />
+            <div className="flex items-center justify-between text-sm">
+              <span>৳{priceRange[0]}</span>
+              <span>৳{priceRange[1]}</span>
+            </div>
+          </div>
+
+          {/* Gender */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Gender</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {filterOptions.genders?.map((gender) => (
+                <Button
+                  key={gender}
+                  variant={selectedGender === gender ? "default" : "outline"}
+                  className="justify-start text-sm h-auto py-2"
+                  onClick={() => setSelectedGender(gender)}
+                >
+                  <span className="truncate">{gender}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Frame Type (Shape) */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Frame Shape</h3>
+            <div className="grid grid-cols-3 gap-2">
+              {filterOptions.types?.map((type) => (
+                <div key={type} className="flex flex-col items-center gap-1">
+                  <div
+                    className={`w-12 h-8 border-2 border-gray-300 ${
+                      type === "Round"
+                        ? "rounded-full"
+                        : type === "Square"
+                        ? "rounded-md"
+                        : type === "Rectangle"
+                        ? "rounded-sm"
+                        : type === "Cat Eye"
+                        ? "rounded-tr-2xl rounded-bl-2xl"
+                        : type === "Aviator"
+                        ? "rounded-t-xl"
+                        : "rounded-tl-2xl rounded-br-2xl"
+                    } hover:border-gray-900 cursor-pointer transition-all ${
+                      selectedType === type ? "border-gray-900" : ""
+                    }`}
+                    onClick={() => setSelectedType(type)}
+                  ></div>
+                  <span className="text-xs">{type}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Brands */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Brands</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {filterOptions.brands?.map((brand) => (
+                <Button
+                  key={brand}
+                  variant={selectedBrand === brand ? "default" : "outline"}
+                  className="justify-start text-sm h-auto py-2"
+                  onClick={() => setSelectedBrand(brand)}
+                >
+                  <span className="truncate">{brand}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Material (Type) */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Material</h3>
+            <div className="flex flex-wrap gap-3">
+              {filterOptions.materials?.map((material) => (
+                <div
+                  key={material}
+                  className={`flex items-center justify-center px-3 py-1 border rounded-md text-sm cursor-pointer transition-all
+          ${
+            selectedMaterial === material
+              ? "bg-gray-900 text-white border-gray-900"
+              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+          }`}
+                  onClick={() => setSelectedMaterial(material)}
+                  title={material}
+                >
+                  {/* You can use icons if available, or just show text */}
+                  {material === "Stainless Steel" ? (
+                    <span>🔩 Stainless Steel</span>
+                  ) : material === "Leather" ? (
+                    <span>🧵 Leather</span>
+                  ) : material === "Silicone" ? (
+                    <span>🟣 Silicone</span>
+                  ) : (
+                    <span>{material}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/*  Color */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Color</h3>
+            <div className="flex flex-wrap gap-2">
+              {filterOptions.colors?.map((material) => (
+                <div
+                  key={material}
+                  className="flex flex-col items-center gap-1"
+                >
+                  <div
+                    className={`w-6 h-6 rounded-full ${
+                      material.includes("Black")
+                        ? "bg-black"
+                        : material.includes("Brown")
+                        ? "bg-amber-800"
+                        : material.includes("Gray")
+                        ? "bg-gray-500"
+                        : material.includes("Blue")
+                        ? "bg-blue-500"
+                        : material.includes("Green")
+                        ? "bg-green-600"
+                        : material.includes("Red")
+                        ? "bg-red-600"
+                        : material.includes("Gold")
+                        ? "bg-yellow-500"
+                        : material.includes("Silver")
+                        ? "bg-gray-300"
+                        : "bg-gray-300"
+                    } hover:ring-2 ring-offset-2 ring-gray-900 cursor-pointer transition-all ${
+                      selectedMaterial === material
+                        ? "ring-2 ring-gray-900"
+                        : ""
+                    }`}
+                    title={material}
+                    onClick={() => setSelectedMaterial(material)}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Frame Size */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Frame Size</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {filterOptions.sizes?.map((size) => (
+                <Button
+                  key={size}
+                  variant={selectedSize === size ? "default" : "outline"}
+                  className="justify-start text-sm h-auto py-2"
+                  onClick={() => setSelectedSize(size)}
+                >
+                  <span className="truncate">{size}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <DrawerFooter>
+          <Button
+            variant="ghost"
+            className="text-red-500"
+            onClick={handleClearFilter}
+          >
+            Clear All
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
 
   return (
     <div className="bg-base-100 my-4 md:my-12">
@@ -210,222 +645,26 @@ const Products = () => {
               className="w-48"
             />
             <div className="flex items-center gap-2 lg:hidden">
-              <Menu as="div" className="relative inline-block text-left">
-                {({ open }) => (
-                  <>
-                    <Menu.Button
-                      className={`btn btn-sm flex items-center gap-2 ${
-                        selectedCategory && "btn-neutral"
-                      }`}
-                    >
-                      <span className="hidden md:flex">Filter</span>
-                      <Filter className="inline-flex" />
-                    </Menu.Button>
-
-                    {open && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200 z-10">
-                        <Menu.Items className="p-2">
-                          {categoriesLoading ? (
-                            <div className="px-4 py-2 text-sm text-gray-500">
-                              Loading...
-                            </div>
-                          ) : categories.length > 0 ? (
-                            categories?.map((category, index) => (
-                              <Menu.Item key={index}>
-                                {({ active }) => (
-                                  <button
-                                    onClick={() =>
-                                      handleCategorySelect(category)
-                                    }
-                                    className={`block w-full text-left px-4 py-2 text-sm rounded-md ${
-                                      selectedCategory === category?.name
-                                        ? "bg-gray-200"
-                                        : "hover:bg-base-300"
-                                    }`}
-                                  >
-                                    {category?.name}
-                                  </button>
-                                )}
-                              </Menu.Item>
-                            ))
-                          ) : (
-                            <div className="px-4 py-2 text-sm text-gray-500">
-                              No categories found
-                            </div>
-                          )}
-                          <div className="mt-2">
-                            <button
-                              onClick={handleClearFilter}
-                              className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
-                            >
-                              Clear Filter
-                            </button>
-                          </div>
-                        </Menu.Items>
-                      </div>
-                    )}
-                  </>
-                )}
-              </Menu>
+              <Button
+                className={`btn btn-sm flex items-center gap-2 ${
+                  selectedCategory && "btn-neutral"
+                }`}
+                onClick={() => setIsDrawerOpen(true)}
+              >
+                <span className="hidden md:flex">Filter</span>
+                <Filter className="inline-flex" />
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto flex flex-col lg:flex-row gap-4 p-2">
-        {/* Sidebar */}
-        <div className="w-full lg:w-64 shrink-0 lg:block hidden">
-          <aside className="w-full bg-white p-4 rounded-lg shadow-md border sticky top-20">
-            <h3 className="text-lg font-semibold mb-3">Filters</h3>
+        {/* Sidebar for large devices */}
+        <FilterSidebar />
 
-            {/* Categories */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Categories</h4>
-              {categoriesLoading ? (
-                <p>Loading...</p>
-              ) : (
-                categories.map((category) => (
-                  <div key={category._id} className="flex items-center mb-2">
-                    <Checkbox
-                      id={`category-${category._id}`}
-                      checked={selectedCategory === category.name}
-                      onCheckedChange={() => setSelectedCategory(category.name)}
-                      className="mr-2"
-                    />
-                    <label
-                      htmlFor={`category-${category._id}`}
-                      className="text-gray-500"
-                    >
-                      {category.name}
-                    </label>
-                  </div>
-                ))
-              )}
-            </div>
-
-            {/* Price Range */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Price Range</h4>
-              <Slider
-                value={priceRange}
-                onValueChange={setPriceRange}
-                min={filterOptions.priceRange?.min || 0}
-                max={filterOptions.priceRange?.max || 10000}
-                step={100}
-                className="mb-2"
-              />
-              <div className="flex justify-between text-sm text-gray-500">
-                <span>৳{priceRange[0]}</span>
-                <span>৳{priceRange[1]}</span>
-              </div>
-            </div>
-
-            {/* Gender */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Gender</h4>
-              {filterOptions.genders?.map((gender) => (
-                <div key={gender} className="flex items-center mb-2">
-                  <Checkbox
-                    id={`gender-${gender}`}
-                    checked={selectedGender === gender}
-                    onCheckedChange={() => setSelectedGender(gender)}
-                    className="mr-2"
-                  />
-                  <label htmlFor={`gender-${gender}`} className="text-gray-500">
-                    {gender}
-                  </label>
-                </div>
-              ))}
-            </div>
-            {/* Frame Type */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Frame Type</h4>
-              {filterOptions.types?.map((type) => (
-                <div key={type} className="flex items-center mb-2">
-                  <Checkbox
-                    id={`type-${type}`}
-                    checked={selectedType === type}
-                    onCheckedChange={() => setSelectedType(type)}
-                    className="mr-2"
-                  />
-                  <label htmlFor={`type-${type}`} className="text-gray-500">
-                    {type}
-                  </label>
-                </div>
-              ))}
-            </div>
-
-            {/* Brands */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Brands</h4>
-              {filterOptions.brands?.map((brand) => (
-                <div key={brand} className="flex items-center mb-2">
-                  <Checkbox
-                    id={`brand-${brand}`}
-                    checked={selectedBrand === brand}
-                    onCheckedChange={() => setSelectedBrand(brand)}
-                    className="mr-2"
-                  />
-                  <label htmlFor={`brand-${brand}`} className="text-gray-500">
-                    {brand}
-                  </label>
-                </div>
-              ))}
-            </div>
-
-            {/* Material */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Material</h4>
-              {filterOptions.materials?.map((material) => (
-                <div key={material} className="flex items-center mb-2">
-                  <Checkbox
-                    id={`material-${material}`}
-                    checked={selectedMaterial === material}
-                    onCheckedChange={() => setSelectedMaterial(material)}
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor={`material-${material}`}
-                    className="text-gray-500"
-                  >
-                    {material}
-                  </label>
-                </div>
-              ))}
-            </div>
-            {/* Frame Size */}
-            <div className="mb-6">
-              <h4 className="font-medium mb-2">Frame Size</h4>
-              {filterOptions.sizes?.map((size) => (
-                <div key={size} className="flex items-center mb-2">
-                  <Checkbox
-                    id={`size-${size}`}
-                    checked={selectedSize === size}
-                    onCheckedChange={() => setSelectedSize(size)}
-                    className="mr-2"
-                  />
-                  <label htmlFor={`size-${size}`} className="text-gray-500">
-                    {size}
-                  </label>
-                </div>
-              ))}
-            </div>
-
-            {(selectedCategory ||
-              selectedGender ||
-              selectedBrand ||
-              selectedMaterial ||
-              selectedSize ||
-              selectedType) && (
-              <button
-                onClick={handleClearFilter}
-                className="text-red-500 text-sm mt-2"
-              >
-                Clear All Filters
-              </button>
-            )}
-          </aside>
-        </div>
+        {/* Drawer for small devices */}
+        <FilterDrawer />
 
         {/* Main Content */}
         <div className="w-full">

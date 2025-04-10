@@ -32,6 +32,9 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { Link } from "react-router-dom";
+import DashboardPagesHeader from "@/components/DashboardPagesHeader";
+import { FaProductHunt } from "react-icons/fa6";
+import { PiSunglasses } from "react-icons/pi";
 
 const ManageProducts = () => {
   const axiosSecure = useAxiosSecure();
@@ -55,7 +58,7 @@ const ManageProducts = () => {
       return res.data;
     },
   });
-  console.log(products);
+  // console.log(products);
 
   useEffect(() => {
     refetch();
@@ -102,13 +105,13 @@ const ManageProducts = () => {
   };
 
   return (
-    <div className="my-10 p-2 container mx-auto">
+    <div className=" p-2 container mx-auto">
       <Seo title={"Manage Products | Kashem Optical"} />
-      <div className="mb-6 text-center">
-        <h2 className="text-3xl xl:text-4xl font-bold pb-3">
-          Manage <span className="text-blue-600">Products</span>
-        </h2>
-      </div>
+      <DashboardPagesHeader
+        title={"Manage Products"}
+        subtitle={"Track And Organize Product Inventory Efficiently"}
+        icon={PiSunglasses}
+      />
 
       <div className="flex flex-col-reverse md:flex-row gap-2 justify-start items-start md:justify-between md:items-center mb-10">
         <div className="flex flex-row-reverse gap-2 items-center">
