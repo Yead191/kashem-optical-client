@@ -1,24 +1,16 @@
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
-export function AddPatientModal({ isOpen, onClose, refetch }) {
+export function UpdatePatientModal({ isOpen, onClose, refetch, patientData }) {
   const axiosSecure = useAxiosSecure();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    date: new Date().toISOString(), // Added date field
+    date: "",
     rightEye: {
       sph: "",
       cyl: "",
@@ -32,6 +24,29 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
       add: "",
     },
   });
+
+  // Initialize form with patient data when modal opens
+  useEffect(() => {
+    if (patientData && isOpen) {
+      setFormData({
+        name: patientData.name || "",
+        phone: patientData.phone || "",
+        date: patientData.date || "",
+        rightEye: {
+          sph: patientData.rightEye?.sph || "",
+          cyl: patientData.rightEye?.cyl || "",
+          axis: patientData.rightEye?.axis || "",
+          add: patientData.rightEye?.add || "",
+        },
+        leftEye: {
+          sph: patientData.leftEye?.sph || "",
+          cyl: patientData.leftEye?.cyl || "",
+          axis: patientData.leftEye?.axis || "",
+          add: patientData.leftEye?.add || "",
+        },
+      });
+    }
+  }, [patientData, isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,48 +70,31 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Update the date right before submission to get the most current time
-    const submissionData = {
-      ...formData,
-      date: new Date().toISOString(),
-    };
-    console.log(submissionData);
-    await toast.promise(axiosSecure.post("/patients", submissionData), {
-      loading: "Adding New Patient...",
-      success: <b>Patient Added Successfully!</b>,
-      error: (error) => <b>{error.message}</b>,
-    });
-    refetch();
-    onClose();
-    // Reset form
-    setFormData({
-      name: "",
-      phone: "",
-      date: new Date().toISOString(), // Reset with new date
-      rightEye: {
-        sph: "",
-        cyl: "",
-        axis: "",
-        add: "",
-      },
-      leftEye: {
-        sph: "",
-        cyl: "",
-        axis: "",
-        add: "",
-      },
-    });
+    try {
+      await toast.promise(
+        axiosSecure.patch(`/patients/${patientData._id}`, formData),
+        {
+          loading: "Updating Patient...",
+          success: <b>Patient Updated Successfully!</b>,
+          error: (error) => <b>{error.message}</b>,
+        }
+      );
+      refetch();
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Add New Patient</DialogTitle>
-          <DialogDescription>
-            Fill out the patient's information and prescription details below.
-          </DialogDescription>
-        </DialogHeader>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-[600px]">
+        <h2 className="text-lg font-semibold mb-4">Edit Patient</h2>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Update the patient's information and prescription details below.
+        </p>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-6 py-4">
             <div className="grid grid-cols-2 gap-4">
@@ -124,16 +122,6 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
               </div>
             </div>
 
-            {/* Optional: Add a read-only field to display the date */}
-            {/* <div className="space-y-2">
-              <Label>Date</Label>
-              <Input
-                value={new Date(formData.date).toLocaleString()}
-                readOnly
-                disabled
-              />
-            </div> */}
-
             <div className="space-y-4">
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-4">Prescription Details</h3>
@@ -156,7 +144,6 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
                     required
                   />
                   <Input
-                    Kopieren
                     name="rightEye.cyl"
                     value={formData.rightEye.cyl}
                     onChange={handleChange}
@@ -212,14 +199,21 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
             </div>
           </div>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="pointer-events-auto"
+            >
               Cancel
             </Button>
-            <Button type="submit">Add Patient</Button>
-          </DialogFooter>
+            <Button type="submit" className="pointer-events-auto">
+              Update Patient
+            </Button>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

@@ -675,7 +675,7 @@ const Products = () => {
           ) : products.length ? (
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4 w-full place-items-center place-content-center justify-center items-center">
               {products?.map((product) => (
-                <ProductCard product={product}></ProductCard>
+                <ProductCard key={product._id} product={product}></ProductCard>
               ))}
             </div>
           ) : (

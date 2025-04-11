@@ -22,7 +22,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { GiMedicines } from "react-icons/gi";
-import { MdManageHistory } from "react-icons/md";
+import { MdLens, MdManageHistory } from "react-icons/md";
 import { RiAdvertisementFill } from "react-icons/ri";
 
 import { Separator } from "../ui/separator";
@@ -120,7 +120,7 @@ export function AppSidebar() {
               <Link
                 style={{ fontVariant: "small-caps" }}
                 to={"/"}
-                className="text-blue-500 text-xl lg:text-2xl xl:text-[28px] font-bold hidden lg:flex"
+                className="text-blue-500 text-xl lg:text-2xl xl:text-[28px] font-bold lg:flex"
               >
                 {/* Kashem <span className='text-blue-500 ml-1'> Optical</span> */}
 
@@ -144,7 +144,7 @@ export function AppSidebar() {
                     <SidebarMenuButton tooltip={item.title} asChild>
                       <NavLink
                         to={item.url}
-                        className={"hover:text-blue-500"}
+                        className={"hover:text-blue-600 text-lg"}
                         end
                       >
                         <item.icon />
@@ -164,6 +164,12 @@ export function AppSidebar() {
                   <NavLink to={"/"}>
                     <Home />
                     <span>{"Home"}</span>
+                  </NavLink>
+                </SidebarMenuButton>
+                <SidebarMenuButton tooltip={"Products"} asChild>
+                  <NavLink to={"/products"}>
+                    <Store />
+                    <span>{"Products"}</span>
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>

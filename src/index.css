@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 a.active {
-  color: #0E82FD;
+  color: #0e82fd;
   font-weight: 500;
-
 }
 
 /* @import url('https://fonts.googleapis.com/css2?family=Cinzel&display=swap');
