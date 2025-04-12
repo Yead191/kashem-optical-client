@@ -138,7 +138,7 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-4">Prescription Details</h3>
 
-                <div className="grid grid-cols-6 gap-2 mb-2">
+                <div className="grid grid-cols-5 md:grid-cols-6 gap-2 mb-2">
                   <div></div>
                   <div className="text-center font-medium">SPH</div>
                   <div className="text-center font-medium">CYL</div>
@@ -146,7 +146,7 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
                   <div className="text-center font-medium">ADD</div>
                 </div>
 
-                <div className="grid grid-cols-6 gap-2 mb-2">
+                <div className="grid grid-cols-5 md:grid-cols-6 gap-2 mb-2">
                   <div className="flex items-center font-medium">OD</div>
                   <Input
                     name="rightEye.sph"
@@ -178,7 +178,7 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
                   />
                 </div>
 
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-5 md:grid-cols-6 gap-2">
                   <div className="flex items-center font-medium">OS</div>
                   <Input
                     name="leftEye.sph"
@@ -212,7 +212,7 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className={"flex flex-col-reverse md:flex-row gap-2"}>
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
