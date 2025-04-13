@@ -43,7 +43,7 @@ const items = [
   },
   {
     title: "Sales Report",
-    url: "/dashboard/sales/report",
+    url: "/dashboard/admin/sales-report",
     icon: FileSpreadsheet,
     role: "admin",
   },

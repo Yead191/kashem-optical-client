@@ -16,7 +16,7 @@ import ManageOrders from "@/Pages/Dashboard/AdminRoute/ManageOrders/ManageOrders
 import Invoice from "@/components/Invoice/Invoice";
 import ManagePatient from "@/Pages/Dashboard/AdminRoute/ManagePatient/ManagePatient";
 import PurchaseHistory from "@/Pages/Dashboard/UserRoutes/PurchaseHisotry";
-
+import SalesReport from "@/Pages/Dashboard/AdminRoute/SalesReport/SalesReport";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "admin/statistics",
         element: <Statistics></Statistics>,
+      },
+      {
+        path: "admin/sales-report",
+        element: <SalesReport />,
       },
       {
         path: "admin/manage-users",
