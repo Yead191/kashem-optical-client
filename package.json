@@ -48,6 +48,7 @@
     "react-router-dom": "^7.1.5",
     "react-select": "^5.10.1",
     "react-simple-typewriter": "^5.0.1",
+    "recharts": "^2.15.2",
     "sort-by": "^1.2.0",
     "sweetalert2": "^11.17.2",
     "swiper": "^11.2.6",

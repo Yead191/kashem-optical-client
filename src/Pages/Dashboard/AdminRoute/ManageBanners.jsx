@@ -81,7 +81,11 @@ const ManageBanners = () => {
   return (
     <div className="container mx-auto  p-2">
       <Seo title={"Banners | Kashem Optical"}></Seo>
-      <DashboardPagesHeader icon={TicketSlash} title={"Manage Banners"} subtitle={"Create, edit, and showcase promotional banners"}/>
+      <DashboardPagesHeader
+        icon={TicketSlash}
+        title={"Manage Banners"}
+        subtitle={"Create, edit, and showcase promotional banners"}
+      />
       <div className="flex justify-end">
         <Button
           onClick={() => setIsModalOpen(true)}
@@ -106,7 +110,7 @@ const ManageBanners = () => {
               </tr>
             </thead>
             <tbody>
-              {banners?.map((banner, idx) => (
+              {banners?.reverse().map((banner, idx) => (
                 <tr key={banner._id} className="hover">
                   <th>{idx + 1}</th>
                   <td>

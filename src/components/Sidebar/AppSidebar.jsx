@@ -37,7 +37,7 @@ import { FaTruck } from "react-icons/fa6";
 const items = [
   {
     title: "Statistics",
-    url: "/dashboard/statistics",
+    url: "/dashboard/admin/statistics",
     icon: ChartNoAxesCombined,
     role: "admin",
   },
