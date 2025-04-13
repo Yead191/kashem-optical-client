@@ -15,6 +15,7 @@ import DashboardLayout from "@/Root/Dashboard/DashboardLayout";
 import ManageOrders from "@/Pages/Dashboard/AdminRoute/ManageOrders/ManageOrders";
 import Invoice from "@/components/Invoice/Invoice";
 import ManagePatient from "@/Pages/Dashboard/AdminRoute/ManagePatient/ManagePatient";
+import PurchaseHistory from "@/Pages/Dashboard/UserRoutes/PurchaseHisotry";
 
 
 const router = createBrowserRouter([
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "manage-cart",
         element: <ManageCart></ManageCart>,
+      },
+      {
+        path: "purchase-history",
+        element: <PurchaseHistory />,
       },
       {
         path: "invoice/:invoiceId",

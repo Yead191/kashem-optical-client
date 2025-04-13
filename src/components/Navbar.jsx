@@ -25,7 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Glasses, House } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { Separator } from "@radix-ui/react-select";
@@ -61,15 +61,16 @@ const Navbar = () => {
     <div className="flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row">
       <NavLink
         className={({ isActive }) =>
-          `${
+          `flex items-center gap-1  ${
             isActive
-              ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
+              ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
               : "text-black opacity-80"
           }`
         }
         style={{ fontVariant: "small-caps" }}
         to="/"
       >
+        <House size={14} />
         Home
       </NavLink>
 
@@ -78,7 +79,7 @@ const Navbar = () => {
         {/* Products Link (clicking this navigates to /products) */}
         <NavLink
           className={() =>
-            `flex items-center ${
+            `flex items-center gap-1 ${
               isProductsActive()
                 ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
                 : "text-black opacity-80"
@@ -87,6 +88,7 @@ const Navbar = () => {
           style={{ fontVariant: "small-caps" }}
           to="/products"
         >
+          <Glasses size={14} />
           Products
         </NavLink>
 
