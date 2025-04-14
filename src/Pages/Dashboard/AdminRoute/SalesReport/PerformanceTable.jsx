@@ -10,7 +10,7 @@ import {
 
 const PerformanceTable = ({ topSellingProducts, totalItems }) => {
   return (
-    <Table>
+    <Table className="">
       <TableCaption>A List Of Medicine Performance Rankings</TableCaption>
       <TableHeader>
         <TableRow className={"bg-base-200 hover:bg-base-200"}>

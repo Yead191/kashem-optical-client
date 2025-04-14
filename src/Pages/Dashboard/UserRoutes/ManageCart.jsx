@@ -176,13 +176,10 @@ const ManageCart = () => {
           await axiosSecure.delete(`/carts/clear/${user?.email}`);
           refetch();
           setShowConfetti(true);
-          setTimeout(
-            () => {
-              setShowConfetti(false);
-              navigate("/dashboard/purchase-history");
-            },
-            5000
-          );
+          setTimeout(() => {
+            setShowConfetti(false);
+            navigate("/dashboard/purchase-history");
+          }, 5000);
           Swal.fire({
             position: "center",
             icon: "success",
@@ -202,18 +199,18 @@ const ManageCart = () => {
         },
       });
     } catch (error) {
-      console.error("Error placing order:", error);
+      console.error("Error placing order:", error); 
     }
   };
 
   return (
-    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 py-12">
+    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 py-12 ">
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
 
       {/* Left Column - Order Summary */}
-      <div className="bg-gray-50 rounded-md p-4 md:p-8 flex-1">
+      <div className="bg-gray-50 rounded-md p-4 md:p-8 flex-1 ">
         <h2 className="text-[1.2rem] text-gray-700 font-semibold mb-6">
           Your order
         </h2>
@@ -304,7 +301,7 @@ const ManageCart = () => {
             </span>
           </div>
 
-          {discount && (
+          {cart.length > 0 && discount && (
             <p className="text-green-600 font-medium mt-2">
               🎉 You saved {discount}% on this order!
             </p>
@@ -332,7 +329,7 @@ const ManageCart = () => {
       </div>
 
       {/* Right Column - Customer Info Form */}
-      <div className="flex-1 md:px-8 lg:sticky lg:top-18 lg:self-start">
+      <div className="flex-1 md:px-8 lg:sticky lg:top-16 lg:self-start ">
         <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>

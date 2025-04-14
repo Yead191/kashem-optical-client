@@ -5,9 +5,13 @@ import { CalendarIcon, Download, FileText, TrendingUp } from "lucide-react";
 import { MdReport } from "react-icons/md";
 import { format } from "date-fns";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
+import toast from "react-hot-toast";
 
 const SalesReportHeader = () => {
   const currentDate = format(new Date(), "MMMM d, yyyy");
+  const handlePdf = ()=>{
+    toast.error('This Feature will Coming Soon!')
+  }
 
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-sm border">
@@ -29,11 +33,11 @@ const SalesReportHeader = () => {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="gap-1">
+        <Button onClick={handlePdf} variant="outline" size="sm" className="gap-1">
           <FileText className="h-4 w-4" />
           PDF
         </Button>
-        <Button variant="outline" size="sm" className="gap-1">
+        <Button onClick={handlePdf} variant="outline" size="sm" className="gap-1">
           <Download className="h-4 w-4" />
           CSV
         </Button>

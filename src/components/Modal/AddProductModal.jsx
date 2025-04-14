@@ -308,6 +308,7 @@ const AddProductModal = ({ isOpen, onClose, refetch }) => {
               <SelectContent>
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="Female">Kids</SelectItem>
                 <SelectItem value="Unisex">Unisex</SelectItem>
               </SelectContent>
             </Select>

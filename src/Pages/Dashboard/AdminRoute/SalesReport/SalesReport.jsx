@@ -23,6 +23,8 @@ import PerformanceTable from "./PerformanceTable";
 import PerformanceChart from "./PerformanceChart";
 import RecommendationsCard from "./RecommendationsCard";
 import TopCustomerTable from "./TopCustomerTable";
+import SalesReportSkeleton from "./Skeleton/SkeletonBox";
+
 
 const SalesReport = () => {
   const axiosSecure = useAxiosSecure();
@@ -39,12 +41,8 @@ const SalesReport = () => {
   });
 
   // Handle loading and error states
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading sales report: {error.message}</div>;
+  if (isLoading || error) {
+    return <SalesReportSkeleton />;
   }
 
   // Sort revenue data by date for the chart
@@ -102,9 +100,9 @@ const SalesReport = () => {
       {/* Sales Report Header */}
       <SalesReportHeader />
       {/* Main Content */}
-      <Tabs defaultValue="overview" className="space-y-4">
+      <Tabs defaultValue="overview" className="space-y-4 ">
         {/* All Tablist */}
-        <TabsList className="border py-6 px-1">
+        <TabsList className="border  px-1 flex justify-start lg:w-3/6 flex-wrap w-full h-full">
           <TabsTrigger value="overview" className="cursor-pointer py-2 px-4">
             Overview
           </TabsTrigger>
@@ -134,7 +132,7 @@ const SalesReport = () => {
             <OrderStatusChart orderStatusData={orderStatusData} />
           </div>
           {/* Top Selling & Order Volume Charts */}
-          <div className="grid gap-6 lg:grid-cols-7">
+          <div className="grid gap-6  lg:grid-cols-7">
             {/* Top Selling Chart */}
             <TopSellingChart
               topSellingProduct={report?.topSellingProducts.slice(0, 5)}
@@ -187,15 +185,15 @@ const SalesReport = () => {
             </CardHeader>
             <CardContent>
               {/* Performance Chart & Table */}
-              <div className="grid lg:grid-cols-7 xl:grid-cols-8">
-                <div className="mb-6 lg:col-span-4 xl:col-span-5 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-7 xl:grid-cols-8">
+                <div className="mb-6  lg:col-span-4 xl:col-span-5 w-full h-[250px] md:h-auto">
                   {/* Medicine Performance Chart */}
                   <PerformanceChart
                     topSellingProducts={report?.topSellingProducts}
                   />
                 </div>
                 {/* Medicine Performance Table */}
-                <div className="lg:col-span-3 xl:col-span-3 w-full">
+                <div className="lg:col-span-3 xl:col-span-3 w-full overflow-x-auto">
                   <PerformanceTable
                     topSellingProducts={report?.topSellingProducts}
                     totalItems={totalItems}

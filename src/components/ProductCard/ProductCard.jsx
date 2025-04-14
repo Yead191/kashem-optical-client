@@ -16,6 +16,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useCart from "@/hooks/useCart";
 
 const ProductCard = ({ product }) => {
+  console.log(product);
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   // State to manage the Heart button (liked/unliked)
@@ -46,7 +47,7 @@ const ProductCard = ({ product }) => {
         customerName: user.displayName,
         customerEmail: user.email,
       },
-      productId: product._id,
+      productId: product._id ? product._id : product.productId,
       productName: product.productName,
       brandName: product.brandName,
       price:
@@ -71,8 +72,8 @@ const ProductCard = ({ product }) => {
 
   return (
     <Link
-      to={`/product/${product._id}`}
-      key={product._id}
+      to={`/product/${product._id ? product._id : product.productId}`}
+      key={product._id ? product._id : product.productId}
       className="relative rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col border border-gray-200 w-full h-full"
     >
       {/* Heart Icon */}
@@ -98,7 +99,7 @@ const ProductCard = ({ product }) => {
           pagination={{ clickable: true }}
           className="h-full w-full"
         >
-          {product?.image.map((imgUrl, index) => (
+          {product?.image?.map((imgUrl, index) => (
             <SwiperSlide key={index}>
               <img
                 className="mx-auto object-cover w-full h-full transition-transform duration-300 hover:scale-105"
