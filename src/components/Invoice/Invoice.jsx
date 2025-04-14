@@ -57,7 +57,7 @@ const InvoicePDF = ({ invoice = {}, user = {} }) => (
           {invoice?.customerInfo?.district || "N/A"},{" "}
           {invoice?.customerInfo?.division || "N/A"}, Bangladesh
         </Text>
-        <Text style={{ color: "green" }}>Payment Status: {invoice?.paymentStatus}</Text>
+        <Text style={{ color: "green" }}>{invoice?.paymentStatus}</Text>
       </View>
 
       {/* Table of Ordered Products */}
@@ -160,6 +160,7 @@ const Invoice = () => {
       return data;
     },
   });
+  console.log(invoice)
 
   if (isLoading) {
     return (
