@@ -47,13 +47,13 @@ const CartDropdown = ({ cart }) => {
           <DropdownMenuSeparator />
 
           {/* Cart Items */}
-          <CardContent className="p-0">
+          <CardContent className="p-0 md:px-3  md:pt-2">
             {cart?.length > 0 ? (
               <ScrollArea className="h-48">
                 {cart.map((item) => (
                   <DropdownMenuItem
                     key={item.productId}
-                    className="flex items-center justify-between p-3 hover:bg-gray-50"
+                    className="flex items-center justify-between p-1 hover:bg-gray-50"
                   >
                     <Link
                       to={`/product/${item.productId}`}

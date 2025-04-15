@@ -1,6 +1,6 @@
 import useCategory from "@/hooks/useCategory";
 import { Link } from "react-router-dom";
-
+import { motion } from "framer-motion";
 function CategoriesSection() {
   const [categories, categoriesLoading, refetch] = useCategory();
 
@@ -41,25 +41,41 @@ function CategoriesSection() {
         <h2 className="text-3xl font-bold text-start mb-8">
           Shop By Categories
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category) => (
-            <Link
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {categories.map((category, idx) => (
+            <motion.div
               key={category._id}
-              to={`/products?category=${category?.name}`}
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: "easeInOut",
+                delay: 0.2 * idx,
+              }}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
+
             >
-              <div className="p-4 text-center">
-                <div className="w-24 h-24 mx-auto mb-4">
-                  <img
-                    src={category?.image || "/placeholder.svg"}
-                    alt={category?.name}
-                    className="w-full h-full object-contain"
-                  />
+              <Link
+                to={`/products?category=${category?.name}`}
+              >
+                <div className="p-4 text-center">
+                  <div className="w-24 h-24 mx-auto mb-4">
+                    <img
+                      src={category?.image || "/placeholder.svg"}
+                      alt={category?.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    {category?.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {category?.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{category?.name}</h3>
-                <p className="text-gray-600 text-sm">{category?.description}</p>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -75,15 +75,15 @@ function LatestProducts() {
       return res.data;
     },
   });
-  console.log(products);
+  // console.log(products);
 
   return (
     <section className="w-full py-12 bg-gray-50">
       <div className="p-2 md:w-11/12 lg:w-10/12 mx-auto px-4">
         <h2 className="text-3xl font-bold text-start mb-8">
-          Check Our Latest Products
+          Check Our Latest Collections
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {products?.map((product) => (
             <ProductCard product={product} />
           ))}

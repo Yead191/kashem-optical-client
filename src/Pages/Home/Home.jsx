@@ -10,6 +10,8 @@ import GenderSection from "./GenderSection";
 import CategoriesSection from "./CategoriesSection";
 import TopSellingProducts from "./TopSellingProducts";
 import LatestProducts from "./LatestProducts";
+import Faq from "./Faq";
+import Testimonials from "./Testimonials";
 
 const Home = () => {
   // console.log(categories);
@@ -57,6 +59,10 @@ const Home = () => {
       <TopSellingProducts />
       {/* latest products */}
       <LatestProducts />
+      {/* faq */}
+      <Faq />
+      {/* testimonials */}
+      <Testimonials />
     </div>
   );
 };

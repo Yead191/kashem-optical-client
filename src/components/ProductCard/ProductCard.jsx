@@ -16,7 +16,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useCart from "@/hooks/useCart";
 
 const ProductCard = ({ product }) => {
-  console.log(product);
+  // console.log(product);
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   // State to manage the Heart button (liked/unliked)
