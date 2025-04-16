@@ -1,10 +1,10 @@
-import axios from 'axios';
-import React from 'react';
+import axios from "axios";
+import React from "react";
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000'
-})
+  baseURL: import.meta.env.VITE_URL,
+});
 const useAxiosPublic = () => {
-    return axiosSecure
+  return axiosSecure;
 };
 
 export default useAxiosPublic;
