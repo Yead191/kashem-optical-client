@@ -27,8 +27,10 @@ import { motion } from "framer-motion";
 const Products = () => {
   const axiosPublic = useAxiosPublic();
   const [categories, categoriesLoading] = useCategory();
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || ""
+  );
   const initialCategory = searchParams.get("category") || "";
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortPrice, setSortPrice] = useState("");
@@ -673,7 +675,7 @@ const Products = () => {
           {isLoading ? (
             <Spinner />
           ) : products.length ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {products?.map((product) => (
                 <ProductCard product={product} />
               ))}

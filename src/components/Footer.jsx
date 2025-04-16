@@ -21,6 +21,8 @@ import {
   FiGlobe,
 } from "react-icons/fi";
 import { IoLogoYoutube } from "react-icons/io5";
+import { GiSunglasses } from "react-icons/gi";
+import { ShoppingBag } from "lucide-react";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -70,18 +72,24 @@ const Footer = () => {
   const footerLinks = [
     {
       id: "company",
-      title: "Company",
+      title: "Quick Links",
       links: [
-        { name: "About Us", path: "/about-us", icon: <FiInfo size={16} /> },
-        {
-          name: "Frequently Asked Questions",
-          path: "/faq",
-          icon: <FiHelpCircle size={16} />,
-        },
+        { name: "About Us", path: "/about", icon: <FiInfo size={16} /> },
+        
         {
           name: "Contact Us",
           path: "/contact-us",
           icon: <FiMessageSquare size={16} />,
+        },
+        {
+          name: "Shop",
+          path: "/products",
+          icon: <GiSunglasses size={16} />,
+        },
+        {
+          name: "Cart",
+          path: "/dashboard/manage-cart",
+          icon: <ShoppingBag size={16} />,
         },
       ],
     },
@@ -149,9 +157,9 @@ const Footer = () => {
             </Link>
 
             <p className={`max-w-md text-gray-600`}>
-              Rent and lend gadgets affordably. GadgetSwap ensures
-              accessibility, affordability, and gadget sharing while providing a
-              secure and seamless experience for users.
+              Your trusted destination for premium eyewear since 2015. Discover
+              the latest collections, from classic eyeglasses to screen glasses,
+              tailored to your style and vision needs. See the world clearly with Kashem Optical!
             </p>
 
             {/*<div className="pt-4">
@@ -287,7 +295,8 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="pt-5 flex flex-col md:flex-row justify-between items-center">
           <p className={`text-sm text-gray-500 `}>
-            &copy; {new Date().getFullYear()} KashemOptical. All rights reserved.
+            &copy; {new Date().getFullYear()} KashemOptical. All rights
+            reserved.
           </p>
           {showScrollButton && (
             <button

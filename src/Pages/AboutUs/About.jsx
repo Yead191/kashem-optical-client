@@ -55,7 +55,7 @@ function AboutPage() {
       </div>
 
       {/* Mission & Vision */}
-      <div className="grid md:grid-cols-2 gap-8 mb-20">
+      <div className="grid md:grid-cols-2 items-center gap-8 mb-20">
         <div>
           <h2 class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
             Our Journey

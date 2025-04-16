@@ -86,7 +86,7 @@ function ContactPage() {
                     <div>
                       <h3 className="font-medium">Address</h3>
                       <p className="text-muted-foreground">
-                        123 Eye Care Street, Chandpur, Bangladesh
+                        Chakbazar,Lakshmipur
                       </p>
                     </div>
                   </div>

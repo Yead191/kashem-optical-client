@@ -21,11 +21,13 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import ContactPage from "@/Pages/Contact/Contact";
 import AboutPage from "@/Pages/AboutUs/About";
+import Error404Page from "@/Pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root></Root>,
+    errorElement: <Error404Page />,
     children: [
       {
         path: "/",

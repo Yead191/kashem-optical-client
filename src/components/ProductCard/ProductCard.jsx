@@ -128,7 +128,7 @@ const ProductCard = ({ product }) => {
             <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
             <span>4.9</span>
             <span className="text-gray-500">
-              ({Math.floor(Math.random() * 1000)})
+              ({Math.floor(Math.random() * 20)})
             </span>
           </Badge>
         </div>

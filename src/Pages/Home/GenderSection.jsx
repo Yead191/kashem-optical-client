@@ -41,15 +41,11 @@ function GenderSection() {
           {genders.map((gender, idx) => (
             <motion.div
               key={gender.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-             
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 1 }}
               viewport={{ once: true }}
-              transition={{
-                duration: 0.8,
-                ease: "easeInOut",
-                delay: 0.2 * idx,
-              }}
+              transition={{ duration: 0.1 }}
+              whileHover={{ scale: 1.05 }}
               className="group relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
             >
               <Link to={`/products?gender=${gender.name}`}>
