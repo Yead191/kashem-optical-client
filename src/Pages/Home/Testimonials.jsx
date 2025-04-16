@@ -31,7 +31,8 @@ const testimonials = [
       "As someone who wears glasses daily, finding the right pair is essential. Kashem Optical made the process easy and enjoyable. The transition lenses I purchased are perfect for my lifestyle—clear indoors and automatically tinted outdoors.",
     name: "Sazzad H Sojol",
     role: "Esports Player",
-    avatar: "https://i.ibb.co.com/3zbd4Gk/473052915-3949075645351178-3792355090660896013-n.jpg",
+    avatar:
+      "https://i.ibb.co.com/3zbd4Gk/473052915-3949075645351178-3792355090660896013-n.jpg",
   },
 ];
 
@@ -40,7 +41,7 @@ export default function Testimonials() {
   const [activeTestimonial, setActiveTestimonial] = useState(1);
 
   return (
-    <div className="w-full p-2 md:w-11/12 lg:w-10/12 mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 py-16 px-4 md:px-8 rounded-lg">
+    <div className="w-full p-2 md:w-11/12 lg:w-10/12 mx-auto bg-gradient-to-r from-blue-500 via-sky-400 to-blue-400 py-16 px-4 md:px-8 rounded-xl my-12">
       <div className=" w-11/12 mx-auto flex flex-col md:flex-row items-center gap-8">
         {/* Left Side: Heading and Description */}
         <div className="w-full md:w-1/2">

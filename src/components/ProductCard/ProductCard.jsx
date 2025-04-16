@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-// Import Swiper React components and styles
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -9,31 +8,25 @@ import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { BaggageClaim, Heart, Star } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils"; // Assuming you have shadcn's cn utility
+import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useCart from "@/hooks/useCart";
 
 const ProductCard = ({ product }) => {
-  // console.log(product);
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
-  // State to manage the Heart button (liked/unliked)
   const [, , refetch] = useCart();
-
   const [isLiked, setIsLiked] = useState(false);
 
-  // Handler for Heart button click (Wishlist)
   const handleWishlist = (e, id) => {
-    e.stopPropagation(); // Prevent the click from bubbling up to the Link
-    e.preventDefault(); // Prevent any default behavior
-    setIsLiked(!isLiked); // Toggle the liked state
+    e.stopPropagation();
+    e.preventDefault();
+    setIsLiked(!isLiked);
     console.log(`Toggled wishlist for product ID: ${id}`);
-    // Add your wishlist logic here (e.g., API call to add/remove from wishlist)
   };
 
-  // Handler for Add to Cart button click
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -71,13 +64,15 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Link
-      to={`/product/${product._id ? product._id : product.productId}`}
-      key={product._id ? product._id : product.productId}
-      className="relative rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col border border-gray-200 w-full h-full"
-    >
+    <div className="group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 bg-white/80 backdrop-blur-md border border-gray-200/50 hover:shadow-lg hover:shadow-indigo-200/50">
+      {/* Hover Gradient Effect */}
+      <div className="absolute inset-0 bg-gradient-to-t from-sky-300/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      {/* Animated Border Effect */}
+      <div className="absolute inset-0 border border-transparent group-hover:border-purple-500/30 rounded-xl transition-colors duration-300"></div>
+
       {/* Heart Icon */}
-      <div className="absolute top-2 right-2 z-10">
+      <div className="absolute top-3 right-3 z-20">
         <button onClick={(e) => handleWishlist(e, product._id)}>
           <Heart
             className={cn(
@@ -91,25 +86,39 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Product Images with Swiper */}
-      <div className="relative pt-4 md:px-4 mb-4 h-[180px] md:h-[200px] lg:h-[260px]">
+      <Link
+        to={`/product/${product._id ? product._id : product.productId}`}
+        className="relative block h-[180px] md:h-[200px] lg:h-[260px] overflow-hidden"
+      >
         <Swiper
-          modules={[Navigation, Pagination]}
+          modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={10}
           slidesPerView={1}
+          autoplay={{
+            delay: 3000, 
+            disableOnInteraction: false, 
+          }}
           pagination={{ clickable: true }}
           className="h-full w-full"
         >
           {product?.image?.map((imgUrl, index) => (
             <SwiperSlide key={index}>
               <img
-                className="mx-auto object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 src={imgUrl}
                 alt={`${product?.brandName} - ${index + 1}`}
               />
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+
+        {/* View Details Button (visible on hover) */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+          <span className="px-4 py-2 rounded-full text-sm font-medium bg-indigo-600/90 text-white backdrop-blur-md">
+            View Details
+          </span>
+        </div>
+      </Link>
 
       {/* Product Details */}
       <div className="p-4 flex flex-col flex-grow">
@@ -125,12 +134,14 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Brand Name */}
-        <h4 className="text-md md:text-lg font-semibold mb-1">
-          {product?.productName}
-        </h4>
+        <Link to={`/product/${product._id ? product._id : product.productId}`}>
+          <h4 className="text-md md:text-lg font-semibold mb-1 truncate hover:text-indigo-600">
+            {product?.productName}
+          </h4>
+        </Link>
 
         {/* Size and Additional Info */}
-        <p className="text-sm text-gray-500 mb-2 flex-grow">
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
           Size: {product?.frameSize} • {product?.brandName}
         </p>
 
@@ -139,7 +150,7 @@ const ProductCard = ({ product }) => {
           <div className="flex items-center gap-2">
             {product.price.discount.discountedAmount > 0 ? (
               <>
-                <span className="text-lg font-semibold text-black">
+                <span className="text-lg font-semibold text-indigo-600">
                   ৳{product.price.discount.discountedAmount}
                 </span>
                 <span className="text-sm text-gray-500 line-through">
@@ -150,20 +161,20 @@ const ProductCard = ({ product }) => {
                 </span>
               </>
             ) : (
-              <span className="text-lg font-semibold text-black">
+              <span className="text-lg font-semibold text-indigo-600">
                 ৳{product.price.amount}
               </span>
             )}
           </div>
           {/* Add to Cart Button */}
-          <div className="mt-auto">
+          <div className="mt-auto z-30">
             {product?.status === "In Stock" ? (
               <Button
                 variant="outline"
                 onClick={(e) => handleAddToCart(e)}
-                className="border-black text-black hover:bg-black hover:text-white"
+                className="border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white"
               >
-                <BaggageClaim className="h-5 w-5" />
+                <BaggageClaim className="h-5 w-5 mr-2" />
                 Add to Cart
               </Button>
             ) : (
@@ -171,14 +182,14 @@ const ProductCard = ({ product }) => {
                 disabled
                 className="w-full flex items-center gap-2 rounded-md bg-red-500 hover:bg-red-600"
               >
-                <BaggageClaim className="h-4 w-4" />
+                <BaggageClaim className="h-4 w-4 mr-2" />
                 Out of Stock
               </Button>
             )}
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

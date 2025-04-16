@@ -89,7 +89,7 @@ function LatestProducts() {
           ))}
         </div>
         <div className="text-center mt-8">
-          <Link to={'/products'}>
+          <Link to={"/products"}>
             <Button variant="outline" size="lg">
               View All Products
             </Button>

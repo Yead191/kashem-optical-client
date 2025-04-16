@@ -28,13 +28,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Glasses, House } from "lucide-react";
+import { ChevronDown, Glasses, House, Info, Phone } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { Separator } from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 import useCart from "@/hooks/useCart";
 import CartDropdown from "./CartDropDown";
+import useRole from "@/hooks/useRole";
 
 const Navbar = () => {
   const { user, logOut, updateUserProfile, setLoading, loading } = useAuth();
@@ -43,6 +44,7 @@ const Navbar = () => {
   const axiosPublic = useAxiosPublic();
   const [categories, categoriesLoading] = useCategory();
   const [cart, cartLoading, refetch] = useCart();
+  const { role, roleLoading } = useRole();
 
   // Calculate the total price of items in the cart
   const totalPrice =
@@ -61,7 +63,7 @@ const Navbar = () => {
   };
 
   const links = (
-    <div className="flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row">
+    <div className="flex lg:items-center flex-col gap-3 lg:gap-4 lg:flex-row">
       <NavLink
         className={({ isActive }) =>
           `flex items-center gap-1  ${
@@ -92,39 +94,68 @@ const Navbar = () => {
           to="/products"
         >
           <Glasses size={14} />
-          Products
+          Shop
+          {/* Dropdown Trigger (clicking this opens the dropdown) */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="ml-1  pb-0  focus:outline-none">
+                <ChevronDown className="h-4 w-4 inline-flex" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {categoriesLoading ? (
+                <DropdownMenuItem>Loading...</DropdownMenuItem>
+              ) : (
+                categories?.map((category) => (
+                  <DropdownMenuItem key={category?.name || category?.id}>
+                    <Link
+                      to={`/products?category=${category?.name}`}
+                      className="w-full text-black opacity-80 hover:opacity-100 flex gap-4"
+                    >
+                      <img
+                        className="w-5 rounded-full object-cover"
+                        src={category?.image}
+                        alt=""
+                      />
+                      {category?.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </NavLink>
-
-        {/* Dropdown Trigger (clicking this opens the dropdown) */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="ml-1 p-2 focus:outline-none">
-              <ChevronDown className="h-4 w-4 inline-flex" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            {categoriesLoading ? (
-              <DropdownMenuItem>Loading...</DropdownMenuItem>
-            ) : (
-              categories?.map((category) => (
-                <DropdownMenuItem key={category?.name || category?.id}>
-                  <Link
-                    to={`/products?category=${category?.name}`}
-                    className="w-full text-black opacity-80 hover:opacity-100 flex gap-4"
-                  >
-                    <img
-                      className="w-5 rounded-full object-cover"
-                      src={category?.image}
-                      alt=""
-                    />
-                    {category?.name}
-                  </Link>
-                </DropdownMenuItem>
-              ))
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
+      {/* about us page */}
+      <NavLink
+        className={({ isActive }) =>
+          `flex items-center gap-1  ${
+            isActive
+              ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
+              : "text-black opacity-80"
+          }`
+        }
+        style={{ fontVariant: "small-caps" }}
+        to="/about"
+      >
+        <Info size={14} />
+        About Us
+      </NavLink>
+      {/* contact us page */}
+      <NavLink
+        className={({ isActive }) =>
+          `flex items-center gap-1  ${
+            isActive
+              ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
+              : "text-black opacity-80"
+          }`
+        }
+        style={{ fontVariant: "small-caps" }}
+        to="/contact"
+      >
+        <Phone size={14} />
+        Contact
+      </NavLink>
     </div>
   );
 
@@ -155,7 +186,7 @@ const Navbar = () => {
   // console.log(cart);
 
   return (
-    <div className="navbar fixed z-50 bg-gradient-to-r from-base-100 via-sky-50 to-white bg-opacity-60 lg:px-28 xl:px-32 py-0 border-b">
+    <div className="navbar fixed z-50 bg-white  lg:px-28 xl:px-32 py-0 border-b">
       <div className="navbar-start ">
         {/* drawer for small devices */}
         <div className="drawer lg:hidden flex items-center z-20">
@@ -335,7 +366,7 @@ const Navbar = () => {
                       (document.getElementById("mobile-drawer").checked = false)
                     }
                   >
-                    Contact Us
+                    Contact
                   </NavLink>
                 </li>
               </ul>
@@ -398,7 +429,7 @@ const Navbar = () => {
                     </li> */}
         </ul>
 
-        <div className="flex-none mr-5 z-0">
+        <div className="flex-none ml-3 mr-5 z-0">
           {/* cart dropdown */}
           <CartDropdown cart={cart}></CartDropdown>
         </div>
@@ -413,15 +444,16 @@ const Navbar = () => {
                 {user?.photoURL ? (
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={user?.photoURL} alt="User profile" />
-                    <AvatarFallback>
-                      <FaUser className="h-5 w-5 text-gray-500" />
-                    </AvatarFallback>
+                    <AvatarFallback className="rounded-lg">KO</AvatarFallback>
                   </Avatar>
                 ) : (
                   <Avatar className="h-10 w-10 bg-white">
-                    <AvatarFallback>
-                      <FaUser className="h-5 w-5 text-black" />
-                    </AvatarFallback>
+                    <AvatarImage
+                      src={
+                        "https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_1280.png"
+                      }
+                      alt="User profile"
+                    />
                   </Avatar>
                 )}
               </Button>
@@ -450,7 +482,11 @@ const Navbar = () => {
               )}
               <DropdownMenuItem asChild>
                 <Link
-                  to="/dashboard"
+                  to={
+                    role === "Admin"
+                      ? "/dashboard/admin/statistics"
+                      : "/dashboard/manage-cart"
+                  }
                   className="flex w-full items-center text-sm text-gray-700 hover:bg-gray-100"
                 >
                   <MdDashboard className="mr-2 h-4 w-4" />
@@ -524,7 +560,14 @@ const Navbar = () => {
                 </li>
               )}
               <li>
-                <Link to={"/dashboard"} className="text-black">
+                <Link
+                  to={
+                    role === "Admin"
+                      ? "/dashboard/admin/statistics"
+                      : "/dashboard/manage-cart"
+                  }
+                  className="text-black"
+                >
                   <MdDashboard></MdDashboard>
                   Dashboard
                 </Link>

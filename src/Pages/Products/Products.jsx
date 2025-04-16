@@ -673,9 +673,9 @@ const Products = () => {
           {isLoading ? (
             <Spinner />
           ) : products.length ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4 w-full place-items-center place-content-center justify-center items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
               {products?.map((product) => (
-                <ProductCard key={product._id} product={product}></ProductCard>
+                <ProductCard product={product} />
               ))}
             </div>
           ) : (

@@ -168,7 +168,6 @@ const UpdateProductModal = ({ isOpen, onClose, refetch, id }) => {
       ],
       [!brandName, "Brand Name is Required!"],
       [!productName, "Product Name is Required!"],
-      [!productType, "Product Type is Required!"],
       [!category, "Select a Category for the Product!"],
       [!gender, "Select a Gender for the Product!"],
       [!origin, "Specify the Country of Origin!"],
@@ -352,6 +351,7 @@ const UpdateProductModal = ({ isOpen, onClose, refetch, id }) => {
               <SelectContent>
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="Kids">Kids</SelectItem>
                 <SelectItem value="Unisex">Unisex</SelectItem>
               </SelectContent>
             </Select>
@@ -370,26 +370,6 @@ const UpdateProductModal = ({ isOpen, onClose, refetch, id }) => {
         {/* Manufacturer & Warranty */}
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
           <div className="space-y-2">
-            <Label>Manufacturer Details</Label>
-            <Input
-              placeholder="Enter Manufacturer"
-              value={manufacturer}
-              onChange={(e) => setManufacturer(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Warranty</Label>
-            <Input
-              placeholder="ex. 1 Year Manufacturer Warranty"
-              value={warranty}
-              onChange={(e) => setWarranty(e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Color & Product Type */}
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-          <div className="space-y-2">
             <Label>Color</Label>
             <Input
               placeholder="ex. Gunmetal"
@@ -398,12 +378,11 @@ const UpdateProductModal = ({ isOpen, onClose, refetch, id }) => {
             />
           </div>
           <div className="space-y-2">
-            <Label>Product Type</Label>
+            <Label>Warranty</Label>
             <Input
-              required
-              placeholder="Enter Product Type"
-              value={productType}
-              onChange={(e) => setProductType(e.target.value)}
+              placeholder="ex. 1 Year Manufacturer Warranty"
+              value={warranty}
+              onChange={(e) => setWarranty(e.target.value)}
             />
           </div>
         </div>

@@ -59,7 +59,7 @@ function TopSellingProducts() {
               transition={{
                 duration: 0.8,
                 ease: "easeInOut",
-                delay: 0.3 * idx,
+                
               }}
             >
               <Link to={`/product/${product.productId}`}>

@@ -17,6 +17,10 @@ import Invoice from "@/components/Invoice/Invoice";
 import ManagePatient from "@/Pages/Dashboard/AdminRoute/ManagePatient/ManagePatient";
 import PurchaseHistory from "@/Pages/Dashboard/UserRoutes/PurchaseHisotry";
 import SalesReport from "@/Pages/Dashboard/AdminRoute/SalesReport/SalesReport";
+import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
+import ContactPage from "@/Pages/Contact/Contact";
+import AboutPage from "@/Pages/AboutUs/About";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +40,14 @@ const router = createBrowserRouter([
         element: <Register></Register>,
       },
       {
+        path: "/contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "/about",
+        element: <AboutPage />,
+      },
+      {
         path: "/products",
         element: <Products></Products>,
       },
@@ -48,40 +60,76 @@ const router = createBrowserRouter([
   // dashboard
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
     children: [
       // admin routes
       {
         path: "admin/statistics",
-        element: <Statistics></Statistics>,
+        element: (
+          <AdminRoute>
+            <Statistics></Statistics>
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/sales-report",
-        element: <SalesReport />,
+        element: (
+          <AdminRoute>
+            <SalesReport />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-users",
-        element: <ManageUsers></ManageUsers>,
+        element: (
+          <AdminRoute>
+            <ManageUsers></ManageUsers>
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-category",
-        element: <ManageCategory></ManageCategory>,
+        element: (
+          <AdminRoute>
+            <ManageCategory></ManageCategory>
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-products",
-        element: <ManageProducts></ManageProducts>,
+        element: (
+          <AdminRoute>
+            <ManageProducts></ManageProducts>
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-orders",
-        element: <ManageOrders></ManageOrders>,
+        element: (
+          <AdminRoute>
+            <ManageOrders></ManageOrders>
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-banners",
-        element: <ManageBanners></ManageBanners>,
+        element: (
+          <AdminRoute>
+            <ManageBanners></ManageBanners>
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-patient",
-        element: <ManagePatient></ManagePatient>,
+        element: (
+          <AdminRoute>
+            <ManagePatient></ManagePatient>
+          </AdminRoute>
+        ),
       },
 
       // user routes

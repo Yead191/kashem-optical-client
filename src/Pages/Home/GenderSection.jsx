@@ -41,21 +41,14 @@ function GenderSection() {
           {genders.map((gender, idx) => (
             <motion.div
               key={gender.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 1 }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.3)",
-                transition: {
-                  duration: 0.4,
-                  ease: "easeInOut",
-                },
-              }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+             
               viewport={{ once: true }}
               transition={{
                 duration: 0.8,
                 ease: "easeInOut",
-                delay: 0.3 * idx,
+                delay: 0.2 * idx,
               }}
               className="group relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
             >

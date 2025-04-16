@@ -33,56 +33,58 @@ import { Store } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { NavUser } from "./NavUser";
 import { FaTruck } from "react-icons/fa6";
+import useRole from "@/hooks/useRole";
+import Spinner from "../Spinner/Spinner";
 
 const items = [
   {
     title: "Statistics",
     url: "/dashboard/admin/statistics",
     icon: ChartNoAxesCombined,
-    role: "admin",
+    role: "Admin",
   },
   {
     title: "Sales Report",
     url: "/dashboard/admin/sales-report",
     icon: FileSpreadsheet,
-    role: "admin",
+    role: "Admin",
   },
   {
     title: "Manage Users",
     url: "/dashboard/admin/manage-users",
     icon: UserRoundCog,
-    role: "admin",
+    role: "Admin",
   },
   {
     title: "Manage Category",
     url: "/dashboard/admin/manage-category",
     icon: LayoutGrid,
-    role: "admin",
+    role: "Admin",
   },
   {
     title: "Manage Products",
     url: "/dashboard/admin/manage-products",
     icon: Store,
-    role: "admin",
+    role: "Admin",
   },
   {
     title: "Manage Orders",
     url: "/dashboard/admin/manage-orders",
     icon: FaTruck,
-    role: "admin",
+    role: "Admin",
   },
   {
     title: "Manage Banner",
     url: "/dashboard/admin/manage-banners",
     icon: TicketSlash,
-    role: "admin",
+    role: "Admin",
   },
-  
+
   {
     title: "Manage Patient",
     url: "/dashboard/admin/manage-patient",
     icon: ScanEye,
-    role: "admin",
+    role: "Admin",
   },
 
   // user routes
@@ -91,21 +93,23 @@ const items = [
     title: "Manage Cart",
     url: "/dashboard/manage-cart",
     icon: ShoppingCart,
-    role: "user",
+    role: "User",
   },
   {
     title: "Purchase History",
     url: "/dashboard/purchase-history",
     icon: FileClock,
-    role: "user",
+    role: "User",
   },
 ];
 
 export function AppSidebar() {
   // const { role } = useRole();
-  const role = "admin";
+  const { role, roleLoading } = useRole();
+  console.log(role);
   const { state, toggleSidebar } = useSidebar();
   // console.log(state);
+  
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
