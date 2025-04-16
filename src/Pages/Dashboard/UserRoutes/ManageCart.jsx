@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaCartShopping } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import emptyCart from "../../../assets/empty-cart.jpg";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,7 @@ import { districts, divisionDistricts, divisions } from "@/lib/address";
 import useAuth from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import Confetti from "react-confetti";
+import useDiscount from "@/hooks/useDiscount";
 
 const ManageCart = () => {
   const { user } = useAuth();
@@ -35,8 +36,13 @@ const ManageCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [subtotal, setSubtotal] = useState(0);
-  const shippingCost = cart.length ? 60 : 0;
   const [showConfetti, setShowConfetti] = useState(false);
+  const [discount, discountLoading] = useDiscount();
+  const navigate = useNavigate();
+
+  // Discount Calculations
+  const discountAmount = discount ? (subtotal * discount) / 100 : 0;
+  const totalAfterDiscount = subtotal - discountAmount;
 
   // Form values
   const [name, setName] = useState(user?.displayName || "");
@@ -46,7 +52,6 @@ const ManageCart = () => {
   const [division, setDivision] = useState("");
   const [address, setAddress] = useState("");
 
-  // Get filtered districts based on selected division
   const filteredDistricts = division ? divisionDistricts[division] : districts;
 
   const customerInfo = {
@@ -66,7 +71,6 @@ const ManageCart = () => {
     setSubtotal(calculatedSubtotal);
   }, [cart]);
 
-  // Increase quantity
   const handleIncrease = async (itemId) => {
     const item = cart.find((i) => i._id === itemId);
     const updatedQuantity = item.quantity + 1;
@@ -83,7 +87,6 @@ const ManageCart = () => {
     refetch();
   };
 
-  // Decrease quantity
   const handleDecrease = async (itemId) => {
     const item = cart.find((i) => i._id === itemId);
     if (item.quantity === 1) {
@@ -105,7 +108,7 @@ const ManageCart = () => {
           refetch();
         }
       });
-    } else if (item.quantity > 1) {
+    } else {
       const updatedQuantity = item.quantity - 1;
       await toast.promise(
         axiosSecure.patch(`/carts/quantity/${itemId}`, {
@@ -121,7 +124,6 @@ const ManageCart = () => {
     }
   };
 
-  // Clear cart
   const handleClearCart = async () => {
     try {
       await toast.promise(axiosSecure.delete(`/carts/clear/${user?.email}`), {
@@ -136,35 +138,28 @@ const ManageCart = () => {
     }
   };
 
-  // Confirm order and upload to database
   const handleConfirmOrder = async () => {
-    if (!customerInfo.name) {
-      return toast.error("Please Enter Your Name");
-    }
-    if (!customerInfo.email) {
-      return toast.error("Please Enter Your Email");
-    }
-    if (!customerInfo.phone) {
-      return toast.error("Please Enter Your Phone Number");
-    }
-    if (!customerInfo.district) {
-      return toast.error("Please Select Your District");
-    }
-    if (!customerInfo.division) {
-      return toast.error("Please Select Your Division");
-    }
-    if (!customerInfo.address) {
-      return toast.error("Please Enter Your Address");
+    if (
+      !customerInfo.name ||
+      !customerInfo.email ||
+      !customerInfo.phone ||
+      !customerInfo.district ||
+      !customerInfo.division ||
+      !customerInfo.address
+    ) {
+      return toast.error("Please fill in all required fields");
     }
 
     const orderData = {
       customerInfo,
-      totalPrice: subtotal,
-      paymentStatus: "Pending", // Set payment status to Pending
+      totalPrice: totalAfterDiscount,
+      discountPercentage: discount || 0,
+      discountAmount,
+      paymentStatus: "Pending",
       orderStatus: "Pending",
       date: new Date().toISOString(),
       products: cart.map((item) => ({
-        productId: item.productId, // Adjusted to match your cart structure
+        productId: item.productId,
         productName: item.productName,
         quantity: item.quantity,
         price: item.price,
@@ -177,12 +172,14 @@ const ManageCart = () => {
     try {
       await toast.promise(axiosSecure.post("/orders", orderData), {
         loading: "Placing your order...",
-        success: async (response) => {
-          // Clear cart after successful order
+        success: async () => {
           await axiosSecure.delete(`/carts/clear/${user?.email}`);
           refetch();
-          setShowConfetti(true); // Show confetti
-          setTimeout(() => setShowConfetti(false), 5000); // Hide confetti after 5 seconds
+          setShowConfetti(true);
+          setTimeout(() => {
+            setShowConfetti(false);
+            navigate("/dashboard/purchase-history");
+          }, 5000);
           Swal.fire({
             position: "center",
             icon: "success",
@@ -192,6 +189,7 @@ const ManageCart = () => {
           });
           return <b>Order placed successfully!</b>;
         },
+
         error: (error) => {
           const errorMessage =
             error.response?.data?.error ||
@@ -201,132 +199,138 @@ const ManageCart = () => {
         },
       });
     } catch (error) {
-      console.error("Error placing order:", error);
+      console.error("Error placing order:", error); 
     }
   };
 
   return (
-    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 py-12">
-      {/* Confetti component */}
+    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 py-12 ">
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
 
       {/* Left Column - Order Summary */}
-      <div className="bg-gray-50 rounded-md p-4 md:p-8 flex-1">
-        <div>
-          <h2 className="text-[1.2rem] text-gray-700 font-semibold mb-6">
-            Your order
-          </h2>
-          <div className="border border-gray-200 rounded-md">
-            {cart.length ? (
-              cart?.map((item, idx) => (
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeInOut",
-                    delay: idx * 0.1,
-                  }}
-                  viewport={{ once: true }}
-                  key={item._id}
-                  className="flex flex-col md:flex-row md:items-center gap-4 border-t p-4 border-gray-200"
-                >
-                  <div className="border relative border-gray-200 w-max rounded-md bg-white">
-                    <img
-                      src={item.image}
-                      alt={item.productName}
-                      className="w-20 h-20 object-cover rounded"
-                    />
-                    <span className="px-[0.45rem] rounded-full absolute bg-white -top-2 -right-2 z-30 text-[0.9rem] text-gray-800 border border-gray-200 shadow-sm">
-                      {item.quantity}
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium">{item.productName}</h3>
-                    <div className="flex items-center gap-[30px] mt-2">
-                      <p className="text-sm text-gray-500">
-                        <b className="text-gray-800">{item.brandName}</b>
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleDecrease(item._id)}
-                          className="p-1 border rounded hover:bg-gray-200"
-                        >
-                          <AiOutlineMinus />
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button
-                          onClick={() => handleIncrease(item._id)}
-                          className="p-1 border rounded hover:bg-gray-200"
-                        >
-                          <AiOutlinePlus />
-                        </button>
-                      </div>
+      <div className="bg-gray-50 rounded-md p-4 md:p-8 flex-1 ">
+        <h2 className="text-[1.2rem] text-gray-700 font-semibold mb-6">
+          Your order
+        </h2>
+        <div className="border border-gray-200 rounded-md">
+          {cart.length ? (
+            cart.map((item, idx) => (
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: idx * 0.1,
+                }}
+                viewport={{ once: true }}
+                key={item._id}
+                className="flex flex-col md:flex-row md:items-center gap-4 border-t p-4 border-gray-200"
+              >
+                <div className="border relative border-gray-200 w-max rounded-md bg-white">
+                  <img
+                    src={item.image}
+                    alt={item.productName}
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                  <span className="px-[0.45rem] rounded-full absolute bg-white -top-2 -right-2 z-30 text-[0.9rem] text-gray-800 border border-gray-200 shadow-sm">
+                    {item.quantity}
+                  </span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium">{item.productName}</h3>
+                  <div className="flex items-center gap-[30px] mt-2">
+                    <p className="text-sm text-gray-500">
+                      <b className="text-gray-800">{item.brandName}</b>
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleDecrease(item._id)}
+                        className="p-1 border rounded hover:bg-gray-200"
+                      >
+                        <AiOutlineMinus />
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        onClick={() => handleIncrease(item._id)}
+                        className="p-1 border rounded hover:bg-gray-200"
+                      >
+                        <AiOutlinePlus />
+                      </button>
                     </div>
                   </div>
-                  <span className="font-medium">
-                    ৳ {(item.price * item.quantity).toFixed(2)}
-                  </span>
-                </motion.div>
-              ))
-            ) : (
-              <img
-                src={emptyCart}
-                alt="empty cart"
-                className="border rounded-md"
-              />
-            )}
-          </div>
-
-          {/* Pricing Summary */}
-          <div className="mt-8 space-y-2 border-t border-gray-200 pt-6">
-            <div className="flex justify-between">
-              <span className="text-[1rem] text-gray-500">Total</span>
-              <span className="text-[1rem] font-medium text-gray-800">
-                ৳ {subtotal.toFixed(2)}
-              </span>
-            </div>
-            {/* <div className="flex justify-between">
-              <span className="text-[1rem] text-gray-500">Shipping Cost</span>
-              <span className="text-[1rem] font-medium text-gray-800">
-                ৳ {shippingCost}
-              </span>
-            </div>
-            <div className="flex justify-between border-t border-gray-200 pt-5 font-medium">
-              <span>Total</span>
-              <span className="text-[1rem] font-medium text-gray-800">
-                ৳ {(subtotal + shippingCost).toFixed(2)}
-              </span>
-            </div> */}
-          </div>
-
-          {/* Clear Cart Button */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center gap-5 mt-5"
-          >
-            <Link to={"/products"}>
-              <Button className="cursor-pointer">Continue Shopping</Button>
-            </Link>
-            <Button
-              onClick={() => setIsOpen(true)}
-              className="bg-red-500 hover:bg-red-400 text-white cursor-pointer"
-            >
-              Clear Cart <FaCartShopping />
-            </Button>
-          </motion.div>
+                </div>
+                <span className="font-medium">
+                  ৳ {(item.price * item.quantity).toFixed(2)}
+                </span>
+              </motion.div>
+            ))
+          ) : (
+            <img
+              src={emptyCart}
+              alt="empty cart"
+              className="border rounded-md"
+            />
+          )}
         </div>
+
+        {/* Pricing Summary */}
+        <div className="mt-8 space-y-2 border-t border-gray-200 pt-6">
+          <div className="flex justify-between">
+            <span className="text-[1rem] text-gray-500">Subtotal</span>
+            <span className="text-[1rem] font-medium text-gray-800">
+              ৳ {subtotal.toFixed(2)}
+            </span>
+          </div>
+
+          {discount && (
+            <div className="flex justify-between text-green-600">
+              <span className="text-[1rem]">Discount ({discount}%)</span>
+              <span className="text-[1rem]">
+                - ৳ {discountAmount.toFixed(2)}
+              </span>
+            </div>
+          )}
+
+          <div className="flex justify-between border-t border-gray-200 pt-5 font-medium">
+            <span>Total</span>
+            <span className="text-[1rem] text-gray-800">
+              ৳ {totalAfterDiscount.toFixed(2)}
+            </span>
+          </div>
+
+          {cart.length > 0 && discount && (
+            <p className="text-green-600 font-medium mt-2">
+              🎉 You saved {discount}% on this order!
+            </p>
+          )}
+        </div>
+
+        {/* Cart Controls */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
+          viewport={{ once: true }}
+          className="flex items-center justify-center gap-5 mt-5"
+        >
+          <Link to={"/products"}>
+            <Button className="cursor-pointer">Continue Shopping</Button>
+          </Link>
+          <Button
+            onClick={() => setIsOpen(true)}
+            className="bg-red-500 hover:bg-red-400 text-white cursor-pointer"
+          >
+            Clear Cart <FaCartShopping />
+          </Button>
+        </motion.div>
       </div>
 
       {/* Right Column - Customer Info Form */}
-      <div className="flex-1 md:px-8 lg:sticky lg:top-18 lg:self-start">
+      <div className="flex-1 md:px-8 lg:sticky lg:top-16 lg:self-start ">
         <div className="space-y-6">
-          {/* Name */}
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input
@@ -337,7 +341,6 @@ const ManageCart = () => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -348,7 +351,6 @@ const ManageCart = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          {/* Phone Number */}
           <div className="space-y-2">
             <Label htmlFor="phone">Phone number</Label>
             <div className="flex gap-2 items-center">
@@ -364,9 +366,7 @@ const ManageCart = () => {
               />
             </div>
           </div>
-          {/* Division & District */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Division */}
             <div className="space-y-2">
               <Label htmlFor="division">Division</Label>
               <Select
@@ -388,7 +388,6 @@ const ManageCart = () => {
                 </SelectContent>
               </Select>
             </div>
-            {/* District */}
             <div className="space-y-2">
               <Label htmlFor="district">District</Label>
               <Select
@@ -413,7 +412,6 @@ const ManageCart = () => {
               </Select>
             </div>
           </div>
-          {/* Address Input */}
           <div className="space-y-2 mt-4">
             <Label htmlFor="billingAddress">Address</Label>
             <Input
@@ -424,11 +422,10 @@ const ManageCart = () => {
               placeholder="Enter Your Location"
             />
           </div>
-          {/* Confirm Order Button */}
           <Button
             onClick={handleConfirmOrder}
             disabled={!cart.length}
-            className="w-full "
+            className="w-full"
             size="lg"
           >
             Confirm Order

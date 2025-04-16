@@ -15,7 +15,8 @@ import DashboardLayout from "@/Root/Dashboard/DashboardLayout";
 import ManageOrders from "@/Pages/Dashboard/AdminRoute/ManageOrders/ManageOrders";
 import Invoice from "@/components/Invoice/Invoice";
 import ManagePatient from "@/Pages/Dashboard/AdminRoute/ManagePatient/ManagePatient";
-
+import PurchaseHistory from "@/Pages/Dashboard/UserRoutes/PurchaseHisotry";
+import SalesReport from "@/Pages/Dashboard/AdminRoute/SalesReport/SalesReport";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
         element: <Statistics></Statistics>,
       },
       {
+        path: "admin/sales-report",
+        element: <SalesReport />,
+      },
+      {
         path: "admin/manage-users",
         element: <ManageUsers></ManageUsers>,
       },
@@ -83,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "manage-cart",
         element: <ManageCart></ManageCart>,
+      },
+      {
+        path: "purchase-history",
+        element: <PurchaseHistory />,
       },
       {
         path: "invoice/:invoiceId",

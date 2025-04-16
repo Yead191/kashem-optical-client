@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
@@ -23,9 +24,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Glasses, House } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { Separator } from "@radix-ui/react-select";
@@ -61,15 +64,16 @@ const Navbar = () => {
     <div className="flex lg:items-center flex-col gap-3 lg:gap-5 lg:flex-row">
       <NavLink
         className={({ isActive }) =>
-          `${
+          `flex items-center gap-1  ${
             isActive
-              ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
+              ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
               : "text-black opacity-80"
           }`
         }
         style={{ fontVariant: "small-caps" }}
         to="/"
       >
+        <House size={14} />
         Home
       </NavLink>
 
@@ -78,7 +82,7 @@ const Navbar = () => {
         {/* Products Link (clicking this navigates to /products) */}
         <NavLink
           className={() =>
-            `flex items-center ${
+            `flex items-center gap-1 ${
               isProductsActive()
                 ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
                 : "text-black opacity-80"
@@ -87,6 +91,7 @@ const Navbar = () => {
           style={{ fontVariant: "small-caps" }}
           to="/products"
         >
+          <Glasses size={14} />
           Products
         </NavLink>
 
@@ -123,15 +128,21 @@ const Navbar = () => {
     </div>
   );
 
-  const handleLogout = () => {
-    document.getElementById("my-drawer-2").checked = false;
-    logOut()
-      .then(() => {
-        toast.success("Log Out Successful");
-      })
-      .catch((error) => {
-        toast.error({ error });
-      });
+  const handleLogout = async () => {
+    // document.getElementById("my-drawer-2").checked = false;
+    //   logOut()
+    //     .then(() => {
+    //       toast.success("Log Out Successful");
+    //     })
+    //     .catch((error) => {
+    //       toast.error({ error });
+    //     });
+    // };
+    await toast.promise(logOut(), {
+      loading: "Signing Out...",
+      success: <b>Logged Out Successfully!</b>,
+      error: (error) => error.message,
+    });
   };
 
   // if (isAdminLoading) {
@@ -392,62 +403,62 @@ const Navbar = () => {
           <CartDropdown cart={cart}></CartDropdown>
         </div>
 
-        <div className="dropdown dropdown-end mr-2">
-          <div className="w-12 rounded-full">
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
+        <div className="mr-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="relative h-12 w-12 rounded-full p-0"
               >
                 {user?.photoURL ? (
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="Tailwind CSS Navbar component"
-                      src={user?.photoURL}
-                    />
-                  </div>
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={user?.photoURL} alt="User profile" />
+                    <AvatarFallback>
+                      <FaUser className="h-5 w-5 text-gray-500" />
+                    </AvatarFallback>
+                  </Avatar>
                 ) : (
-                  <button className="p-2 bg-white rounded-full">
-                    {" "}
-                    <FaUser className="text-black text-lg"></FaUser>{" "}
+                  <Avatar className="h-10 w-10 bg-white">
+                    <AvatarFallback>
+                      <FaUser className="h-5 w-5 text-black" />
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-56 rounded-md bg-white p-2 shadow-lg"
+              align="end"
+            >
+              <DropdownMenuLabel className="flex flex-col items-start space-y-1">
+                <span className="text-sm font-medium text-gray-900">
+                  {user?.displayName || user?.name || "No User"}
+                </span>
+                <span className="text-xs text-purple-500">{user?.email}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {user && (
+                <DropdownMenuItem asChild>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="w-full text-left text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <FaUser className="mr-2 h-4 w-4" />
+                    Update Profile
                   </button>
-                )}
-              </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-md z-[1] mt-3 w-52 p-2 shadow"
-              >
-                <li>
-                  <p className="text-slate-800 mb-0 flex flex-col justify-start items-start space-y-0">
-                    {user?.displayName || user?.name || "No User"}
-                    <span className="text-xs -mt-2 text-purple-500 block">
-                      {user?.email}
-                    </span>
-                  </p>
-                </li>
-
-                <hr className="my-2" />
-                {user && (
-                  <li className="">
-                    <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="text-black py-1"
-                    >
-                      <FaUser className="text-sm w-3 h-3 inline-flex items-center" />
-                      Update Profile
-                    </button>
-                  </li>
-                )}
-                <li>
-                  <Link to={"/dashboard"} className="text-black py-1">
-                    <MdDashboard></MdDashboard>
-                    Dashboard
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/dashboard"
+                  className="flex w-full items-center text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <MdDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {user ? (

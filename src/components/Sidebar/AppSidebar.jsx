@@ -1,6 +1,7 @@
 import {
   ChartNoAxesCombined,
   CreditCard,
+  FileClock,
   FileSpreadsheet,
   Home,
   LayoutGrid,
@@ -35,9 +36,15 @@ import { FaTruck } from "react-icons/fa6";
 
 const items = [
   {
-    title: "Statics",
-    url: "/dashboard/admin",
+    title: "Statistics",
+    url: "/dashboard/admin/statistics",
     icon: ChartNoAxesCombined,
+    role: "admin",
+  },
+  {
+    title: "Sales Report",
+    url: "/dashboard/admin/sales-report",
+    icon: FileSpreadsheet,
     role: "admin",
   },
   {
@@ -70,22 +77,26 @@ const items = [
     icon: TicketSlash,
     role: "admin",
   },
-  {
-    title: "Sales Report",
-    url: "/dashboard/sales/report",
-    icon: FileSpreadsheet,
-    role: "admin",
-  },
+  
   {
     title: "Manage Patient",
     url: "/dashboard/admin/manage-patient",
     icon: ScanEye,
     role: "admin",
   },
+
+  // user routes
+
   {
     title: "Manage Cart",
     url: "/dashboard/manage-cart",
     icon: ShoppingCart,
+    role: "user",
+  },
+  {
+    title: "Purchase History",
+    url: "/dashboard/purchase-history",
+    icon: FileClock,
     role: "user",
   },
 ];
@@ -159,7 +170,7 @@ export function AppSidebar() {
               <div>
                 <Separator />
               </div>
-              <SidebarMenuItem>
+              <SidebarMenuItem className={"text-lg"}>
                 <SidebarMenuButton tooltip={"Home"} asChild>
                   <NavLink to={"/"}>
                     <Home />

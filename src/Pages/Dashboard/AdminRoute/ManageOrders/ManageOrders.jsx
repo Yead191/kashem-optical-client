@@ -63,7 +63,7 @@ const ManageOrders = () => {
       : orders?.filter((order) => order.orderStatus === activeTab);
 
   return (
-    <div className="px-2 md:px-7 ">
+    <div className="px-2 md:px-6">
       <DashboardPagesHeader
         title="Manage Orders"
         subtitle="Track and process all Eye-wear orders efficiently"
