@@ -46,7 +46,7 @@ const Register = () => {
             role: "User",
             createdAt: new Date().toISOString().split('T')[0]
         }
-        console.log(userInfo);
+        // console.log(userInfo);
         await axiosSecure.post('/users', userInfo)
         navigate('/')
         reset()

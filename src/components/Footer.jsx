@@ -47,7 +47,7 @@ const Footer = () => {
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (email) {
-      console.log("Subscribed with email:", email);
+      // console.log("Subscribed with email:", email);
       setIsSubscribed(true);
       setEmail("");
 

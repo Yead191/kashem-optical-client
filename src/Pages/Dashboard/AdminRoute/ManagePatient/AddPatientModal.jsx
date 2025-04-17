@@ -60,7 +60,7 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
       ...formData,
       date: new Date().toISOString(),
     };
-    console.log(submissionData);
+    // console.log(submissionData);
     await toast.promise(axiosSecure.post("/patients", submissionData), {
       loading: "Adding New Patient...",
       success: <b>Patient Added Successfully!</b>,

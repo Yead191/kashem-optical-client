@@ -36,80 +36,79 @@ import { FaTruck } from "react-icons/fa6";
 import useRole from "@/hooks/useRole";
 import Spinner from "../Spinner/Spinner";
 
-const items = [
-  {
-    title: "Statistics",
-    url: "/dashboard/admin/statistics",
-    icon: ChartNoAxesCombined,
-    role: "Admin",
-  },
-  {
-    title: "Sales Report",
-    url: "/dashboard/admin/sales-report",
-    icon: FileSpreadsheet,
-    role: "Admin",
-  },
-  {
-    title: "Manage Users",
-    url: "/dashboard/admin/manage-users",
-    icon: UserRoundCog,
-    role: "Admin",
-  },
-  {
-    title: "Manage Category",
-    url: "/dashboard/admin/manage-category",
-    icon: LayoutGrid,
-    role: "Admin",
-  },
-  {
-    title: "Manage Products",
-    url: "/dashboard/admin/manage-products",
-    icon: Store,
-    role: "Admin",
-  },
-  {
-    title: "Manage Orders",
-    url: "/dashboard/admin/manage-orders",
-    icon: FaTruck,
-    role: "Admin",
-  },
-  {
-    title: "Manage Banner",
-    url: "/dashboard/admin/manage-banners",
-    icon: TicketSlash,
-    role: "Admin",
-  },
-
-  {
-    title: "Manage Patient",
-    url: "/dashboard/admin/manage-patient",
-    icon: ScanEye,
-    role: "Admin",
-  },
-
-  // user routes
-
-  {
-    title: "Manage Cart",
-    url: "/dashboard/manage-cart",
-    icon: ShoppingCart,
-    role: "User",
-  },
-  {
-    title: "Purchase History",
-    url: "/dashboard/purchase-history",
-    icon: FileClock,
-    role: "User",
-  },
-];
-
 export function AppSidebar() {
   // const { role } = useRole();
   const { role, roleLoading } = useRole();
-  console.log(role);
+  // console.log(role);
   const { state, toggleSidebar } = useSidebar();
   // console.log(state);
-  
+  const items = [
+    {
+      title: "Statistics",
+      url: "/dashboard/admin/statistics",
+      icon: ChartNoAxesCombined,
+      role: "Admin",
+    },
+    {
+      title: "Sales Report",
+      url: "/dashboard/admin/sales-report",
+      icon: FileSpreadsheet,
+      role: "Admin",
+    },
+    {
+      title: "Manage Users",
+      url: "/dashboard/admin/manage-users",
+      icon: UserRoundCog,
+      role: "Admin",
+    },
+    {
+      title: "Manage Category",
+      url: "/dashboard/admin/manage-category",
+      icon: LayoutGrid,
+      role: "Admin",
+    },
+    {
+      title: "Manage Products",
+      url: "/dashboard/admin/manage-products",
+      icon: Store,
+      role: "Admin",
+    },
+    {
+      title: "Manage Orders",
+      url: "/dashboard/admin/manage-orders",
+      icon: FaTruck,
+      role: "Admin",
+    },
+    {
+      title: "Manage Banner",
+      url: "/dashboard/admin/manage-banners",
+      icon: TicketSlash,
+      role: "Admin",
+    },
+
+    {
+      title: "Manage Patient",
+      url: "/dashboard/admin/manage-patient",
+      icon: ScanEye,
+      role: "Admin",
+    },
+
+    // user routes
+
+    {
+      title: "Manage Cart",
+      url: "/dashboard/manage-cart",
+      icon: ShoppingCart,
+      role: role ? "User" : null,
+    },
+    {
+      title: "Purchase History",
+      url: "/dashboard/purchase-history",
+      icon: FileClock,
+      role: role ? "User" : null,
+    },
+  ];
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>

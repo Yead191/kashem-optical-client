@@ -2,16 +2,21 @@ import Spinner from "@/components/Spinner/Spinner";
 import useAuth from "@/hooks/useAuth";
 import React from "react";
 import toast from "react-hot-toast";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
-
+  const location = useLocation();
+  // console.log(location);
   if (loading) {
     return <Spinner />;
   }
-  if (user) {
+  if (
+    user ||
+    location.pathname === "/dashboard/manage-cart" ||
+    location.pathname === "/dashboard/purchase-history"
+  ) {
     return children;
   }
   if (!user) {

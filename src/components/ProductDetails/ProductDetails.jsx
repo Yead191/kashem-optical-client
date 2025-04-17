@@ -75,16 +75,12 @@ const ProductDetails = () => {
   // handle Add to cart
   const handleAddToCart = async () => {
     try {
-      if (!user) {
-        return toast.error("You Must Login Before Adding To Cart");
-      }
-
       setIsAddedToCart(true);
 
       const cartItem = {
         customer: {
-          customerName: user.displayName,
-          customerEmail: user.email,
+          customerName: user?.displayName || "Guest",
+          customerEmail: user?.email || "guest@email.com",
         },
         productId: product?._id,
         productName: product?.productName,
@@ -95,6 +91,26 @@ const ProductDetails = () => {
         brandName: product?.brandName,
         quantity: quantity,
       };
+      if (!user) {
+        try {
+          const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+          const existingItemIndex = existingCart.findIndex(
+            (item) => item.productId === id
+          );
+          if (existingItemIndex >= 0) {
+            existingCart[existingItemIndex].quantity += 1;
+          } else {
+            existingCart.push(cartItem);
+          }
+          localStorage.setItem("cart", JSON.stringify(existingCart));
+          toast.success("Successfully Added To Cart");
+          refetch();
+        } catch (error) {
+          toast.error("Failed to add to cart");
+          console.error("Error saving to local storage:", error);
+        }
+        return;
+      }
 
       await toast.promise(axiosPublic.post("/carts", cartItem), {
         loading: "Adding to cart...",

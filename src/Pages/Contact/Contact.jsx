@@ -32,7 +32,7 @@ function ContactPage() {
     setPhone("");
     setSubject("");
     setMessage("");
-    console.log(newMessage);
+    // console.log(newMessage);
   };
 
   return (
@@ -109,7 +109,7 @@ function ContactPage() {
               </CardContent>
             </Card>
 
-            <div className="h-[400px] rounded-lg overflow-hidden border">
+            <div className="h-[400px] rounded-lg overflow-hidden border z-0">
               <ContactMap latitude={22.94008} longitude={90.8285} />
             </div>
           </div>

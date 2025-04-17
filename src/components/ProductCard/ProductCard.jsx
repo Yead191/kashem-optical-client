@@ -24,21 +24,17 @@ const ProductCard = ({ product }) => {
     e.stopPropagation();
     e.preventDefault();
     setIsLiked(!isLiked);
-    console.log(`Toggled wishlist for product ID: ${id}`);
+    // console.log(`Toggled wishlist for product ID: ${id}`);
   };
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!user) {
-      return toast.error("You must login before adding to cart");
-    }
-
     const cartItem = {
       customer: {
-        customerName: user.displayName,
-        customerEmail: user.email,
+        customerName: user?.displayName || "Guest",
+        customerEmail: user?.email || "guest@localstorage.com",
       },
       productId: product._id ? product._id : product.productId,
       productName: product.productName,
@@ -50,6 +46,26 @@ const ProductCard = ({ product }) => {
       image: product.image[0],
       quantity: 1,
     };
+    if (!user) {
+      try {
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existingItemIndex = existingCart.findIndex(
+          (item) => item.productId === cartItem.productId
+        );
+        if (existingItemIndex >= 0) {
+          existingCart[existingItemIndex].quantity += 1;
+        } else {
+          existingCart.push(cartItem);
+        }
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        toast.success("Successfully Added To Cart");
+        refetch();
+      } catch (error) {
+        toast.error("Failed to add to cart");
+        console.error("Error saving to local storage:", error);
+      }
+      return;
+    }
 
     await toast.promise(axiosPublic.post("/carts", cartItem), {
       loading: "Adding to cart...",
@@ -95,8 +111,8 @@ const ProductCard = ({ product }) => {
           spaceBetween={10}
           slidesPerView={1}
           autoplay={{
-            delay: 3000, 
-            disableOnInteraction: false, 
+            delay: 3000,
+            disableOnInteraction: false,
           }}
           pagination={{ clickable: true }}
           className="h-full w-full"

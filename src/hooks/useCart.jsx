@@ -15,6 +15,11 @@ const useCart = () => {
     queryKey: ["cart"],
     enabled: !loading,
     queryFn: async () => {
+      if (!user) {
+        // Return cart from local storage for unauthenticated users
+        const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        return localCart;
+      }
       const res = await axiosSecure.get(`/carts?email=${user?.email}`);
       return res.data;
     },

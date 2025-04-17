@@ -376,7 +376,7 @@ const Navbar = () => {
           <div className=" ">
             <NavLink
               to="/"
-              className="text-black text-xl font-bold"
+              className="text-indigo-500 text-xl font-bold"
               style={{ fontVariant: "small-caps" }}
             >
               <Typewriter
@@ -395,7 +395,7 @@ const Navbar = () => {
         <Link
           style={{ fontVariant: "small-caps" }}
           to={"/"}
-          className="text-black text-xl lg:text-2xl xl:text-[28px] font-bold hidden lg:flex"
+          className="text-indigo-600 text-xl lg:text-2xl xl:text-[28px] font-bold hidden lg:flex hover:scale-105 transition duration-700"
         >
           {/* Kashem <span className='text-blue-500 ml-1'> Optical</span> */}
 

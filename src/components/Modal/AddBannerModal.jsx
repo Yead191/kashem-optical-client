@@ -53,7 +53,7 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
       status: "added",
       createdAt: new Date().toISOString().split("T")[0],
     };
-    console.log(newBanner);
+    // console.log(newBanner);
     await toast.promise(axiosSecure.post("/banners", newBanner), {
       loading: "Banner Uploading...",
       success: <b>Banner Uploaded Successfully!</b>,

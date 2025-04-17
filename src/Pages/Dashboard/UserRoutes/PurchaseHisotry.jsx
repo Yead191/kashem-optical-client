@@ -16,7 +16,7 @@ import { FaFileInvoice } from "react-icons/fa";
 import { useQuery } from "react-query";
 import { Link } from "react-router";
 
-const PurchaseHistoryTable = ({ purchaseHistory, isLoading }) => (
+const PurchaseHistoryTable = ({ purchaseHistory, isLoading, user }) => (
   <Table>
     <TableCaption>Your Purchase History</TableCaption>
     <TableHeader>
@@ -53,7 +53,9 @@ const PurchaseHistoryTable = ({ purchaseHistory, isLoading }) => (
             colSpan={8}
             className="text-center font-medium text-gray-800 py-4 border-y"
           >
-            No Purchase History Available
+            {!user
+              ? "Please Login in first to see your purchase history!"
+              : "No Purchase History Available"}
           </TableCell>
         </TableRow>
       ) : (
@@ -180,9 +182,10 @@ const PurchaseHistoryTable = ({ purchaseHistory, isLoading }) => (
 const PurchaseHistory = () => {
   const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
+
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["purchase-history", user?.email],
-    enabled: !loading,
+    enabled: !!user && !loading,
     queryFn: async () => {
       const res = await axiosSecure.get(`/orders?email=${user.email}`);
       return res.data;
@@ -197,7 +200,11 @@ const PurchaseHistory = () => {
         icon={HistoryIcon}
       />
       {/* Purchase History Table */}
-      <PurchaseHistoryTable purchaseHistory={orders} isLoading={isLoading} />
+      <PurchaseHistoryTable
+        purchaseHistory={orders}
+        isLoading={isLoading}
+        user={user}
+      />
     </div>
   );
 };

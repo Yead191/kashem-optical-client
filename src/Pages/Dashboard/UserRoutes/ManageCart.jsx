@@ -29,12 +29,13 @@ import useAuth from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import Confetti from "react-confetti";
 import useDiscount from "@/hooks/useDiscount";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 const ManageCart = () => {
   const { user } = useAuth();
   const [cart, , refetch] = useCart();
   const [isOpen, setIsOpen] = useState(false);
-  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const [subtotal, setSubtotal] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [discount, discountLoading] = useDiscount();
@@ -55,8 +56,8 @@ const ManageCart = () => {
   const filteredDistricts = division ? divisionDistricts[division] : districts;
 
   const customerInfo = {
-    name: name || user?.displayName,
-    email: email || user?.email,
+    name: name || user?.displayName || "Guest",
+    email: email || user?.email || "guest@localstorage.com",
     phone,
     district,
     division,
@@ -72,68 +73,145 @@ const ManageCart = () => {
   }, [cart]);
 
   const handleIncrease = async (itemId) => {
-    const item = cart.find((i) => i._id === itemId);
-    const updatedQuantity = item.quantity + 1;
-    await toast.promise(
-      axiosSecure.patch(`/carts/quantity/${itemId}`, {
-        quantity: updatedQuantity,
-      }),
-      {
-        loading: "Updating quantity...",
-        success: <b>Quantity Added!</b>,
-        error: (error) => error.message,
+    try {
+      if (user) {
+        // Server-side update for authorized users
+        const item = cart.find((i) => i._id === itemId);
+        if (!item) {
+          toast.error("Item not found in cart");
+          return;
+        }
+        const updatedQuantity = item.quantity + 1;
+        await toast.promise(
+          axiosPublic.patch(`/carts/quantity/${itemId}`, {
+            quantity: updatedQuantity,
+          }),
+          {
+            loading: "Updating quantity...",
+            success: <b>Quantity Added!</b>,
+            error: (error) => error.message,
+          }
+        );
+      } else {
+        // Local storage update for unauthorized users
+        const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const itemIndex = localCart.findIndex((i) => i.productId === itemId);
+        if (itemIndex < 0) {
+          toast.error("Item not found in local storage cart");
+          return;
+        }
+        localCart[itemIndex].quantity += 1;
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        toast.success("Quantity Added!");
       }
-    );
-    refetch();
+      refetch();
+    } catch (error) {
+      toast.error("Failed to update quantity");
+      console.error("Error updating cart:", error);
+    }
   };
 
   const handleDecrease = async (itemId) => {
-    const item = cart.find((i) => i._id === itemId);
-    if (item.quantity === 1) {
-      Swal.fire({
-        title: "Want to remove this item?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await toast.promise(axiosSecure.delete(`/carts/delete/${itemId}`), {
-            loading: "Deleting item...",
-            success: <b>Item Removed!</b>,
-            error: (error) => error.message,
+    try {
+      if (user) {
+        // Server-side update for authorized users
+        const item = cart.find((i) => i._id === itemId);
+        if (!item) {
+          toast.error("Item not found in cart");
+          return;
+        }
+        if (item.quantity === 1) {
+          Swal.fire({
+            title: "Want to remove this item?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await toast.promise(
+                axiosPublic.delete(`/carts/delete/${itemId}`),
+                {
+                  loading: "Deleting item...",
+                  success: <b>Item Removed!</b>,
+                  error: (error) => error.message,
+                }
+              );
+              refetch();
+            }
           });
+        } else {
+          const updatedQuantity = item.quantity - 1;
+          await toast.promise(
+            axiosPublic.patch(`/carts/quantity/${itemId}`, {
+              quantity: updatedQuantity,
+            }),
+            {
+              loading: "Updating quantity...",
+              success: <b>Quantity Decreased!</b>,
+              error: (error) => error.message,
+            }
+          );
           refetch();
         }
-      });
-    } else {
-      const updatedQuantity = item.quantity - 1;
-      await toast.promise(
-        axiosSecure.patch(`/carts/quantity/${itemId}`, {
-          quantity: updatedQuantity,
-        }),
-        {
-          loading: "Updating quantity...",
-          success: <b>Quantity Decreased!</b>,
-          error: (error) => error.message,
+      } else {
+        // Local storage update for unauthorized users
+        const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const itemIndex = localCart.findIndex((i) => i.productId === itemId);
+        if (itemIndex < 0) {
+          toast.error("Item not found in local storage cart");
+          return;
         }
-      );
-      refetch();
+        if (localCart[itemIndex].quantity === 1) {
+          Swal.fire({
+            title: "Want to remove this item?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              localCart.splice(itemIndex, 1);
+              localStorage.setItem("cart", JSON.stringify(localCart));
+              toast.success("Item Removed!");
+              refetch();
+            }
+          });
+        } else {
+          localCart[itemIndex].quantity -= 1;
+          localStorage.setItem("cart", JSON.stringify(localCart));
+          toast.success("Quantity Decreased!");
+          refetch();
+        }
+      }
+    } catch (error) {
+      toast.error("Failed to update cart");
+      console.error("Error updating cart:", error);
     }
   };
 
   const handleClearCart = async () => {
     try {
-      await toast.promise(axiosSecure.delete(`/carts/clear/${user?.email}`), {
-        loading: "Clearing Cart...",
-        success: <b>Cart Cleared Successfully!</b>,
-        error: (error) => error.message,
-      });
+      if (user) {
+        // Server-side clear for authorized users
+        await toast.promise(axiosPublic.delete(`/carts/clear/${user?.email}`), {
+          loading: "Clearing Cart...",
+          success: <b>Cart Cleared Successfully!</b>,
+          error: (error) => error.message,
+        });
+      } else {
+        // Local storage clear for unauthorized users
+        localStorage.removeItem("cart");
+        toast.success("Cart Cleared Successfully!");
+      }
       refetch();
       setIsOpen(false);
     } catch (error) {
+      toast.error("Failed to clear cart");
       console.error("Error clearing cart:", error);
     }
   };
@@ -170,15 +248,21 @@ const ManageCart = () => {
     };
 
     try {
-      await toast.promise(axiosSecure.post("/orders", orderData), {
+      await toast.promise(axiosPublic.post("/orders", orderData), {
         loading: "Placing your order...",
         success: async () => {
-          await axiosSecure.delete(`/carts/clear/${user?.email}`);
+          if (user) {
+            // Clear server cart for authorized users
+            await axiosPublic.delete(`/carts/clear/${user?.email}`);
+          } else {
+            // Clear local storage cart for unauthorized users
+            localStorage.removeItem("cart");
+          }
           refetch();
           setShowConfetti(true);
           setTimeout(() => {
             setShowConfetti(false);
-            navigate("/dashboard/purchase-history");
+            navigate(user ? "/dashboard/purchase-history" : "/products");
           }, 5000);
           Swal.fire({
             position: "center",
@@ -189,7 +273,6 @@ const ManageCart = () => {
           });
           return <b>Order placed successfully!</b>;
         },
-
         error: (error) => {
           const errorMessage =
             error.response?.data?.error ||
@@ -199,18 +282,18 @@ const ManageCart = () => {
         },
       });
     } catch (error) {
-      console.error("Error placing order:", error); 
+      console.error("Error placing order:", error);
     }
   };
 
   return (
-    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row p-2 md:px-7 py-12 ">
+    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row p-2 md:px-7 py-12">
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
 
       {/* Left Column - Order Summary */}
-      <div className="bg-gray-50 rounded-md p-4 md:p-8 flex-1 ">
+      <div className="bg-gray-50 rounded-md p-4 md:p-8 flex-1">
         <h2 className="text-[1.2rem] text-gray-700 font-semibold mb-6">
           Your order
         </h2>
@@ -226,7 +309,7 @@ const ManageCart = () => {
                   delay: idx * 0.1,
                 }}
                 viewport={{ once: true }}
-                key={item._id}
+                key={item._id || item.productId}
                 className="flex flex-col md:flex-row md:items-center gap-4 border-t p-4 border-gray-200"
               >
                 <div className="border relative border-gray-200 w-max rounded-md bg-white">
@@ -247,14 +330,18 @@ const ManageCart = () => {
                     </p>
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => handleDecrease(item._id)}
+                        onClick={() =>
+                          handleDecrease(item._id || item.productId)
+                        }
                         className="p-1 border rounded hover:bg-gray-200"
                       >
                         <AiOutlineMinus />
                       </button>
                       <span>{item.quantity}</span>
                       <button
-                        onClick={() => handleIncrease(item._id)}
+                        onClick={() =>
+                          handleIncrease(item._id || item.productId)
+                        }
                         className="p-1 border rounded hover:bg-gray-200"
                       >
                         <AiOutlinePlus />
@@ -329,7 +416,7 @@ const ManageCart = () => {
       </div>
 
       {/* Right Column - Customer Info Form */}
-      <div className="flex-1 md:px-8 lg:sticky lg:top-16 lg:self-start ">
+      <div className="flex-1 md:px-8 lg:sticky lg:top-16 lg:self-start">
         <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>

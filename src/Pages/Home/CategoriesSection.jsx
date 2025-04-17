@@ -38,7 +38,7 @@ function CategoriesSection() {
   return (
     <section className="w-full py-12 bg-gray-50 ">
       <div className=" mx-auto px-4 p-2 md:w-11/12 lg:w-10/12 ">
-        <h2 className="text-3xl font-bold text-start mb-8">
+        <h2 className="text-3xl font-bold text-start mb-8 ">
           Shop By Categories
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -61,10 +61,10 @@ function CategoriesSection() {
                     <img
                       src={category?.image || "/placeholder.svg"}
                       alt={category?.name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain hover:scale-110 transition duration-700"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">
+                  <h3 className="text-xl font-semibold  mb-2">
                     {category?.name}
                   </h3>
                   {/* <p className="text-gray-600 text-sm">
