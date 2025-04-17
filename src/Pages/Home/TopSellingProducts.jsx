@@ -59,16 +59,21 @@ function TopSellingProducts() {
               transition={{
                 duration: 0.8,
                 ease: "easeInOut",
-                
               }}
             >
               <Link to={`/product/${product.productId}`}>
-                <Card className="overflow-hidden flex flex-col h-full">
+                <Card className="group relative overflow-hidden flex flex-col h-full rounded-xl bg-white/80 backdrop-blur-md border border-gray-200/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200/50">
+                  {/* Hover Gradient Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-sky-300/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                  {/* Animated Border Effect */}
+                  <div className="absolute inset-0 border border-transparent group-hover:border-purple-500/30 rounded-xl transition-colors duration-300"></div>
+
                   <div className="relative h-48 w-full">
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {/* Badge for Total Quantity Sold */}
                     <span className="absolute top-2 right-2 bg-black text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
@@ -77,7 +82,7 @@ function TopSellingProducts() {
                   </div>
 
                   <CardContent className="p-4 flex-grow">
-                    <h3 className="font-semibold text-lg mb-2 hover:text-primary transition-colors">
+                    <h3 className="font-semibold text-lg mb-2 hover:text-indigo-600 transition-colors">
                       {product?.productName}
                     </h3>
                     {/* Size and Additional Info */}
@@ -85,28 +90,15 @@ function TopSellingProducts() {
                       Size: {product?.frameSize} • {product?.brandName}
                     </p>
 
-                    {/* <div className="flex items-center mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.floor(product.rating)
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                  <span className="text-sm text-gray-600 ml-1">
-                    ({product.rating})
-                  </span>
-                </div> */}
-                    <p className="font-bold text-lg">
+                    <p className="font-bold text-lg text-indigo-600">
                       ৳{product.price.toFixed(2)}
                     </p>
                   </CardContent>
-                  <CardFooter className="p-4 pt-0">
-                    <Button className="w-full">View Details</Button>
-                  </CardFooter>
+                  {/* <CardFooter className="p-4 pt-0">
+                    <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+                      View Details
+                    </Button>
+                  </CardFooter> */}
                 </Card>
               </Link>
             </motion.div>

@@ -204,7 +204,7 @@ const ManageCart = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row px-7 py-12 ">
+    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row p-2 md:px-7 py-12 ">
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
@@ -355,7 +355,7 @@ const ManageCart = () => {
             <Label htmlFor="phone">Phone number</Label>
             <div className="flex gap-2 items-center">
               <div className="border rounded px-3 py-[5px] border-gray-200 w-[130px]">
-                <h1 value="bd">🇧🇩 +880</h1>
+                <h1 value="bd">🇧🇩 +88</h1>
               </div>
               <Input
                 type="tel"

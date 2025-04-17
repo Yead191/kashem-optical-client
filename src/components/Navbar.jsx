@@ -186,8 +186,8 @@ const Navbar = () => {
   // console.log(cart);
 
   return (
-    <div className="navbar fixed z-50 bg-white  lg:px-28 xl:px-32 py-0 border-b">
-      <div className="navbar-start ">
+    <div className="navbar flex justify-between fixed z-50 bg-white  lg:px-28 xl:px-32 py-0 border-b">
+      <div className=" ">
         {/* drawer for small devices */}
         <div className="drawer lg:hidden flex items-center z-20">
           <input id="mobile-drawer" type="checkbox" className="drawer-toggle" />
@@ -380,7 +380,7 @@ const Navbar = () => {
               style={{ fontVariant: "small-caps" }}
             >
               <Typewriter
-                words={["KO"]}
+                words={["Kashem Optical", "KO"]}
                 loop={true}
                 cursor
                 cursorStyle="."
@@ -410,7 +410,7 @@ const Navbar = () => {
           />
         </Link>
       </div>
-      <div className="navbar-end hidden lg:flex">
+      <div className=" hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-3 ">
           {links}
           {/* <li>
@@ -514,12 +514,83 @@ const Navbar = () => {
         ></UpdateProfile>
       )}
 
-      <div className="navbar-end lg:hidden">
+      <div className="lg:hidden">
         <div className="flex-none mr-3">
           <CartDropdown cart={cart}></CartDropdown>
         </div>
-        <div className="dropdown dropdown-end ">
-          <div className="dropdown dropdown-end">
+        <div className="mr-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="relative h-12 w-12 rounded-full p-0"
+              >
+                {user?.photoURL ? (
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={user?.photoURL} alt="User profile" />
+                    <AvatarFallback className="rounded-lg">KO</AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <Avatar className="h-10 w-10 bg-white">
+                    <AvatarImage
+                      src={
+                        "https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_1280.png"
+                      }
+                      alt="User profile"
+                    />
+                  </Avatar>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-56 rounded-md bg-white p-2 shadow-lg"
+              align="end"
+            >
+              <DropdownMenuLabel className="flex flex-col items-start space-y-1">
+                <span className="text-sm font-medium text-gray-900">
+                  {user?.displayName || user?.name || "No User"}
+                </span>
+                <span className="text-xs text-purple-500">{user?.email}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {user && (
+                <DropdownMenuItem asChild>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="w-full text-left text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <FaUser className="mr-2 h-4 w-4" />
+                    Update Profile
+                  </button>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem asChild>
+                <Link
+                  to={
+                    role === "Admin"
+                      ? "/dashboard/admin/statistics"
+                      : "/dashboard/manage-cart"
+                  }
+                  className="flex w-full items-center text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <MdDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                {user ? (
+                  <Button className="w-full" onClick={handleLogout}>
+                    Log Out
+                  </Button>
+                ) : (
+                  <Link to={"/login"} className="w-full">
+                    <Button className="w-full">Login</Button>
+                  </Link>
+                )}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
@@ -572,18 +643,8 @@ const Navbar = () => {
                   Dashboard
                 </Link>
               </li>
-
-              {user ? (
-                <Button onClick={handleLogout}>Log Out</Button>
-              ) : (
-                <Link to={"/login"} className="">
-                  <button className=" btn btn-neutral hover:bg-black btn-sm w-full text-center">
-                    Login
-                  </button>
-                </Link>
-              )}
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

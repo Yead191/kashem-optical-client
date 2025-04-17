@@ -91,7 +91,7 @@ const BannerComponent = () => {
   //     },
   //   ];
 
-  console.log(featuredProducts);
+  // console.log(featuredProducts);
 
   return (
     <div className=" w-full overflow-hidden transition-all duration-300 bg-white text-gray-900">
@@ -129,7 +129,7 @@ const BannerComponent = () => {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-12 md:py-24">
+        <div className="p-2 md:w-11/12 xl:w-10/12 mx-auto px-4 py-12 md:py-24">
           {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             {/* Left Content */}

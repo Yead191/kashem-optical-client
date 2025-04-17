@@ -54,11 +54,8 @@ function CategoriesSection() {
                 delay: 0.2 * idx,
               }}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
-
             >
-              <Link
-                to={`/products?category=${category?.name}`}
-              >
+              <Link to={`/products?category=${category?.name}`}>
                 <div className="p-4 text-center">
                   <div className="w-24 h-24 mx-auto mb-4">
                     <img
@@ -70,9 +67,9 @@ function CategoriesSection() {
                   <h3 className="text-xl font-semibold mb-2">
                     {category?.name}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  {/* <p className="text-gray-600 text-sm">
                     {category?.description}
-                  </p>
+                  </p> */}
                 </div>
               </Link>
             </motion.div>

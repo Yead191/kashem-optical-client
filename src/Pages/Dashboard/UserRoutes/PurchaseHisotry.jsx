@@ -181,7 +181,7 @@ const PurchaseHistory = () => {
   const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
   const { data: orders = [], isLoading } = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["purchase-history", user?.email],
     enabled: !loading,
     queryFn: async () => {
       const res = await axiosSecure.get(`/orders?email=${user.email}`);

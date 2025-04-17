@@ -128,7 +128,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="mx-auto md:px-8 md:py-12 w-11/12 md:w-10/12">
+    <div className="mx-auto md:px-8 py-12 w-11/12 md:w-10/12  ">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Left side - Image gallery */}
         <div className="space-y-2">
