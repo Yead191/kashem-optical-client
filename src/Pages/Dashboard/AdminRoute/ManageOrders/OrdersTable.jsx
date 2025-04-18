@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { FaFileInvoice } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import ProductsDialog from "./ProductsDialog";
