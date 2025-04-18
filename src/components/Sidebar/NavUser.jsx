@@ -23,7 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import UpdateProfile from "../UpdateProfile";
 import toast from "react-hot-toast";
@@ -31,6 +31,7 @@ import { LogIn } from "lucide-react";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
   const { user, logOut } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleLogOut = () => {

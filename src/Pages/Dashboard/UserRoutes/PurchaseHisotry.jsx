@@ -54,7 +54,7 @@ const PurchaseHistoryTable = ({ purchaseHistory, isLoading, user }) => (
             className="text-center font-medium text-gray-800 py-4 border-y"
           >
             {!user
-              ? "Please Login in first to see your purchase history!"
+              ? "Please Login with your purchased email to see your purchase history and Invoice!"
               : "No Purchase History Available"}
           </TableCell>
         </TableRow>

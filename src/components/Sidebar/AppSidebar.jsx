@@ -4,8 +4,10 @@ import {
   FileClock,
   FileSpreadsheet,
   Home,
+  Info,
   LayoutGrid,
   Logs,
+  Phone,
   ScanEye,
   TicketSlash,
   UserRoundCog,
@@ -184,6 +186,18 @@ export function AppSidebar() {
                   <NavLink to={"/products"}>
                     <Store />
                     <span>{"Products"}</span>
+                  </NavLink>
+                </SidebarMenuButton>
+                <SidebarMenuButton tooltip={"About Us"} asChild>
+                  <NavLink to={"/about"}>
+                    <Info />
+                    <span>{"About Us"}</span>
+                  </NavLink>
+                </SidebarMenuButton>
+                <SidebarMenuButton tooltip={"Contact Us"} asChild>
+                  <NavLink to={"/contact"}>
+                    <Phone />
+                    <span>{"Contact Us"}</span>
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>

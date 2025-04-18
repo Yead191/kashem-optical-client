@@ -126,7 +126,7 @@ export function UpdatePatientModal({ isOpen, onClose, refetch, patientData }) {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-4">Prescription Details</h3>
 
-                <div className="grid grid-cols-6 gap-2 mb-2">
+                <div className="grid grid-cols-5 md:grid-cols-6 gap-2 mb-2">
                   <div></div>
                   <div className="text-center font-medium">SPH</div>
                   <div className="text-center font-medium">CYL</div>
@@ -134,7 +134,7 @@ export function UpdatePatientModal({ isOpen, onClose, refetch, patientData }) {
                   <div className="text-center font-medium">ADD</div>
                 </div>
 
-                <div className="grid grid-cols-6 gap-2 mb-2">
+                <div className="grid grid-cols-5 md:grid-cols-6 gap-2 mb-2">
                   <div className="flex items-center font-medium">OD</div>
                   <Input
                     name="rightEye.sph"
@@ -165,7 +165,7 @@ export function UpdatePatientModal({ isOpen, onClose, refetch, patientData }) {
                   />
                 </div>
 
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-5 md:grid-cols-6 gap-2">
                   <div className="flex items-center font-medium">OS</div>
                   <Input
                     name="leftEye.sph"

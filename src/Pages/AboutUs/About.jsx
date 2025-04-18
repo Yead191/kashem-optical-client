@@ -4,7 +4,7 @@ import { FiMessageCircle } from "react-icons/fi";
 
 function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="p-2 md:w-11/12 lg:w-10/12 mx-auto px-4 py-12">
       <div className="text-center mb-12">
         <div
           className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mb-4 bg-white/80 text-blue-600 border border-blue-100/50 shadow-sm backdrop-blur-md`}

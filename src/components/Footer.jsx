@@ -143,7 +143,7 @@ const Footer = () => {
       </div>
 
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 pt-20 pb-5 relative z-10">
+      <div className="p-2 md:w-11/12 lg:w-10/12 mx-auto px-4 pt-20 pb-5 relative z-10">
         {/* Top Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-5">
           {/* Logo and Info Section */}
