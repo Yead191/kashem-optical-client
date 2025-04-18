@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import toast from 'react-hot-toast';
-import { motion } from 'framer-motion';
+
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import Lottie from 'lottie-react';
 import loginLottie from '../../assets/login.json'
@@ -13,7 +13,7 @@ import { Helmet } from 'react-helmet-async';
 import useAuth from '../../hooks/useAuth';
 import SocialLogin from '../../components/SocialLogin/SocialLogin';
 // import SocialLogin from '../components/SocialLogin';
-
+import { motion } from 'framer-motion';
 
 
 

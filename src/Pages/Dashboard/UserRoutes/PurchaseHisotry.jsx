@@ -14,7 +14,7 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { HistoryIcon } from "lucide-react";
 import { FaFileInvoice } from "react-icons/fa";
 import { useQuery } from "react-query";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const PurchaseHistoryTable = ({ purchaseHistory, isLoading, user }) => (
   <Table>
