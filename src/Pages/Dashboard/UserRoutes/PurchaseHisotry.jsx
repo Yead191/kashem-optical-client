@@ -15,6 +15,8 @@ import { HistoryIcon } from "lucide-react";
 import { FaFileInvoice } from "react-icons/fa";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import Seo from "@/components/Seo/Seo";
+
 
 const PurchaseHistoryTable = ({ purchaseHistory, isLoading, user }) => (
   <Table>
@@ -194,6 +196,7 @@ const PurchaseHistory = () => {
 
   return (
     <div className="px-2 md:px-6 mx-auto">
+      <Seo title={"Purchase History | Kashem Optical"} />
       <DashboardPagesHeader
         title="Purchase History"
         subtitle="View all your pending, present and past purchases in one place!"

@@ -24,6 +24,7 @@ import PerformanceChart from "./PerformanceChart";
 import RecommendationsCard from "./RecommendationsCard";
 import TopCustomerTable from "./TopCustomerTable";
 import SalesReportSkeleton from "./Skeleton/SkeletonBox";
+import Seo from "@/components/Seo/Seo";
 
 
 const SalesReport = () => {
@@ -97,6 +98,7 @@ const SalesReport = () => {
 
   return (
     <div className="px-2 md:px-4 lg:px-6 flex flex-col gap-4 md:gap-6 lg:gap-8">
+      <Seo title="Sales Report | Kashem Optical" />
       {/* Sales Report Header */}
       <SalesReportHeader />
       {/* Main Content */}

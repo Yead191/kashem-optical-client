@@ -30,6 +30,8 @@ import { Button } from "@/components/ui/button";
 import Confetti from "react-confetti";
 import useDiscount from "@/hooks/useDiscount";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import Seo from "@/components/Seo/Seo";
+
 
 const ManageCart = () => {
   const { user } = useAuth();
@@ -289,6 +291,7 @@ const ManageCart = () => {
 
   return (
     <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row p-2 md:px-7  ">
+      <Seo title="Manage Cart | Kashem Optical" />
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}

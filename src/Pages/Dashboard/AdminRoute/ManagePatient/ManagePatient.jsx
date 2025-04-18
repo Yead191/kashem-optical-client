@@ -26,6 +26,7 @@ import { useQuery } from "react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
 import { Input } from "@/components/ui/input";
+import Seo from "@/components/Seo/Seo";
 
 import {
   PDFDownloadLink,
@@ -272,6 +273,7 @@ export default function ManagePatient() {
 
   return (
     <div className="container mx-auto">
+      <Seo title="Manage Patients | Kashem Optical" />
       <DashboardPagesHeader
         title={"Manage Patients"}
         icon={ScanEye}

@@ -154,7 +154,7 @@ const Navbar = () => {
         to="/contact"
       >
         <Phone size={14} />
-        Contact
+        Contact Us
       </NavLink>
     </div>
   );

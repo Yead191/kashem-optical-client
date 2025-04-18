@@ -8,6 +8,7 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
 import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/Provider/AuthProvider";
+import Seo from "@/components/Seo/Seo";
 
 const ManageOrders = () => {
   const [orders, isLoading, refetch] = useOrders();
@@ -64,6 +65,7 @@ const ManageOrders = () => {
 
   return (
     <div className="px-2 md:px-6">
+      <Seo title="Manage Orders | Kashem Optical" />
       <DashboardPagesHeader
         title="Manage Orders"
         subtitle="Track and process all Eye-wear orders efficiently"

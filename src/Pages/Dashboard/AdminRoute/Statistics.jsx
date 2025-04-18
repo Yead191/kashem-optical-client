@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { CheckCircle, XCircle, TrendingUp } from "lucide-react";
 import { ProductCategories } from "@/components/ProductCategories";
+import Seo from "@/components/Seo/Seo";
 
 const Statistics = () => {
   const axiosSecure = useAxiosSecure();
@@ -27,6 +28,7 @@ const Statistics = () => {
 
   return (
     <div className="px-2 md:px-4 lg:px-4">
+      <Seo title="Statistics | Kashem Optical" />
       <DashboardPagesHeader title={"Statistics"} icon={ChartBar} />
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {/* Users & Admins Card */}

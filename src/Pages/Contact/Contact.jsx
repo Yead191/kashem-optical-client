@@ -8,6 +8,8 @@ import ContactMap from "./ContactMap";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { FiMessageCircle } from "react-icons/fi";
+import Seo from "../../components/Seo/Seo";
+
 
 function ContactPage() {
   const [name, setName] = useState("");
@@ -37,6 +39,7 @@ function ContactPage() {
 
   return (
     <div className="p-2 md:w-11/12 lg:w-10/12 mx-auto px-4 py-12">
+      <Seo title="Contact Us | Kashem Optical" />
       <div className="text-center mb-12">
         <div
           className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mb-2 bg-white/80 text-blue-600 border border-blue-100/50 shadow-sm backdrop-blur-md`}
