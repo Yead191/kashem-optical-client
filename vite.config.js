@@ -9,13 +9,4 @@ export default defineConfig({
       "@": "/src", // Maps @ to the src directory
     },
   },
-  optimizeDeps: {
-    include: ['framer-motion'], // Pre-bundle framer-motion
-    force: true, // Force pre-bundling
-  },
-  build: {
-    commonjsOptions: {
-      include: [/framer-motion/, /node_modules/], // Handle CommonJS modules
-    },
-  },
 });
