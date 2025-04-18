@@ -416,7 +416,7 @@ const ManageCart = () => {
       </div>
 
       {/* Right Column - Customer Info Form */}
-      <div className="flex-1 md:px-8 lg:sticky lg:top-16 lg:self-start">
+      <div className="flex-1 p-2 md:px-8 lg:sticky lg:top-16 lg:self-start">
         <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
