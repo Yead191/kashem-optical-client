@@ -69,7 +69,7 @@ function LatestProducts() {
 
   const axiosPublic = useAxiosPublic();
   const { data: products = [] } = useQuery({
-    queryKey: ["latesr-products"],
+    queryKey: ["latest-products"],
     queryFn: async () => {
       const res = await axiosPublic.get("/latest-products");
       return res.data;
@@ -85,7 +85,7 @@ function LatestProducts() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {products?.map((product) => (
-            <ProductCard product={product} />
+            <ProductCard key={product.productId} product={product} />
           ))}
         </div>
         <div className="text-center mt-8">

@@ -12,7 +12,7 @@ const useDiscount = () => {
     refetch,
   } = useQuery({
     queryKey: ["discount", user?.email],
-    enabled: !loading,
+    enabled: !!user && !loading,
     queryFn: async () => {
       const res = await axiosPublic(`/users/discount/${user?.email}`);
       return res.data.discountVoucher;

@@ -40,6 +40,7 @@ const ManageCart = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [discount, discountLoading] = useDiscount();
   const navigate = useNavigate();
+  // console.log(discount)
 
   // Discount Calculations
   const discountAmount = discount ? (subtotal * discount) / 100 : 0;
@@ -262,7 +263,7 @@ const ManageCart = () => {
           setShowConfetti(true);
           setTimeout(() => {
             setShowConfetti(false);
-            navigate(user ? "/dashboard/purchase-history" : "/products");
+            navigate("/dashboard/purchase-history");
           }, 5000);
           Swal.fire({
             position: "center",
@@ -287,7 +288,7 @@ const ManageCart = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row p-2 md:px-7 py-12">
+    <div className="w-full flex flex-col gap-8 md:gap-0 md:flex-row p-2 md:px-7  ">
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
@@ -416,7 +417,7 @@ const ManageCart = () => {
       </div>
 
       {/* Right Column - Customer Info Form */}
-      <div className="flex-1 p-2 md:px-8 lg:sticky lg:top-16 lg:self-start">
+      <div className="flex-1 p-2 md:px-8 lg:sticky lg:top-20 lg:self-start">
         <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>

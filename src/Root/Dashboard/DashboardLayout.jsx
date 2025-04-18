@@ -8,7 +8,7 @@ function DashboardLayout() {
       <ScrollRestoration />
       <SidebarProvider>
         <AppSidebar />
-        <main className="px-4 w-full  my-12">
+        <main className="px-4 w-full  my-12 h-full ">
           <SidebarTrigger className="fixed top-2" />
           <Outlet />
         </main>

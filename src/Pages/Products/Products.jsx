@@ -599,9 +599,9 @@ const Products = () => {
   );
 
   return (
-    <div className="bg-base-100 my-4 md:my-12">
+    <div className="bg-base-100 my-4 md:my-12 p-2 md:w-11/12 lg:w-10/12 mx-auto">
       <Seo title={"Products | Kashem Optical"} />
-      <div className="container mx-auto my-2 space-y-4 md:space-y-0 p-2 md:flex items-center justify-between">
+      <div className=" my-2 space-y-4 md:space-y-0 p-2 md:flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Browse Products</h1>
         </div>
@@ -677,7 +677,7 @@ const Products = () => {
           ) : products.length ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {products?.map((product) => (
-                <ProductCard product={product} />
+                <ProductCard key={product._id} product={product} />
               ))}
             </div>
           ) : (
