@@ -68,7 +68,7 @@ const Faq = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="container mx-auto px-4 lg:px-8"
+        className="p-2 md:w-11/12 lg:w-10/12 mx-auto"
       >
         <div className="flex flex-col md:flex-row items-center gap-8 py-10 xl:py-6">
           <motion.div
