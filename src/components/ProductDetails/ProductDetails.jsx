@@ -36,6 +36,7 @@ import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
 import toast from "react-hot-toast";
 import { ShoppingCart } from "lucide-react";
+import Seo from "../Seo/Seo";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -145,6 +146,13 @@ const ProductDetails = () => {
 
   return (
     <div className="mx-auto md:px-8 py-12 w-11/12 md:w-10/12  ">
+      <Seo
+        title={"Product Details | Kashem Optical"}
+        content={
+          "Explore detailed information about this lens or eyewear product."
+        }
+        link={`/product/${id}`}
+      ></Seo>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Left side - Image gallery */}
         <div className="space-y-2">

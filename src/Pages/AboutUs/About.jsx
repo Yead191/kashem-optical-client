@@ -7,7 +7,7 @@ import Seo from "../../components/Seo/Seo";
 function AboutPage() {
   return (
     <div className="p-2 md:w-11/12 lg:w-10/12 mx-auto px-4 py-12">
-      <Seo title={"About Us | Kashem Optical"} />
+      <Seo title={"About Us | Kashem Optical"} content={"Learn more about Kashem Optical and our mission to provide premium vision solutions."} link={"/about"}/>
       <div className="text-center mb-12">
         <div
           className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mb-4 bg-white/80 text-blue-600 border border-blue-100/50 shadow-sm backdrop-blur-md`}

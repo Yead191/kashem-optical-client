@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { IoSparkles } from "react-icons/io5";
 import useAuth from "@/hooks/useAuth.jsx";
@@ -12,6 +12,7 @@ const BannerComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeProduct, setActiveProduct] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const location = useLocation()
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const { data: featuredProducts = [], isLoading: bannerLoading } = useQuery({
@@ -22,6 +23,8 @@ const BannerComponent = () => {
       return filtered;
     },
   });
+  const isHome = location.pathname === "/"
+  // console.log(isHome);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -41,7 +44,7 @@ const BannerComponent = () => {
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, [isHovering, featuredProducts.length]);
+  }, [isHovering, featuredProducts.length, isHome]);
 
   const handleProductHover = (index) => {
     setActiveProduct(index);
@@ -55,43 +58,6 @@ const BannerComponent = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
-
-  //   const featuredProducts = [
-  //     {
-  //       name: "Ray-Ban Aviator",
-  //       category: "Sunglasses",
-  //       price: "$149.99",
-  //       image:
-  //         "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
-  //       color: "from-blue-500 to-teal-600",
-  //     },
-  //     {
-  //       name: "Blue Light Glasses",
-  //       category: "Anti-Glare",
-  //       price: "$59.99",
-  //       image:
-  //         "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=800&q=80",
-  //       color: "from-gray-500 to-gray-700",
-  //     },
-  //     {
-  //       name: "Progressive Lenses",
-  //       category: "Prescription",
-  //       price: "$199.99",
-  //       image:
-  //         "https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?auto=format&fit=crop&w=800&q=80",
-  //       color: "from-blue-600 to-indigo-800",
-  //     },
-  //     {
-  //       name: "Oakley Sports",
-  //       category: "Sports Eyewear",
-  //       price: "৳129.99",
-  //       image:
-  //         "https://images.unsplash.com/photo-1509695507491-09ce0b54602d?auto=format&fit=crop&w=800&q=80",
-  //       color: "from-green-400 to-green-600",
-  //     },
-  //   ];
-
-  // console.log(featuredProducts);
 
   return (
     <div className=" w-full overflow-hidden transition-all duration-300 bg-white text-gray-900">

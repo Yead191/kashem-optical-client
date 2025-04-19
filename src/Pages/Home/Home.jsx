@@ -18,7 +18,7 @@ const Home = () => {
   // console.log(categories);
   return (
     <div className="">
-      <Seo title={"Home | Kashem Optical"} />
+      <Seo title={"Home | Kashem Optical"} content={"Discover premium lenses and eyewear at Kashem Optical. Shop stylish and affordable optical products designed for comfort and clarity."} link={'/'} />
       {/* banner 1 */}
       {/* <BannerSlide></BannerSlide> */}
       {/* banner2 */}

@@ -600,7 +600,13 @@ const Products = () => {
 
   return (
     <div className="bg-base-100 my-4 md:my-12 p-2 md:w-11/12 lg:w-10/12 mx-auto">
-      <Seo title={"Shop | Kashem Optical"} />
+      <Seo
+        title={"Shop | Kashem Optical"}
+        content={
+          "Browse our full range of premium lenses, frames, and optical accessories."
+        }
+        link={"/products"}
+      />
       <div className=" my-2 space-y-4 md:space-y-0 p-2 md:flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Browse Products</h1>
