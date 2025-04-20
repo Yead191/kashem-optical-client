@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { motion } from "framer-motion";
-
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 // react icons
 import {
   FaStar,
@@ -153,6 +161,25 @@ const ProductDetails = () => {
         }
         link={`/product/${id}`}
       ></Seo>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link to={"/"}>
+              <BreadcrumbLink>Home</BreadcrumbLink>
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <Link to={"/products"}>
+              <BreadcrumbLink>Shop</BreadcrumbLink>
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink>Product Details</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Left side - Image gallery */}
         <div className="space-y-2">

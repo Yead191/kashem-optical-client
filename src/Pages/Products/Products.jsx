@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Spinner from "../../components/Spinner/Spinner";
 import useCategory from "../../hooks/useCategory";
-import { Menu } from "@headlessui/react";
 import "react-dropdown/style.css";
 import { Link, useSearchParams } from "react-router-dom";
 import Seo from "../../components/Seo/Seo";
@@ -14,6 +13,15 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import ProductCard from "@/components/ProductCard/ProductCard";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   Drawer,
   DrawerContent,
@@ -599,7 +607,7 @@ const Products = () => {
   );
 
   return (
-    <div className="bg-base-100 my-4 md:my-12 p-2 md:w-11/12 lg:w-10/12 mx-auto">
+    <div className="bg-base-100 my-4 p-2 md:my-12 md:w-11/12 lg:w-10/12 mx-auto">
       <Seo
         title={"Shop | Kashem Optical"}
         content={
@@ -607,7 +615,20 @@ const Products = () => {
         }
         link={"/products"}
       />
-      <div className=" my-2 space-y-4 md:space-y-0 p-2 md:flex items-center justify-between">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link to={"/"}>
+              <BreadcrumbLink>Home</BreadcrumbLink>
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink>Shop</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className=" my-2 space-y-4 md:space-y-0  md:flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Browse Products</h1>
         </div>
@@ -665,7 +686,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="container mx-auto flex flex-col lg:flex-row gap-4 p-2">
+      <div className="container mx-auto flex flex-col lg:flex-row gap-4 py-2">
         {/* Sidebar for large devices */}
         <FilterSidebar />
 
