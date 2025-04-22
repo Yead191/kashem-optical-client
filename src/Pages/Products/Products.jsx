@@ -607,7 +607,7 @@ const Products = () => {
   );
 
   return (
-    <div className="bg-base-100 my-4 p-2 md:my-12 md:w-11/12 lg:w-10/12 mx-auto">
+    <div className="bg-base-100 my-4 p-2 md:my-12 container mx-auto">
       <Seo
         title={"Shop | Kashem Optical"}
         content={

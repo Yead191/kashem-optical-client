@@ -12,19 +12,37 @@ const BannerComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeProduct, setActiveProduct] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
-  const location = useLocation()
+  const location = useLocation();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
-  const { data: featuredProducts = [], isLoading: bannerLoading } = useQuery({
+  const {
+    data: featuredProducts = [],
+    isLoading: bannerLoading,
+    error,
+  } = useQuery({
     queryKey: ["banners"],
     queryFn: async () => {
       const { data } = await axiosPublic.get("/banners");
-      const filtered = data.filter((item) => item.status === "added");
-      return filtered;
+      return data.filter((item) => item.status === "added");
     },
   });
-  const isHome = location.pathname === "/"
-  // console.log(isHome);
+
+  // Reset activeProduct when featuredProducts changes
+  useEffect(() => {
+    if (featuredProducts.length > 0) {
+      setActiveProduct(0);
+    }
+  }, [featuredProducts]);
+
+  // Auto-rotate featured products
+  useEffect(() => {
+    if (!isHovering && !bannerLoading && featuredProducts.length > 0) {
+      const interval = setInterval(() => {
+        setActiveProduct((prev) => (prev + 1) % featuredProducts.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isHovering, bannerLoading, featuredProducts.length]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -33,18 +51,7 @@ const BannerComponent = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     navigate(`/products?search=${searchQuery}`);
-    // console.log("Searching for:", searchQuery);
   };
-
-  // Auto-rotate featured products
-  useEffect(() => {
-    if (!isHovering) {
-      const interval = setInterval(() => {
-        setActiveProduct((prev) => (prev + 1) % featuredProducts.length);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [isHovering, featuredProducts.length, isHome]);
 
   const handleProductHover = (index) => {
     setActiveProduct(index);
@@ -54,7 +61,6 @@ const BannerComponent = () => {
   const handleProductLeave = () => {
     setIsHovering(false);
   };
-
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
