@@ -128,6 +128,7 @@ const Products = () => {
       selectedMaterial,
       selectedSize,
       priceRange,
+      searchParams,
       selectedType,
       selectedColor,
     ],
@@ -160,7 +161,7 @@ const Products = () => {
 
   const handleCategorySelect = (category) => {
     setSortPrice("");
-    setSelectedCategory(category.name);
+    setSelectedCategory(category);
   };
 
   const handleClearFilter = () => {
@@ -173,11 +174,8 @@ const Products = () => {
     setSelectedType("");
     setSelectedSize("");
     setSelectedColor("");
-    setPriceRange([
-      filterOptions.priceRange?.min || 0,
-      filterOptions.priceRange?.max || 10000,
-    ]);
-    refetch();
+    setPriceRange([0, 10000]);
+    // refetch();
   };
 
   const handleSortChange = (selectedOption) => {
@@ -215,7 +213,7 @@ const Products = () => {
                   selectedCategory === category.name ? "default" : "outline"
                 }
                 className="justify-start text-sm h-auto py-2"
-                onClick={() => setSelectedCategory(category.name)}
+                onClick={() => handleCategorySelect(category.name)}
               >
                 <span className="truncate">{category.name}</span>
               </Button>
@@ -674,6 +672,13 @@ const Products = () => {
             />
             <div className="flex items-center gap-2 lg:hidden">
               <Button
+                variant="destructive"
+                onClick={handleClearFilter}
+                title={"Clear Filter"}
+              >
+                X
+              </Button>
+              <Button
                 className={`btn btn-sm flex items-center gap-2 ${
                   selectedCategory && "btn-neutral"
                 }`}
@@ -715,8 +720,8 @@ const Products = () => {
               </div>
               <h3 className="text-lg font-medium mb-1">No Product Found</h3>
               <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-                Sorry, we couldn't find any product matching your criteria.
-                Try adjusting your filters.
+                Sorry, we couldn't find any product matching your criteria. Try
+                adjusting your filters.
               </p>
               <Button onClick={handleClearFilter} className="cursor-pointer">
                 Clear Filters

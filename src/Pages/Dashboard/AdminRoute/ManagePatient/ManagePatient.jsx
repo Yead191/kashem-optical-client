@@ -187,7 +187,7 @@ const PatientPDF = ({ patient }) => (
 
 // Sample DeleteModal Component
 const DeleteModal = ({ isOpen, onClose, deletePatient, refetch }) => {
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const handleDelete = async () => {
     try {
       await axiosSecure.delete(`/patient/delete/${deletePatient._id}`);
