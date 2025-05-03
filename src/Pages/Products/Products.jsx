@@ -131,6 +131,7 @@ const Products = () => {
       searchParams,
       selectedType,
       selectedColor,
+      searchTerm,
     ],
     queryFn: async () => {
       const res = await axiosPublic.get(
@@ -140,24 +141,24 @@ const Products = () => {
     },
   });
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      refetch();
-    }, 500);
+  // useEffect(() => {
+  //   const handler = setTimeout(() => {
+  //     refetch();
+  //   }, 500);
 
-    return () => clearTimeout(handler);
-  }, [
-    searchTerm,
-    selectedCategory,
-    selectedGender,
-    selectedBrand,
-    selectedMaterial,
-    selectedType,
-    selectedColor,
-    sortPrice,
-    priceRange,
-    refetch,
-  ]);
+  //   return () => clearTimeout(handler);
+  // }, [
+  //   searchTerm,
+  //   selectedCategory,
+  //   selectedGender,
+  //   selectedBrand,
+  //   selectedMaterial,
+  //   selectedType,
+  //   selectedColor,
+  //   sortPrice,
+  //   priceRange,
+  //   refetch,
+  // ]);
 
   const handleCategorySelect = (category) => {
     setSortPrice("");
