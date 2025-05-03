@@ -104,17 +104,17 @@ const SalesReport = () => {
       {/* Main Content */}
       <Tabs defaultValue="overview" className="space-y-4 ">
         {/* All Tablist */}
-        <TabsList className="border  px-1 flex justify-start lg:w-3/6 flex-wrap w-full h-full">
-          <TabsTrigger value="overview" className="cursor-pointer py-2 px-4">
+        <TabsList className="border  px-1 flex justify-between items-center flex-wrap lg:flex-nowrap lg:flex-row w-full h-full">
+          <TabsTrigger value="overview" className="cursor-pointer py-2 px-4 w-full">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="analytics" className="cursor-pointer py-2 px-4">
+          <TabsTrigger value="analytics" className="cursor-pointer py-2 px-4 w-full">
             Detailed Analytics
           </TabsTrigger>
-          <TabsTrigger value="products" className="cursor-pointer py-2 px-4">
+          <TabsTrigger value="products" className="cursor-pointer py-2 px-4 w-full">
             Product Performance
           </TabsTrigger>
-          <TabsTrigger value="insights" className={"cursor-pointer py-2 px-4"}>
+          <TabsTrigger value="insights" className={"cursor-pointer py-2 px-4 w-full"}>
             Customer Insights
           </TabsTrigger>
         </TabsList>

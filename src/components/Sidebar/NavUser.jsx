@@ -34,16 +34,19 @@ export function NavUser() {
   const navigate = useNavigate();
   const { user, logOut } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleLogOut = () => {
-    logOut();
-    toast.success("LoggedOut Successfully!");
+  const handleLogOut = async () => {
+    await toast.promise(logOut(), {
+      loading: "Logging out...",
+      success: <b>Log Out Successful!</b>,
+      error: (err) => err.message,
+    });
     navigate("/");
   };
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               tooltip="My Account"
