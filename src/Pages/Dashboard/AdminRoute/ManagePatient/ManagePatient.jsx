@@ -39,6 +39,8 @@ import {
 import toast from "react-hot-toast"; // Added for feedback
 import { AddPatientModal } from "./AddPatientModal";
 import { UpdatePatientModal } from "./UpdatePatientModal";
+import { PatientDetailsModal } from "./PatientDetailsModal";
+import { Eye } from "lucide-react";
 
 // Styles for the PDF
 const styles = StyleSheet.create({
@@ -233,12 +235,20 @@ const DeleteModal = ({ isOpen, onClose, deletePatient, refetch }) => {
 export default function ManagePatient() {
   const axiosSecure = useAxiosSecure();
   const [searchPhone, setSearchPhone] = useState("");
-  const [deletePatient, setDeletePatient] = useState(null); // Initialize as null to avoid undefined issues
+  const [deletePatient, setDeletePatient] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editPatient, setEditPatient] = useState(null);
+
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [isPatientModalOpen, setIsPatientModalOpen] = useState(false);
+
+  const handleViewDetails = (patient) => {
+    setSelectedPatient(patient);
+    setIsPatientModalOpen(true);
+  };
   const handleEdit = (patient) => {
     setEditPatient(patient);
     setIsEditModalOpen(true);
@@ -269,6 +279,10 @@ export default function ManagePatient() {
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setDeletePatient(null);
+  };
+  const closePatientModal = () => {
+    setIsPatientModalOpen(false);
+    setSelectedPatient(null);
   };
 
   return (
@@ -337,7 +351,7 @@ export default function ManagePatient() {
                     <TableCell>{patient.rightEye.add || "-"}</TableCell>
                     <TableCell rowSpan={2}>
                       <div className="flex justify-end items-center">
-                        <DropdownMenu>
+                        <DropdownMenu modal={false}>
                           <DropdownMenuTrigger asChild>
                             <Button size="sm" variant="outline">
                               <Ellipsis />
@@ -358,6 +372,12 @@ export default function ManagePatient() {
                                   </div>
                                 )}
                               </PDFDownloadLink>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleViewDetails(patient)}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEdit(patient)}
@@ -395,10 +415,14 @@ export default function ManagePatient() {
           </p>
         </div>
       )}
-
+      <PatientDetailsModal
+        patient={selectedPatient}
+        isOpen={isPatientModalOpen}
+        onClose={closePatientModal}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
-        onClose={closeDeleteModal} // Use custom close function
+        onClose={closeDeleteModal}
         deletePatient={deletePatient}
         refetch={refetch}
       />

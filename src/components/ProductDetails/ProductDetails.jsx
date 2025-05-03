@@ -155,10 +155,8 @@ const ProductDetails = () => {
   return (
     <div className="mx-auto md:px-8 py-12 w-11/12 md:w-10/12  ">
       <Seo
-        title={"Product Details | Kashem Optical"}
-        content={
-          "Explore detailed information about this lens or eyewear product."
-        }
+        title={`${product.productName} | Kashem Optical`}
+        content={`Explore detailed information about ${product.productName}.`}
         link={`/product/${id}`}
       ></Seo>
       <Breadcrumb>
@@ -176,7 +174,7 @@ const ProductDetails = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink>Product Details</BreadcrumbLink>
+            <BreadcrumbLink>{product?.productName}</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -253,8 +251,12 @@ const ProductDetails = () => {
           </div>
 
           <h1 className="text-[1.6rem] md:text-[1.9rem] text-gray-800 font-semibold">
-            {product.productName} - {product.brandName}
+            {product.productName}
           </h1>
+          <p className="text-sm mt-1">
+            <span className="font-medium">{product?.brandName}</span> • Model:{" "}
+            {product?.modelNo}
+          </p>
           {product.status && (
             <p className="text-gray-800 flex items-center gap-2 ">
               <FaCircle

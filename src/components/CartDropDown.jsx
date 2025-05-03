@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { GiSunglasses } from "react-icons/gi";
 
 const CartDropdown = ({ cart }) => {
   // Calculate the total price of items in the cart
@@ -80,8 +81,17 @@ const CartDropdown = ({ cart }) => {
                 ))}
               </ScrollArea>
             ) : (
-              <div className="p-4 text-center">
-                <p className="text-sm text-gray-500">Your cart is empty</p>
+              <div className="p-4 text-center flex flex-col h-full ">
+                <p className="text-sm text-gray-500 flex-grow">
+                  Your cart is empty
+                </p>
+                <CardFooter className="mt-4 mb-4 items-end">
+                  <Link to="/products" className="w-full cursor-pointer">
+                    <Button className="w-full cursor-pointer flex items-center gap-1">
+                      <GiSunglasses /> Buy Product
+                    </Button>
+                  </Link>
+                </CardFooter>
               </div>
             )}
           </CardContent>

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Lottie from "lottie-react";
@@ -26,30 +26,29 @@ const Login = () => {
   const from = location.state || "/";
   // console.log('login', location.state);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
-    loginUser(email, password)
-      .then((res) => {
-        const user = res.user;
-        toast.success(`Logged in as: ${user.displayName}`);
-        // console.log(res.user);
-        navigate(from);
-        form.reset();
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        toast.error(errorMessage);
+    try {
+      const form = e.target;
+      const email = form.email.value;
+      const password = form.password.value;
+      await toast.promise(loginUser(email, password), {
+        loading: "Signing in...",
+        success: <b>Login Successful!</b>,
+        error: (err) => err.message,
       });
+      navigate(from);
+      form.reset();
+    } catch (err) {
+      toast.error(err.message || "An unexpected error occurred");
+    }
   };
 
   return (
     <motion.div
       initial={{ y: 30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
+      transition={{ duration: 1.5, ease: "easeIn" }}
       className="flex items-center justify-center min-h-screen bg-base-100"
     >
       <Seo
@@ -66,7 +65,7 @@ const Login = () => {
           <SocialLogin></SocialLogin>
           <motion.form
             initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
+            animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeInOut", delay: 0.4 }}
             onSubmit={handleLogin}
             className="w-full"
@@ -97,7 +96,7 @@ const Login = () => {
 
             <motion.div
               initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
+              animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeInOut", delay: 0.6 }}
               className="flex items-center justify-center"
             >

@@ -15,7 +15,7 @@ export function PatientDetailsModal({ patient, isOpen, onClose }) {
         if (!open) onClose();
       }}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Patient Details</DialogTitle>
           <DialogDescription>

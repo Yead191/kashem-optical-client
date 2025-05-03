@@ -90,7 +90,7 @@ const Register = () => {
 
           <motion.form
             initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
+            animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
             onSubmit={handleSubmit(onSubmit)}
             className="w-full"

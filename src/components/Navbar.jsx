@@ -427,7 +427,7 @@ const Navbar = () => {
         </div>
 
         <div className="mr-2">
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -435,16 +435,16 @@ const Navbar = () => {
               >
                 {user?.photoURL ? (
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user?.photoURL} alt="User profile" />
+                    <AvatarImage src={user?.photoURL} alt="User profile" className="object-cover"/>
                     <AvatarFallback className="rounded-lg">KO</AvatarFallback>
                   </Avatar>
                 ) : (
-                  <Avatar className="h-10 w-10 bg-white">
+                  <Avatar className="h-10 w-10 bg-white border-2">
                     <AvatarImage
                       src={
-                        "https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_1280.png"
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZgr9-7PZSm240VMDVsathNHVdCabXvMCxsA&s"
                       }
-                      alt="User profile"
+                      alt="User profile" className="object-cover"
                     />
                   </Avatar>
                 )}
