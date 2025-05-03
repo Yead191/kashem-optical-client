@@ -80,7 +80,10 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 bg-white/80 backdrop-blur-md border border-gray-200/50 hover:shadow-lg hover:shadow-indigo-200/50">
+    <Link
+      to={`/product/${product._id ? product._id : product.productId}`}
+      className="group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 bg-white/80 backdrop-blur-md border border-gray-200/50 hover:shadow-lg hover:shadow-indigo-200/50"
+    >
       {/* Hover Gradient Effect */}
       <div className="absolute inset-0 bg-gradient-to-t from-sky-300/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -102,18 +105,11 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Product Images with Swiper */}
-      <Link
-        to={`/product/${product._id ? product._id : product.productId}`}
-        className="relative block h-[180px] md:h-[200px] lg:h-[260px] overflow-hidden"
-      >
+      <div className="relative block h-[180px] md:h-[200px] lg:h-[260px] overflow-hidden">
         <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
+          modules={[Navigation, Pagination]}
           spaceBetween={10}
           slidesPerView={1}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
           pagination={{ clickable: true }}
           className="h-full w-full"
         >
@@ -129,17 +125,17 @@ const ProductCard = ({ product }) => {
         </Swiper>
 
         {/* View Details Button (visible on hover) */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+        {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
           <span className="px-4 py-2 rounded-full text-sm font-medium bg-indigo-600/90 text-white backdrop-blur-md">
             View Details
           </span>
-        </div>
-      </Link>
+        </div> */}
+      </div>
 
       {/* Product Details */}
       <div className="p-4 flex flex-col flex-grow">
         {/* Rating */}
-        <div className="flex items-center mb-2">
+        {/* <div className="flex items-center mb-2">
           <Badge variant="secondary" className="flex items-center gap-1">
             <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
             <span>4.9</span>
@@ -147,7 +143,7 @@ const ProductCard = ({ product }) => {
               ({Math.floor(Math.random() * 20)})
             </span>
           </Badge>
-        </div>
+        </div> */}
 
         {/* Brand Name */}
         <Link to={`/product/${product._id ? product._id : product.productId}`}>
@@ -205,7 +201,7 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

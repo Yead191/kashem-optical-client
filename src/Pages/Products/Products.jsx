@@ -31,6 +31,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { motion } from "framer-motion";
+import { PiSunglasses } from "react-icons/pi";
 
 const Products = () => {
   const axiosPublic = useAxiosPublic();
@@ -642,7 +643,7 @@ const Products = () => {
             />
             {searchTerm && (
               <button
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 onClick={() => setSearchTerm("")}
               >
                 ✕
@@ -708,15 +709,17 @@ const Products = () => {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center">
-              <p className="text-red-500 text-2xl">No Product Found!</p>
-              <Button
-                onClick={handleClearFilter}
-                variant="destructive"
-                size="sm"
-                className="mt-2"
-              >
-                Clear Filter
+            <div className="flex flex-col items-center justify-center h-[40vh] md:h-[70vh] text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted mb-4">
+                <PiSunglasses className="h-10 w-10 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-medium mb-1">No Product Found</h3>
+              <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+                Sorry, we couldn't find any product matching your criteria.
+                Try adjusting your filters.
+              </p>
+              <Button onClick={handleClearFilter} className="cursor-pointer">
+                Clear Filters
               </Button>
             </div>
           )}
