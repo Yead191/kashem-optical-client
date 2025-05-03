@@ -160,20 +160,12 @@ const Navbar = () => {
   );
 
   const handleLogout = async () => {
-    // document.getElementById("my-drawer-2").checked = false;
-    //   logOut()
-    //     .then(() => {
-    //       toast.success("Log Out Successful");
-    //     })
-    //     .catch((error) => {
-    //       toast.error({ error });
-    //     });
-    // };
     await toast.promise(logOut(), {
       loading: "Signing Out...",
       success: <b>Logged Out Successfully!</b>,
       error: (error) => error.message,
     });
+    refetch();
   };
 
   // if (isAdminLoading) {

@@ -12,7 +12,7 @@ const useCart = () => {
     isLoading: cartLoading,
     refetch,
   } = useQuery({
-    queryKey: ["cart"],
+    queryKey: ["cart", user?.email],
     enabled: !loading,
     queryFn: async () => {
       if (!user) {
