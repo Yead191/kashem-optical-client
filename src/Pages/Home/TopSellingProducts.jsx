@@ -87,7 +87,7 @@ function TopSellingProducts() {
                     </h3>
                     {/* Size and Additional Info */}
                     <p className="text-sm text-gray-500 mb-2 flex-grow">
-                      Size: {product?.frameSize} • {product?.brandName}
+                     • {product?.brandName}
                     </p>
 
                     <p className="font-bold text-lg text-indigo-600">
