@@ -27,8 +27,8 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
   const { user, updateUserProfile } = useAuth();
 
   const { data: loggedUser, refetch } = useQuery({
-    queryKey: ["loggedUser", user],
-    enabled: false,
+    queryKey: ["loggedUser", user?.email],
+    enabled: !!user,
     queryFn: async () => {
       const res = await axiosSecure.get(`/user?email=${user.email}`);
       return res.data;
@@ -105,7 +105,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                   className="object-cover"
                 />
                 <AvatarFallback>
-                  {name?.charAt(0) || user.email?.charAt(0)}
+                  {name?.charAt(0) || user?.email?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -118,7 +118,7 @@ const UpdateProfile = ({ isModalOpen, setIsModalOpen }) => {
                   className="object-cover"
                 />
                 <AvatarFallback>
-                  {name?.charAt(0) || user.email?.charAt(0)}
+                  {name?.charAt(0) || user?.email?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>

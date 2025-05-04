@@ -42,7 +42,7 @@ import { Plus } from "lucide-react";
 import { Heart } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 import { ShoppingCart } from "lucide-react";
 import Seo from "../Seo/Seo";
 

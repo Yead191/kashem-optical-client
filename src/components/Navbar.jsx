@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 
 import { MdDashboard } from "react-icons/md";
 import { Typewriter } from "react-simple-typewriter";

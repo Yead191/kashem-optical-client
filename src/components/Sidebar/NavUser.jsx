@@ -26,7 +26,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import UpdateProfile from "../UpdateProfile";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 import { LogIn } from "lucide-react";
 
 export function NavUser() {

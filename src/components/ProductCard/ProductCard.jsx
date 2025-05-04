@@ -10,7 +10,7 @@ import { BaggageClaim, Heart, Star } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useCart from "@/hooks/useCart";
 

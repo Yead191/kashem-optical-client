@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
-
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Lottie from "lottie-react";
 import loginLottie from "../../assets/login.json";
