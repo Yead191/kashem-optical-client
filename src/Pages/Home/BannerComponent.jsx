@@ -76,7 +76,7 @@ const BannerComponent = () => {
           <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-gradient-to-br from-blue-600/20 to-teal-600/20 blur-3xl"></div>
 
           {/* Animated Lines */}
-          <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 opacity-20">
             <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-pulse"></div>
             <div
               className="absolute top-2/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent animate-pulse"

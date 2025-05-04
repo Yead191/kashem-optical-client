@@ -42,6 +42,7 @@ import { UpdatePatientModal } from "./UpdatePatientModal";
 import { PatientDetailsModal } from "./PatientDetailsModal";
 import { Eye } from "lucide-react";
 import Spinner from "@/components/Spinner/Spinner";
+import { UserX } from "lucide-react";
 
 // Styles for the PDF
 const styles = StyleSheet.create({
@@ -286,9 +287,9 @@ export default function ManagePatient() {
     setSelectedPatient(null);
   };
 
-  if (patientLoading) {
-    return <Spinner />;
-  }
+  const handleClearFilter = () => {
+    setSearchPhone("");
+  };
   return (
     <div className="container mx-auto">
       <Seo title="Manage Patients | Kashem Optical" />
@@ -304,6 +305,7 @@ export default function ManagePatient() {
             type="text"
             placeholder="Search patient by Name / Phone no."
             className="w-full bg-base-100"
+            value={searchPhone}
             onChange={(e) => setSearchPhone(e.target.value)}
           />
         </div>
@@ -313,7 +315,9 @@ export default function ManagePatient() {
         </Button>
       </div>
 
-      {patients.length > 0 ? (
+      {patientLoading ? (
+        <Spinner />
+      ) : patients.length > 0 ? (
         <div className="border rounded-lg overflow-hidden">
           <Table>
             <TableHeader className="bg-base-200">
@@ -413,10 +417,18 @@ export default function ManagePatient() {
           </Table>
         </div>
       ) : (
-        <div className="text-center py-10 border rounded-lg bg-muted/20">
-          <p className="text-muted-foreground">
-            No patients added yet. Add your first patient to get started.
+        <div className="flex flex-col items-center justify-center h-[40vh] md:h-[70vh] text-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted mb-4">
+            <UserX className="h-10 w-10 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-medium mb-1">No Patient Found</h3>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+            Sorry, we couldn't find any patient matching your criteria. Try
+            adjusting your filters or add new patient.
           </p>
+          <Button onClick={handleClearFilter} className="cursor-pointer">
+            Clear Filters
+          </Button>
         </div>
       )}
       <PatientDetailsModal

@@ -31,7 +31,7 @@ const ManageUsers = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["users", user],
+    queryKey: ["users", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users?search=${searchTerm}`);
       return res.data;

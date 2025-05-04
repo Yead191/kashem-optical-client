@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export function UpdatePatientModal({ isOpen, onClose, refetch, patientData }) {
   const axiosSecure = useAxiosSecure();
@@ -71,16 +71,18 @@ export function UpdatePatientModal({ isOpen, onClose, refetch, patientData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await toast.promise(
+      toast.promise(
         axiosSecure.patch(`/patients/${patientData._id}`, formData),
         {
           loading: "Updating Patient...",
-          success: <b>Patient Updated Successfully!</b>,
+          success: () => {
+            refetch();
+            onClose();
+            return <b>Patient Updated Successfully!</b>;
+          },
           error: (error) => <b>{error.message}</b>,
         }
       );
-      refetch();
-      onClose();
     } catch (error) {
       console.error(error);
     }

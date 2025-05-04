@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export function AddPatientModal({ isOpen, onClose, refetch }) {
   const axiosSecure = useAxiosSecure();
@@ -61,30 +61,32 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
       date: new Date().toISOString(),
     };
     // console.log(submissionData);
-    await toast.promise(axiosSecure.post("/patients", submissionData), {
+    toast.promise(axiosSecure.post("/patients", submissionData), {
       loading: "Adding New Patient...",
-      success: <b>Patient Added Successfully!</b>,
+      success: () => {
+        refetch();
+        // Reset form
+        setFormData({
+          name: "",
+          phone: "",
+          date: new Date().toISOString(),
+          rightEye: {
+            sph: "",
+            cyl: "",
+            axis: "",
+            add: "",
+          },
+          leftEye: {
+            sph: "",
+            cyl: "",
+            axis: "",
+            add: "",
+          },
+        });
+        onClose();
+        return <b>Patient Added Successfully!</b>;
+      },
       error: (error) => <b>{error.message}</b>,
-    });
-    refetch();
-    onClose();
-    // Reset form
-    setFormData({
-      name: "",
-      phone: "",
-      date: new Date().toISOString(), // Reset with new date
-      rightEye: {
-        sph: "",
-        cyl: "",
-        axis: "",
-        add: "",
-      },
-      leftEye: {
-        sph: "",
-        cyl: "",
-        axis: "",
-        add: "",
-      },
     });
   };
 
@@ -116,6 +118,7 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
                 <Input
                   id="phone"
                   name="phone"
+                  type="number"
                   placeholder="Enter Patient Phone no"
                   value={formData.phone}
                   onChange={handleChange}
@@ -156,7 +159,6 @@ export function AddPatientModal({ isOpen, onClose, refetch }) {
                     required
                   />
                   <Input
-                    Kopieren
                     name="rightEye.cyl"
                     value={formData.rightEye.cyl}
                     onChange={handleChange}
