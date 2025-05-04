@@ -7,7 +7,6 @@ import Lottie from "lottie-react";
 import loginLottie from "../../assets/login.json";
 // import SocialLogin from '../components/SocialLogin';
 import axios from "axios";
-
 import { Helmet } from "react-helmet-async";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin/SocialLogin";
@@ -31,13 +30,15 @@ const Login = () => {
       const form = e.target;
       const email = form.email.value;
       const password = form.password.value;
-      await toast.promise(loginUser(email, password), {
+      toast.promise(loginUser(email, password), {
         loading: "Signing in...",
-        success: <b>Login Successful!</b>,
-        error: (err) => err.message,
+        success: () => {
+          navigate(from);
+          form.reset();
+          return <b>Login Successful!</b>;
+        },
+        error: (err) => err.message || "An unexpected error occurred",
       });
-      navigate(from);
-      form.reset();
     } catch (err) {
       toast.error(err.message || "An unexpected error occurred");
     }

@@ -42,7 +42,7 @@ import { Plus } from "lucide-react";
 import { Heart } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import { ShoppingCart } from "lucide-react";
 import Seo from "../Seo/Seo";
 
@@ -121,9 +121,12 @@ const ProductDetails = () => {
         return;
       }
 
-      await toast.promise(axiosPublic.post("/carts", cartItem), {
+      toast.promise(axiosPublic.post("/carts", cartItem), {
         loading: "Adding to cart...",
-        success: <b>Product Successfully Added To Cart</b>,
+        success: () => {
+          refetch();
+          return <b>Product Successfully Added To Cart</b>;
+        },
         error: (error) => {
           const errorMessage =
             error.response?.data?.error || error.message || "Unable To Add";
@@ -134,7 +137,6 @@ const ProductDetails = () => {
           return <b>{errorMessage}</b>;
         },
       });
-      refetch();
     } catch (error) {
       console.error("Error adding to cart:", error);
     } finally {

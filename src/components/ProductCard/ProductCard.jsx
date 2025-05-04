@@ -10,7 +10,7 @@ import { BaggageClaim, Heart, Star } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useCart from "@/hooks/useCart";
 
@@ -67,16 +67,18 @@ const ProductCard = ({ product }) => {
       return;
     }
 
-    await toast.promise(axiosPublic.post("/carts", cartItem), {
+    toast.promise(axiosPublic.post("/carts", cartItem), {
       loading: "Adding to cart...",
-      success: <b>Successfully Added To Cart</b>,
+      success: () => {
+        refetch();
+        return <b>Successfully Added To Cart</b>;
+      },
       error: (error) => {
         const errorMessage =
           error.response?.data?.error || error.message || "Unable to Add";
         return <b>{errorMessage}</b>;
       },
     });
-    refetch();
   };
 
   return (

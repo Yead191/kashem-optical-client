@@ -41,6 +41,7 @@ import { AddPatientModal } from "./AddPatientModal";
 import { UpdatePatientModal } from "./UpdatePatientModal";
 import { PatientDetailsModal } from "./PatientDetailsModal";
 import { Eye } from "lucide-react";
+import Spinner from "@/components/Spinner/Spinner";
 
 // Styles for the PDF
 const styles = StyleSheet.create({
@@ -285,6 +286,9 @@ export default function ManagePatient() {
     setSelectedPatient(null);
   };
 
+  if (patientLoading) {
+    return <Spinner />;
+  }
   return (
     <div className="container mx-auto">
       <Seo title="Manage Patients | Kashem Optical" />

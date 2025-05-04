@@ -25,7 +25,7 @@ export function PatientDetailsModal({ patient, isOpen, onClose }) {
         {patient && (
           <div className="space-y-4">
             <div className="border rounded-md p-4">
-              <div className="flex justify-between mb-2">
+              <div className="flex flex-col md:flex-row justify-between mb-2">
                 <p>
                   <strong>Name:</strong> {patient.name}
                 </p>
@@ -40,14 +40,14 @@ export function PatientDetailsModal({ patient, isOpen, onClose }) {
             <div>
               <p className="font-semibold mb-2">Prescription Details</p>
               <div className="space-y-2">
-                <div className="border rounded-md p-2 flex justify-between">
+                <div className="border rounded-md p-2 flex justify-between items-center">
                   <span>OD</span>
                   <span>SPH: {patient.rightEye.sph}</span>
                   <span>CYL: {patient.rightEye.cyl}</span>
                   <span>Axis: {patient.rightEye.axis}</span>
                   <span>Add: {patient.rightEye.add || "-"}</span>
                 </div>
-                <div className="border rounded-md p-2 flex justify-between">
+                <div className="border rounded-md p-2 flex justify-between items-center">
                   <span>OS</span>
                   <span>SPH: {patient.leftEye.sph}</span>
                   <span>CYL: {patient.leftEye.cyl}</span>
