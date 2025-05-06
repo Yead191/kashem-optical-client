@@ -10,7 +10,7 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useCart from "@/hooks/useCart";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,7 +31,6 @@ import Confetti from "react-confetti";
 import useDiscount from "@/hooks/useDiscount";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import Seo from "@/components/Seo/Seo";
-
 
 const ManageCart = () => {
   const { user } = useAuth();
@@ -91,7 +90,10 @@ const ManageCart = () => {
           }),
           {
             loading: "Updating quantity...",
-            success: <b>Quantity Added!</b>,
+            success: () => {
+              refetch();
+              return <b>Quantity Added!</b>;
+            },
             error: (error) => error.message,
           }
         );
@@ -106,8 +108,8 @@ const ManageCart = () => {
         localCart[itemIndex].quantity += 1;
         localStorage.setItem("cart", JSON.stringify(localCart));
         toast.success("Quantity Added!");
+        refetch();
       }
-      refetch();
     } catch (error) {
       toast.error("Failed to update quantity");
       console.error("Error updating cart:", error);
@@ -134,30 +136,31 @@ const ManageCart = () => {
             confirmButtonText: "Yes, delete it!",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              await toast.promise(
-                axiosPublic.delete(`/carts/delete/${itemId}`),
-                {
-                  loading: "Deleting item...",
-                  success: <b>Item Removed!</b>,
-                  error: (error) => error.message,
-                }
-              );
-              refetch();
+              toast.promise(axiosPublic.delete(`/carts/delete/${itemId}`), {
+                loading: "Deleting item...",
+                success: () => {
+                  refetch();
+                  return <b>Item Removed!</b>;
+                },
+                error: (error) => error.message,
+              });
             }
           });
         } else {
           const updatedQuantity = item.quantity - 1;
-          await toast.promise(
+          toast.promise(
             axiosPublic.patch(`/carts/quantity/${itemId}`, {
               quantity: updatedQuantity,
             }),
             {
               loading: "Updating quantity...",
-              success: <b>Quantity Decreased!</b>,
+              success: () => {
+                refetch();
+                return <b>Quantity Decreased!</b>;
+              },
               error: (error) => error.message,
             }
           );
-          refetch();
         }
       } else {
         // Local storage update for unauthorized users
@@ -203,15 +206,18 @@ const ManageCart = () => {
         // Server-side clear for authorized users
         await toast.promise(axiosPublic.delete(`/carts/clear/${user?.email}`), {
           loading: "Clearing Cart...",
-          success: <b>Cart Cleared Successfully!</b>,
+          success: () => {
+            refetch();
+            return <b>Cart Cleared Successfully!</b>;
+          },
           error: (error) => error.message,
         });
       } else {
         // Local storage clear for unauthorized users
         localStorage.removeItem("cart");
         toast.success("Cart Cleared Successfully!");
+        refetch();
       }
-      refetch();
       setIsOpen(false);
     } catch (error) {
       toast.error("Failed to clear cart");
@@ -251,7 +257,7 @@ const ManageCart = () => {
     };
 
     try {
-      await toast.promise(axiosPublic.post("/orders", orderData), {
+      toast.promise(axiosPublic.post("/orders", orderData), {
         loading: "Placing your order...",
         success: async () => {
           if (user) {
