@@ -148,7 +148,7 @@ const OrdersTable = ({
               </Select>
             </TableCell>
             <TableCell>
-              <div className="mt-1 text-xs font-medium truncate">
+              <div className="mt-1 text-xs max-w-28 overflow-x-auto font-medium truncate">
                 <span>{order?._id}</span>
               </div>
             </TableCell>
