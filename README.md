@@ -2,7 +2,8 @@
 
 Kashem Optical is a modern, responsive, and feature-rich lens selling web application built with React, Tailwind CSS, Firebase, and more. It offers a seamless user experience for both customers and administrators, with functionalities including cart management, order tracking, patient prescription handling, and detailed sales reporting.
 
-![Kashem Optical Screenshot](https://i.ibb.co.com/yFhgT441/Screenshot-2025-04-20-at-2-22-25-AM.png)
+![Banner Image](https://i.ibb.co.com/yFhgT441/Screenshot-2025-04-20-at-2-22-25-AM.png)
+
 
 ---
 
@@ -16,6 +17,7 @@ Kashem Optical is a modern, responsive, and feature-rich lens selling web applic
 - [Configuration](#configuration)
 - [Examples](#examples)
 - [Troubleshooting](#troubleshooting)
+- [Admin Credentials](#admin-credentials)
 - [License](#license)
 
 ---
@@ -82,6 +84,14 @@ Kashem Optical is a modern, responsive, and feature-rich lens selling web applic
 - ESLint
 - PostCSS
 - TailwindCSS Animate
+
+### Admin Credential:
+- **Email** : admin@nabil.com
+- **Password** : 123456
+
+### Live Link:
+https://kashemoptical.vercel.app
+
 
 ---
 
