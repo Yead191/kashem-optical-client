@@ -57,10 +57,10 @@ const Faq = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      viewport={{ once: true }}
+      // initial={{ opacity: 0, y: 50 }}
+      // whileInView={{ opacity: 1, y: 0 }}
+      // transition={{ duration: 0.8, ease: "easeOut" }}
+      // viewport={{ once: true }}
       className=" my-8 relative rounded-md"
     >
       <motion.div
@@ -72,10 +72,10 @@ const Faq = () => {
       >
         <div className="flex flex-col md:flex-row items-center gap-8 py-10 xl:py-6">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
+            // initial={{ opacity: 0, scale: 0.8 }}
+            // whileInView={{ opacity: 1, scale: 1 }}
+            // transition={{ duration: 0.8, delay: 0.4 }}
+            // viewport={{ once: true }}
             className="w-full lg:w-1/2"
           >
             <Lottie
@@ -86,10 +86,10 @@ const Faq = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            viewport={{ once: true }}
+            // initial={{ opacity: 0, y: 20 }}
+            // whileInView={{ opacity: 1, y: 0 }}
+            // transition={{ duration: 0.8, delay: 0.8 }}
+            // viewport={{ once: true }}
             className="w-full lg:w-1/2"
           >
             <h5 className="text-xs font-semibold text-[#006eff]">

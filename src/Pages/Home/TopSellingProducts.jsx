@@ -53,13 +53,13 @@ function TopSellingProducts() {
           {visibleProducts.map((product, idx) => (
             <motion.div
               key={product.productId}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.8,
-                ease: "easeInOut",
-              }}
+              // initial={{ opacity: 0, scale: 0.8 }}
+              // whileInView={{ opacity: 1, scale: 1 }}
+              // viewport={{ once: true }}
+              // transition={{
+              //   duration: 0.8,
+              //   ease: "easeInOut",
+              // }}
             >
               <Link to={`/product/${product.productId}`}>
                 <Card className="group relative overflow-hidden flex flex-col h-full rounded-xl bg-white/80 backdrop-blur-md border border-gray-200/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200/50">
@@ -87,7 +87,7 @@ function TopSellingProducts() {
                     </h3>
                     {/* Size and Additional Info */}
                     <p className="text-sm text-gray-500 mb-2 flex-grow">
-                     • {product?.brandName}
+                      • {product?.brandName}
                     </p>
 
                     <p className="font-bold text-lg text-indigo-600">

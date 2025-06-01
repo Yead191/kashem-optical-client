@@ -75,7 +75,7 @@ const Footer = () => {
       title: "Quick Links",
       links: [
         { name: "About Us", path: "/about", icon: <FiInfo size={16} /> },
-        
+
         {
           name: "Contact Us",
           path: "/contact-us",
@@ -159,7 +159,8 @@ const Footer = () => {
             <p className={`max-w-md text-gray-600`}>
               Your trusted destination for premium eyewear since 2015. Discover
               the latest collections, from classic eyeglasses to screen glasses,
-              tailored to your style and vision needs. See the world clearly with Kashem Optical!
+              tailored to your style and vision needs. See the world clearly
+              with Kashem Optical!
             </p>
 
             {/*<div className="pt-4">
