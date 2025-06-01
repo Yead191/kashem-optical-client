@@ -6,10 +6,11 @@ import { useQuery } from "react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import Spinner from "@/components/Spinner/Spinner";
 
 function TopSellingProducts() {
   const axiosPublic = useAxiosPublic();
-  const { data: products = [] } = useQuery({
+  const { data: products = [], isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const res = await axiosPublic("/top-selling-products");
@@ -50,59 +51,63 @@ function TopSellingProducts() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {visibleProducts.map((product, idx) => (
-            <motion.div
-              key={product.productId}
-              // initial={{ opacity: 0, scale: 0.8 }}
-              // whileInView={{ opacity: 1, scale: 1 }}
-              // viewport={{ once: true }}
-              // transition={{
-              //   duration: 0.8,
-              //   ease: "easeInOut",
-              // }}
-            >
-              <Link to={`/product/${product.productId}`}>
-                <Card className="group relative overflow-hidden flex flex-col h-full rounded-xl bg-white/80 backdrop-blur-md border border-gray-200/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200/50">
-                  {/* Hover Gradient Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-sky-300/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            visibleProducts?.map((product, idx) => (
+              <motion.div
+                key={product.productId}
+                // initial={{ opacity: 0, scale: 0.8 }}
+                // whileInView={{ opacity: 1, scale: 1 }}
+                // viewport={{ once: true }}
+                // transition={{
+                //   duration: 0.8,
+                //   ease: "easeInOut",
+                // }}
+              >
+                <Link to={`/product/${product.productId}`}>
+                  <Card className="group relative overflow-hidden flex flex-col h-full rounded-xl bg-white/80 backdrop-blur-md border border-gray-200/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200/50">
+                    {/* Hover Gradient Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-sky-300/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                  {/* Animated Border Effect */}
-                  <div className="absolute inset-0 border border-transparent group-hover:border-purple-500/30 rounded-xl transition-colors duration-300"></div>
+                    {/* Animated Border Effect */}
+                    <div className="absolute inset-0 border border-transparent group-hover:border-purple-500/30 rounded-xl transition-colors duration-300"></div>
 
-                  <div className="relative h-48 w-full">
-                    <img
-                      src={product.image || "/placeholder.svg"}
-                      alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {/* Badge for Total Quantity Sold */}
-                    <span className="absolute top-2 right-2 bg-black text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
-                      {product.totalQty} Sold
-                    </span>
-                  </div>
+                    <div className="relative h-48 w-full">
+                      <img
+                        src={product.image || "/placeholder.svg"}
+                        alt={product.name}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      {/* Badge for Total Quantity Sold */}
+                      <span className="absolute top-2 right-2 bg-black text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                        {product.totalQty} Sold
+                      </span>
+                    </div>
 
-                  <CardContent className="p-4 flex-grow">
-                    <h3 className="font-semibold text-lg mb-2 hover:text-indigo-600 transition-colors">
-                      {product?.productName}
-                    </h3>
-                    {/* Size and Additional Info */}
-                    <p className="text-sm text-gray-500 mb-2 flex-grow">
-                      • {product?.brandName}
-                    </p>
+                    <CardContent className="p-4 flex-grow">
+                      <h3 className="font-semibold text-lg mb-2 hover:text-indigo-600 transition-colors">
+                        {product?.productName}
+                      </h3>
+                      {/* Size and Additional Info */}
+                      <p className="text-sm text-gray-500 mb-2 flex-grow">
+                        • {product?.brandName}
+                      </p>
 
-                    <p className="font-bold text-lg text-indigo-600">
-                      ৳{product.price.toFixed(2)}
-                    </p>
-                  </CardContent>
-                  {/* <CardFooter className="p-4 pt-0">
+                      <p className="font-bold text-lg text-indigo-600">
+                        ৳{product.price.toFixed(2)}
+                      </p>
+                    </CardContent>
+                    {/* <CardFooter className="p-4 pt-0">
                     <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
                       View Details
                     </Button>
                   </CardFooter> */}
-                </Card>
-              </Link>
-            </motion.div>
-          ))}
+                  </Card>
+                </Link>
+              </motion.div>
+            ))
+          )}
         </div>
       </div>
     </section>

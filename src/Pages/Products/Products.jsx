@@ -81,27 +81,27 @@ const Products = () => {
     }
   }, [filterOptions]);
 
-  useEffect(() => {
-    const params = {};
-    if (selectedCategory) params.category = selectedCategory;
-    if (selectedGender) params.gender = selectedGender;
-    if (selectedBrand) params.brand = selectedBrand;
-    if (selectedMaterial) params.material = selectedMaterial;
-    if (selectedSize) params.size = selectedSize;
-    if (selectedType) params.type = selectedType;
-    if (selectedColor) params.color = selectedColor;
-    if (sortPrice) params.sort = sortPrice;
-    setSearchParams(params, { replace: true });
-  }, [
-    selectedCategory,
-    selectedGender,
-    selectedBrand,
-    selectedMaterial,
-    selectedType,
-    sortPrice,
-    selectedColor,
-    setSearchParams,
-  ]);
+  // useEffect(() => {
+  //   const params = {};
+  //   if (selectedCategory) params.category = selectedCategory;
+  //   if (selectedGender) params.gender = selectedGender;
+  //   if (selectedBrand) params.brand = selectedBrand;
+  //   if (selectedMaterial) params.material = selectedMaterial;
+  //   if (selectedSize) params.size = selectedSize;
+  //   if (selectedType) params.type = selectedType;
+  //   if (selectedColor) params.color = selectedColor;
+  //   if (sortPrice) params.sort = sortPrice;
+  //   setSearchParams(params, { replace: true });
+  // }, [
+  //   selectedCategory,
+  //   selectedGender,
+  //   selectedBrand,
+  //   selectedMaterial,
+  //   selectedType,
+  //   sortPrice,
+  //   selectedColor,
+  //   setSearchParams,
+  // ]);
 
   useEffect(() => {
     const categoryFromParams = searchParams.get("category") || "";
@@ -132,6 +132,7 @@ const Products = () => {
       selectedType,
       selectedColor,
       searchTerm,
+      sortPrice,
     ],
     queryFn: async () => {
       const res = await axiosPublic.get(

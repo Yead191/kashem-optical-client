@@ -45,8 +45,8 @@ const UpdateProductModal = ({ isOpen, onClose, refetch, id }) => {
   const [manufacturer, setManufacturer] = useState("");
   const [warranty, setWarranty] = useState("");
   const [color, setColor] = useState("");
-  const [price, setPrice] = useState(0);
-  const [discountedAmount, setDiscountedAmount] = useState(0);
+  const [price, setPrice] = useState(null);
+  const [discountedAmount, setDiscountedAmount] = useState(null);
   const [description, setDescription] = useState("");
   const [collection, setCollection] = useState("");
   const [quantity, setQuantity] = useState("");
