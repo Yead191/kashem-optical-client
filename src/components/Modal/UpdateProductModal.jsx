@@ -312,9 +312,9 @@ const UpdateProductModal = ({ isOpen, onClose, refetch, id }) => {
         <DialogHeader>
           <DialogTitle className="flex justify-between items-center">
             <span>Update Product</span>
-            <button onClick={onClose} className="text-gray-500 text-2xl">
+            {/* <button onClick={onClose} className="text-gray-500 text-2xl">
               <IoMdClose />
-            </button>
+            </button> */}
           </DialogTitle>
         </DialogHeader>
 

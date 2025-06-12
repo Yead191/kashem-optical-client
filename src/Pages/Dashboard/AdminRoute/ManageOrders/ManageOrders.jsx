@@ -2,13 +2,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import useOrders from "../../../../hooks/useOrders";
 import { FaTruck } from "react-icons/fa6";
 import OrdersTable from "./OrdersTable";
-import toast from "sonner";
 import { useContext, useState } from "react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
 import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/Provider/AuthProvider";
 import Seo from "@/components/Seo/Seo";
+import { toast } from "sonner";
 
 const ManageOrders = () => {
   const [orders, isLoading, refetch] = useOrders();
