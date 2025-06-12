@@ -53,6 +53,13 @@ import useCart from "@/hooks/useCart";
 import { toast } from "sonner";
 import { ShoppingCart } from "lucide-react";
 import Seo from "../Seo/Seo";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CopyIcon } from "lucide-react";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -63,6 +70,7 @@ const ProductDetails = () => {
   const axiosPublic = useAxiosPublic();
   const [cart, cartLoading, refetch] = useCart();
   const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const {
     data: product = {},
@@ -152,6 +160,19 @@ const ProductDetails = () => {
         refetch();
       }
     }
+  };
+
+  // copy to clipboard
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast.success("PID Copied to clipboard", { duration: 2000 });
+      })
+      .catch((err) => {
+        toast.error("Failed to copy", { duration: 2000 });
+        console.error("Clipboard error:", err);
+      });
   };
 
   if (isLoading) {
@@ -252,22 +273,43 @@ const ProductDetails = () => {
         </div>
 
         {/* Right side - Product details */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
+        <div className="space-y-2">
+          {/* ratings */}
+          {/* <div className="flex items-center gap-2">
             <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} className="w-4 h-4 fill-black" />
               ))}
             </div>
             <span className="text-sm text-gray-600">11 Reviews</span>
+          </div> */}
+
+          <div className="flex items-center gap-2 group">
+            <h1 className="text-[1.6rem] md:text-[1.9rem] text-gray-800 font-semibold">
+              {product.productName}
+            </h1>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 lg:opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => copyToClipboard(product?._id)}
+                  >
+                    <CopyIcon className="h-3.5 w-3.5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy Product Id</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
-          <h1 className="text-[1.6rem] md:text-[1.9rem] text-gray-800 font-semibold">
-            {product.productName}
-          </h1>
-          <p className="text-sm mt-1">
+          <p className="text-sm ">
             <span className="font-medium">{product?.brandName}</span> • Model:{" "}
-            {product?.modelNo}
+            {product?.modelNo}{" "}
           </p>
           {product.status && (
             <p className="text-gray-800 flex items-center gap-2 ">

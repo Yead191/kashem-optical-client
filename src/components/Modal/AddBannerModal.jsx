@@ -158,8 +158,20 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
                 required
               />
             </div>
-
             <div className="col-span-2 md:col-span-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Product ID
+              </label>
+              <Input
+                name="productId"
+                type="text"
+                placeholder="Enter Product ID (e.g., PROD12345)"
+                className="w-full border-blue-200 focus:border-blue-600 focus:ring focus:ring-blue-200"
+                required
+              />
+            </div>
+
+            <div className="col-span-2 ">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload Image
               </label>
