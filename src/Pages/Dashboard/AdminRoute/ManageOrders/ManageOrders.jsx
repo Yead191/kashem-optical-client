@@ -2,7 +2,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import useOrders from "../../../../hooks/useOrders";
 import { FaTruck } from "react-icons/fa6";
 import OrdersTable from "./OrdersTable";
-import toast from "react-hot-toast";
+import toast from "sonner";
 import { useContext, useState } from "react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
@@ -18,32 +18,35 @@ const ManageOrders = () => {
   // console.log(searchPhone);
 
   const changeOrderStatus = async (id, newStatus) => {
-    await toast.promise(
+    toast.promise(
       axiosSecure.patch(`/orders/change-status/${id}`, {
         orderStatus: newStatus,
       }),
       {
         loading: "Updating Status...",
-        success: <b>Order Status Updated!</b>,
+        success: () => {
+          refetch();
+          return <b>Order Status Updated!</b>;
+        },
         error: (error) => <b>{error.message}</b>,
       }
     );
-    refetch();
   };
 
   const handlePaymentStatusChange = async (orderId, newStatus) => {
-    await toast.promise(
+    toast.promise(
       axiosSecure.patch(`/orders/payment/${orderId}`, {
         paymentStatus: newStatus,
       }),
       {
         loading: "Updating payment status...",
-        success: (response) => `Payment status updated to ${newStatus}`,
+        success: (response) => {
+          refetch();
+          return <b>Payment status updated to {newStatus}</b>;
+        },
         error: (error) => `Failed to update payment status: ${error.message}`,
       }
     );
-
-    refetch();
   };
 
   const orderStatuses = [
