@@ -35,7 +35,7 @@ export function NavUser() {
   const { user, logOut } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleLogOut = async () => {
-    await toast.promise(logOut(), {
+     toast.promise(logOut(), {
       loading: "Logging out...",
       success: <b>Log Out Successful!</b>,
       error: (err) => err.message,

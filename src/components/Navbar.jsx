@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {toast} from "sonner";
+import { toast } from "sonner";
 
 import { MdDashboard } from "react-icons/md";
 import { Typewriter } from "react-simple-typewriter";
@@ -66,7 +66,7 @@ const Navbar = () => {
     <div className="flex lg:items-center flex-col gap-3 lg:gap-4 lg:flex-row">
       <NavLink
         className={({ isActive }) =>
-          `flex items-center gap-1  ${
+          `flex items-center gap-1 transition hover:scale-105 hover:text-blue-500  ${
             isActive
               ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
               : "text-black opacity-80"
@@ -84,7 +84,7 @@ const Navbar = () => {
         {/* Products Link (clicking this navigates to /products) */}
         <NavLink
           className={() =>
-            `flex items-center gap-1 ${
+            `flex items-center gap-1 transition hover:scale-105 hover:text-blue-500 ${
               isProductsActive()
                 ? "text-blue-500 opacity-100 font-semibold border-b-2 border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
                 : "text-black opacity-80"
@@ -129,7 +129,7 @@ const Navbar = () => {
       {/* about us page */}
       <NavLink
         className={({ isActive }) =>
-          `flex items-center gap-1  ${
+          `flex items-center gap-1 transition hover:scale-105 hover:text-blue-500 ${
             isActive
               ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
               : "text-black opacity-80"
@@ -144,7 +144,7 @@ const Navbar = () => {
       {/* contact us page */}
       <NavLink
         className={({ isActive }) =>
-          `flex items-center gap-1  ${
+          `flex items-center gap-1 transition hover:scale-105 hover:text-blue-500  ${
             isActive
               ? "text-blue-500 opacity-100 font-semibold border-b-2  border-blue-500 rounded-none px-2 focus:outline-none focus:ring-0"
               : "text-black opacity-80"
@@ -160,12 +160,14 @@ const Navbar = () => {
   );
 
   const handleLogout = async () => {
-    await toast.promise(logOut(), {
+    toast.promise(logOut(), {
       loading: "Signing Out...",
-      success: <b>Logged Out Successfully!</b>,
+      success: () => {
+        refetch();
+        return <b>Logged Out Successfully!</b>;
+      },
       error: (error) => error.message,
     });
-    refetch();
   };
 
   // if (isAdminLoading) {
@@ -435,7 +437,11 @@ const Navbar = () => {
               >
                 {user?.photoURL ? (
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user?.photoURL} alt="User profile" className="object-cover"/>
+                    <AvatarImage
+                      src={user?.photoURL}
+                      alt="User profile"
+                      className="object-cover"
+                    />
                     <AvatarFallback className="rounded-lg">KO</AvatarFallback>
                   </Avatar>
                 ) : (
@@ -444,7 +450,8 @@ const Navbar = () => {
                       src={
                         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZgr9-7PZSm240VMDVsathNHVdCabXvMCxsA&s"
                       }
-                      alt="User profile" className="object-cover"
+                      alt="User profile"
+                      className="object-cover"
                     />
                   </Avatar>
                 )}

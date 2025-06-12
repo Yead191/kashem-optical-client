@@ -3,6 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { motion } from "framer-motion";
 import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
+import {
   Breadcrumb,
   BreadcrumbEllipsis,
   BreadcrumbItem,
@@ -154,6 +162,8 @@ const ProductDetails = () => {
     return <div className="text-center py-12">Product not found</div>;
   }
 
+  // console.log(product);
+
   return (
     <div className="mx-auto md:px-8 py-12 w-11/12 md:w-10/12  ">
       <Seo
@@ -268,7 +278,7 @@ const ProductDetails = () => {
                     : "text-red-500"
                 }`}
               />{" "}
-              {product.status}
+              {product.status} {product?.quantity && `(${product?.quantity})`}
             </p>
           )}
 
@@ -416,6 +426,38 @@ const ProductDetails = () => {
               </p>
             )}
           </div>
+          {product?.spectaclePrescription &&
+            Object.values(product.spectaclePrescription).some(
+              (eyeData) =>
+                eyeData.sph || eyeData.cyl || eyeData.axis || eyeData.add
+            ) && (
+              <div className="w-full  rounded-lg border shadow-sm overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Eye</TableHead>
+                      <TableHead>SPH</TableHead>
+                      <TableHead>CYL</TableHead>
+                      <TableHead>Axis</TableHead>
+                      <TableHead>ADD</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {Object.entries(product?.spectaclePrescription).map(
+                      ([eye, values]) => (
+                        <TableRow key={eye}>
+                          <TableCell className="font-medium">{eye}</TableCell>
+                          <TableCell>{values.sph || "—"}</TableCell>
+                          <TableCell>{values.cyl || "—"}</TableCell>
+                          <TableCell>{values.axis || "—"}</TableCell>
+                          <TableCell>{values.add || "—"}</TableCell>
+                        </TableRow>
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}

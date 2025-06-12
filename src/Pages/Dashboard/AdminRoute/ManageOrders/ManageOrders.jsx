@@ -77,7 +77,7 @@ const ManageOrders = () => {
 
       <Tabs defaultValue="All" className="w-full" onValueChange={setActiveTab}>
         <div className="flex flex-col lg:flex-row  gap-4 items-center">
-          <TabsList className="flex justify-start items-center lg:w-3/4 flex-wrap h-full mb-4">
+          <TabsList className="flex justify-start items-center lg:w-8/12 flex-wrap h-full mb-4">
             {orderStatuses?.map((status) => (
               <TabsTrigger
                 key={status}
@@ -101,7 +101,7 @@ const ManageOrders = () => {
             ))}
           </TabsList>
 
-          <div className="lg:w-1/4 mb-4 w-full">
+          <div className="lg:w-4/12 mb-4 w-full">
             <Input
               type="text"
               placeholder="Search order by Name / Phone no."
