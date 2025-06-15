@@ -31,6 +31,7 @@ import Confetti from "react-confetti";
 import useDiscount from "@/hooks/useDiscount";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import Seo from "@/components/Seo/Seo";
+import { set } from "date-fns";
 
 const ManageCart = () => {
   const { user } = useAuth();
@@ -40,6 +41,7 @@ const ManageCart = () => {
   const [subtotal, setSubtotal] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [discount, discountLoading] = useDiscount();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   // console.log(discount)
 
@@ -84,7 +86,7 @@ const ManageCart = () => {
           return;
         }
         const updatedQuantity = item.quantity + 1;
-        await toast.promise(
+        toast.promise(
           axiosPublic.patch(`/carts/quantity/${itemId}`, {
             quantity: updatedQuantity,
           }),
@@ -204,7 +206,7 @@ const ManageCart = () => {
     try {
       if (user) {
         // Server-side clear for authorized users
-        await toast.promise(axiosPublic.delete(`/carts/clear/${user?.email}`), {
+        toast.promise(axiosPublic.delete(`/carts/clear/${user?.email}`), {
           loading: "Clearing Cart...",
           success: () => {
             refetch();
@@ -225,6 +227,13 @@ const ManageCart = () => {
     }
   };
 
+  // Bangladeshi phone number validation
+  const validateBangladeshiNumber = (number) => {
+    const cleanNumber = number.replace(/[^\d]/g, "");
+    const bdNumberRegex = /^01[3-9][0-9]{8}$/;
+    return bdNumberRegex.test(cleanNumber);
+  };
+
   const handleConfirmOrder = async () => {
     if (
       !customerInfo.name ||
@@ -235,6 +244,10 @@ const ManageCart = () => {
       !customerInfo.address
     ) {
       return toast.error("Please fill in all required fields");
+    }
+
+    if (customerInfo.phone && !validateBangladeshiNumber(customerInfo.phone)) {
+      return toast.error("Please enter a valid Bangladeshi phone number");
     }
 
     const orderData = {
@@ -257,6 +270,7 @@ const ManageCart = () => {
     };
 
     try {
+      setLoading(true);
       toast.promise(axiosPublic.post("/orders", orderData), {
         loading: "Placing your order...",
         success: async () => {
@@ -267,6 +281,7 @@ const ManageCart = () => {
             // Clear local storage cart for unauthorized users
             localStorage.removeItem("cart");
           }
+          setLoading(false);
           refetch();
           setShowConfetti(true);
           setTimeout(() => {
@@ -283,6 +298,7 @@ const ManageCart = () => {
           return <b>Order placed successfully!</b>;
         },
         error: (error) => {
+          setLoading(false);
           const errorMessage =
             error.response?.data?.error ||
             error.message ||
@@ -291,6 +307,7 @@ const ManageCart = () => {
         },
       });
     } catch (error) {
+      setLoading(false);
       console.error("Error placing order:", error);
     }
   };
@@ -457,9 +474,13 @@ const ManageCart = () => {
               <Input
                 type="tel"
                 id="phone"
+                inputMode="numeric"
                 placeholder="Enter Your Phone Number!"
                 value={phone}
+                pattern="\01[3-9][0-9]{8}"
+                maxLength={11}
                 onChange={(e) => setPhone(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -521,11 +542,17 @@ const ManageCart = () => {
           </div>
           <Button
             onClick={handleConfirmOrder}
-            disabled={!cart.length}
+            disabled={!cart.length || loading}
             className="w-full"
             size="lg"
           >
-            Confirm Order
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                Placing Order...
+              </span>
+            ) : (
+              "Confirm Order"
+            )}
           </Button>
         </div>
       </div>
