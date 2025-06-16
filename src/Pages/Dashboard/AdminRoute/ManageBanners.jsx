@@ -1,22 +1,69 @@
 import React, { useState } from "react";
 import Seo from "../../../components/Seo/Seo";
-import { Button } from "@headlessui/react";
-import { IoMdAddCircle } from "react-icons/io";
-import AddBannerModal from "../../../components/Modal/AddBannerModal";
-import { useQuery } from "react-query";
-import { Menu } from "@headlessui/react";
+import { Button } from "@/components/ui/button";
 import {
-  ChevronDownIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
-import { Ellipsis, TicketSlash } from "lucide-react";
-import { Minus } from "lucide-react";
-import toast from "react-hot-toast";
+  PlusCircle,
+  ChevronDown,
+  Edit,
+  Trash2,
+  Ellipsis,
+  TicketSlash,
+} from "lucide-react";
+import { useQuery } from "react-query";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {toast} from "sonner";
 import Swal from "sweetalert2";
-import { Switch } from "@headlessui/react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { IoMdAddCircle } from "react-icons/io";
+import AddBannerModal from "@/components/Modal/AddBannerModal";
+
+// Placeholder for AddBannerModal, adapted to shadcn Dialog
+// const AddBannerModal = ({ isOpen, onClose, refetch }) => {
+//   // Assuming AddBannerModal has a form; this is a placeholder
+//   return (
+//     <Dialog open={isOpen} onOpenChange={onClose}>
+//       <DialogContent>
+//         <DialogHeader>
+//           <DialogTitle>Add New Banner</DialogTitle>
+//         </DialogHeader>
+//         {/* Placeholder form; replace with actual AddBannerModal content */}
+//         <div className="p-4">
+//           <p>Form to add banner goes here</p>
+//           <Button
+//             onClick={() => {
+//               refetch();
+//               onClose();
+//             }}
+//           >
+//             Save
+//           </Button>
+//         </div>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// };
 
 const ManageBanners = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,30 +75,23 @@ const ManageBanners = () => {
       return res.data;
     },
   });
-  // console.log(banners);
-  // const handleStatus = async (id, val) => {
-  //     // console.log(id, val);
-  //     await toast.promise(axiosSecure.patch(`/banner/status/${id}`, { status: val }), {
-  //         loading: "Updating Status...",
-  //         success: "Status Updated Successfully!",
-  //         error: "Could not Update!"
-  //     });
-  //     refetch();
-  // };
+
   const handleStatusToggle = async (id, currentStatus) => {
     const newStatus = currentStatus === "added" ? "removed" : "added";
     await toast.promise(
       axiosSecure.patch(`/banner/status/${id}`, { status: newStatus }),
       {
         loading: "Updating Status...",
-        success: "Status Updated Successfully!",
+        success: ()=>{
+          refetch()
+          return <b>Status Updated Successfully!</b>
+        },
         error: "Could not Update!",
       }
     );
-    refetch();
+    // refetch();
   };
 
-  // console.log(products);
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -64,7 +104,6 @@ const ManageBanners = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/banner/delete/${id}`).then((res) => {
-          // console.log(res);
           if (res.data.deletedCount > 0) {
             refetch();
             Swal.fire({
@@ -79,8 +118,8 @@ const ManageBanners = () => {
   };
 
   return (
-    <div className="container mx-auto  p-2">
-      <Seo title={"Banners | Kashem Optical"}></Seo>
+    <div className="container mx-auto p-2">
+      <Seo title={"Banners | Kashem Optical"} />
       <DashboardPagesHeader
         icon={TicketSlash}
         title={"Manage Banners"}
@@ -97,127 +136,75 @@ const ManageBanners = () => {
       </div>
       <div className="my-8">
         <div className="overflow-x-auto">
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Created At</th>
-                <th>Banner Status</th>
-                <th className="flex justify-end">Action</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Image</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Created At</TableHead>
+                <TableHead>Banner Status</TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {banners?.reverse().map((banner, idx) => (
-                <tr key={banner._id} className="hover">
-                  <th>{idx + 1}</th>
-                  <td>
-                    <div className="flex items-center ">
-                      <div className="avatar">
-                        <div className=" h-14 w-32">
-                          <img
-                            src={banner?.image}
-                            alt="Banner"
-                            className="w-full rounded-lg"
-                          />
-                        </div>
+                <TableRow key={banner._id}>
+                  <TableCell>{idx + 1}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      <div className="w-20">
+                        <img
+                          src={banner?.image}
+                          alt="Banner"
+                          className="w-full rounded-lg"
+                        />
                       </div>
                     </div>
-                  </td>
-                  <td>{banner?.title}</td>
-                  <td>{banner?.createdAt}</td>
-                  <td>
+                  </TableCell>
+                  <TableCell>{banner?.title}</TableCell>
+                  <TableCell>{banner?.createdAt}</TableCell>
+                  <TableCell>
                     <Switch
                       checked={banner?.status === "added"}
-                      onChange={() =>
+                      onCheckedChange={() =>
                         handleStatusToggle(banner._id, banner?.status)
                       }
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full 
-            ${banner?.status === "added" ? "bg-green-500" : "bg-gray-300"}`}
-                    >
-                      <span className="sr-only">Toggle Banner Status</span>
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition
-                ${
-                  banner?.status === "added" ? "translate-x-6" : "translate-x-1"
-                }`}
-                      />
-                    </Switch>
-                  </td>
-                  <td className="flex justify-end">
-                    <Menu as="div" className="relative inline-block text-left">
-                      <Menu.Button className="inline-flex items-center gap-2 rounded-md bg-transparent border py-1.5 px-3 text-sm font-semibold text-black shadow-inner shadow-white/10 hover:bg-base-100 focus:outline-none">
-                        <Ellipsis />
-                        <ChevronDownIcon className="w-4 h-4 text-black/60" />
-                      </Menu.Button>
-
-                      <Menu.Items className="absolute right-0 mt-2 w-40 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                        <div className="py-1">
-                          {/* Add/Remove Banner */}
-                          {/* <Menu.Item>
-                                                            {
-                                                                banner?.status === 'added' ?
-                                                                    <button
-                                                                        onClick={() => handleStatus(banner._id, "removed")}
-                                                                        className={` group flex items-center w-full px-4 py-2 text-sm text-gray-900 hover:bg-gray-100`}
-                                                                    >
-                                                                        <Minus className="w-5 h-5 mr-2 text-gray-500" />
-                                                                        Remove Banner
-                                                                    </button>
-                                                                    :
-                                                                    <button
-                                                                        onClick={() => handleStatus(banner._id, "added")}
-                                                                        className="group flex items-center w-full px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
-                                                                    >
-                                                                        <IoMdAddCircle className="w-5 h-5 mr-2 text-gray-500" />
-                                                                        Add Banner
-                                                                    </button>
-                                                            }
-                                                        </Menu.Item> */}
-
-                          {/* Update Banner */}
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={`${
-                                  active ? "bg-gray-100" : ""
-                                } group flex items-center w-full px-4 py-2 text-sm text-gray-900`}
-                              >
-                                <PencilIcon className="w-5 h-5 mr-2 text-gray-500" />
-                                Update Banner
-                              </button>
-                            )}
-                          </Menu.Item>
-
-                          {/* Delete Banner */}
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                onClick={() => handleDelete(banner._id)}
-                                className={`${
-                                  active
-                                    ? "bg-red-100 text-red-700"
-                                    : "text-red-600"
-                                } group flex items-center w-full px-4 py-2 text-sm`}
-                              >
-                                <TrashIcon className="w-5 h-5 mr-2" />
-                                Delete Banner
-                              </button>
-                            )}
-                          </Menu.Item>
-                        </div>
-                      </Menu.Items>
-                    </Menu>
-                  </td>
-                </tr>
+                      className="data-[state=checked]:bg-green-500"
+                    />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="inline-flex items-center gap-2"
+                        >
+                          <Ellipsis className="h-5 w-5" />
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>
+                          <Edit className="h-5 w-5 mr-2" />
+                          Update Banner
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => handleDelete(banner._id)}
+                        >
+                          <Trash2 className="h-5 w-5 mr-2" />
+                          Delete Banner
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
-      {/* Modal Component */}
       <AddBannerModal
         refetch={refetch}
         isOpen={isModalOpen}
