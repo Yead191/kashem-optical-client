@@ -39,31 +39,6 @@ import {
 import { IoMdAddCircle } from "react-icons/io";
 import AddBannerModal from "@/components/Modal/AddBannerModal";
 
-// Placeholder for AddBannerModal, adapted to shadcn Dialog
-// const AddBannerModal = ({ isOpen, onClose, refetch }) => {
-//   // Assuming AddBannerModal has a form; this is a placeholder
-//   return (
-//     <Dialog open={isOpen} onOpenChange={onClose}>
-//       <DialogContent>
-//         <DialogHeader>
-//           <DialogTitle>Add New Banner</DialogTitle>
-//         </DialogHeader>
-//         {/* Placeholder form; replace with actual AddBannerModal content */}
-//         <div className="p-4">
-//           <p>Form to add banner goes here</p>
-//           <Button
-//             onClick={() => {
-//               refetch();
-//               onClose();
-//             }}
-//           >
-//             Save
-//           </Button>
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// };
 
 const ManageBanners = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
