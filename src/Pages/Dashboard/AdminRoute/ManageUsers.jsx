@@ -5,7 +5,6 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Seo from "../../../components/Seo/Seo";
 import toast from "react-hot-toast";
 import Spinner from "../../../components/Spinner/Spinner";
-import Select from "react-select";
 import { useState } from "react";
 import {
   Input,
