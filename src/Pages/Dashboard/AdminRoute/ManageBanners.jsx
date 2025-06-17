@@ -25,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import Swal from "sweetalert2";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import DashboardPagesHeader from "@/components/DashboardPagesHeader";
@@ -38,10 +38,12 @@ import {
 } from "@/components/ui/dialog";
 import { IoMdAddCircle } from "react-icons/io";
 import AddBannerModal from "@/components/Modal/AddBannerModal";
-
+import UpdateBannerModal from "@/components/Modal/UpdateBannerModal";
 
 const ManageBanners = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedBanner, setSelectedBanner] = useState(null);
   const axiosSecure = useAxiosSecure();
   const { data: banners = [], refetch } = useQuery({
     queryKey: ["banners"],
@@ -57,9 +59,9 @@ const ManageBanners = () => {
       axiosSecure.patch(`/banner/status/${id}`, { status: newStatus }),
       {
         loading: "Updating Status...",
-        success: ()=>{
-          refetch()
-          return <b>Status Updated Successfully!</b>
+        success: () => {
+          refetch();
+          return <b>Status Updated Successfully!</b>;
         },
         error: "Could not Update!",
       }
@@ -128,11 +130,11 @@ const ManageBanners = () => {
                   <TableCell>{idx + 1}</TableCell>
                   <TableCell>
                     <div className="flex items-center">
-                      <div className="w-20">
+                      <div className="w-20 ">
                         <img
                           src={banner?.image}
                           alt="Banner"
-                          className="w-full rounded-lg"
+                          className="w-full h-12 object-cover rounded-lg"
                         />
                       </div>
                     </div>
@@ -160,7 +162,13 @@ const ManageBanners = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedBanner(banner);
+                            // Open the update modal and pass the selected banner
+                            setIsUpdateModalOpen(true);
+                          }}
+                        >
                           <Edit className="h-5 w-5 mr-2" />
                           Update Banner
                         </DropdownMenuItem>
@@ -184,6 +192,12 @@ const ManageBanners = () => {
         refetch={refetch}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+      <UpdateBannerModal
+        banner={selectedBanner}
+        refetch={refetch}
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
       />
     </div>
   );

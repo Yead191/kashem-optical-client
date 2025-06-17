@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -36,33 +36,37 @@ const modalVariants = {
   },
 };
 
-const AddBannerModal = ({ isOpen, onClose, refetch }) => {
+const UpdateBannerModal = ({ isOpen, onClose, refetch, banner }) => {
   const [imageLoading, setImageLoading] = useState(false);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(banner?.image || null);
   const axiosSecure = useAxiosSecure();
   const [categories, categoriesLoading] = useCategory();
+
+  useEffect(() => {
+    setFile(banner?.image || null);
+  }, [banner]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formValues = Object.fromEntries(formData.entries());
-    const newBanner = {
+    const updatedBanner = {
       ...formValues,
       image: file,
-      status: "added",
-      createdAt: new Date().toISOString().split("T")[0],
+      status: "updated",
+      updatedAt: new Date().toISOString().split("T")[0],
     };
-    // console.log(newBanner);
-    toast.promise(axiosSecure.post("/banners", newBanner), {
-      loading: "Banner Uploading...",
+
+    toast.promise(axiosSecure.patch(`/banners/update/${banner._id}`, updatedBanner), {
+      loading: "Updating Banner...",
       success: () => {
         refetch();
         e.target.reset();
         setFile(null);
         onClose();
-        return <b>Banner Uploaded Successfully!</b>;
+        return <b>Banner Updated Successfully!</b>;
       },
-      error: <b>Unable to Upload. Try Again!</b>,
+      error: <b>Unable to Update. Try Again!</b>,
     });
   };
 
@@ -91,16 +95,8 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
           <DialogHeader>
             <div className="flex justify-between items-center">
               <DialogTitle className="text-2xl font-bold text-blue-700">
-                Add New Banner
+                Update Banner
               </DialogTitle>
-              {/* <Button
-                variant="ghost"
-                size="icon"
-                onClick={onClose}
-                className="text-gray-500 hover:text-blue-600"
-              >
-                <IoMdClose size={24} />
-              </Button> */}
             </div>
           </DialogHeader>
           <div className="mt-4">
@@ -113,7 +109,6 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
             )}
           </div>
 
-          {/* Form */}
           <form
             onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -125,6 +120,7 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
               <Input
                 name="title"
                 type="text"
+                defaultValue={banner?.title}
                 placeholder="Enter Product Name (e.g., Ray-Ban Aviator)"
                 className="w-full border-blue-200 focus:border-blue-600 focus:ring focus:ring-blue-200"
                 required
@@ -135,7 +131,7 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Category
               </label>
-              <Select name="category" required>
+              <Select name="category" defaultValue={banner?.category} required>
                 <SelectTrigger className="w-full border-blue-200 focus:border-blue-600 focus:ring focus:ring-blue-200">
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
@@ -156,6 +152,7 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
               <Input
                 name="price"
                 type="text"
+                defaultValue={banner?.price}
                 placeholder="Enter Price (e.g., ৳1200)"
                 className="w-full border-blue-200 focus:border-blue-600 focus:ring focus:ring-blue-200"
                 required
@@ -168,13 +165,14 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
               <Input
                 name="productId"
                 type="text"
+                defaultValue={banner?.productId}
                 placeholder="Enter Product ID (e.g., PROD12345)"
                 className="w-full border-blue-200 focus:border-blue-600 focus:ring focus:ring-blue-200"
                 required
               />
             </div>
 
-            <div className="col-span-2 ">
+            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload Image
               </label>
@@ -184,7 +182,6 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
                 className="w-full border-blue-200 focus:border-blue-600"
                 accept="image/*"
                 onChange={handleUpload}
-                required
               />
             </div>
 
@@ -194,7 +191,7 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white hover:from-teal-600 hover:to-blue-600"
               >
-                {imageLoading ? "Please Wait..." : "Add Banner"}
+                {imageLoading ? "Please Wait..." : "Update Banner"}
               </Button>
             </div>
           </form>
@@ -204,4 +201,4 @@ const AddBannerModal = ({ isOpen, onClose, refetch }) => {
   );
 };
 
-export default AddBannerModal;
+export default UpdateBannerModal;

@@ -285,9 +285,11 @@ const BannerComponent = () => {
                                   </div>
                                 </div>
                                 <Link
-                                  to={`/products?search=${product.title
-                                    .toLowerCase()
-                                    .replace(/\s+/g, "-")}`}
+                                  to={
+                                    product?.productId
+                                      ? `/product/${product?.productId}`
+                                      : "#"
+                                  }
                                   className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 text-white backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
                                 >
                                   <FiArrowRight size={20} />
