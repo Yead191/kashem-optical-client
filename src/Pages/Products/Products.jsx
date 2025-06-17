@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Spinner from "../../components/Spinner/Spinner";
 import useCategory from "../../hooks/useCategory";
-import "react-dropdown/style.css";
 import { Link, useSearchParams } from "react-router-dom";
 import Seo from "../../components/Seo/Seo";
 import Select from "react-select";
