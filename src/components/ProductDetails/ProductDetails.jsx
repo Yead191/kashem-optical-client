@@ -211,7 +211,7 @@ const ProductDetails = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-2">
         {/* Left side - Image gallery */}
         <div className="space-y-2">
           {" "}
