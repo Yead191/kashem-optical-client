@@ -24,7 +24,7 @@ const CartDropdown = ({ cart }) => {
       {/* Cart Icon with Badge */}
       <DropdownMenuTrigger asChild>
         <button className="relative flex items-center justify-center p-1 rounded-full hover:bg-gray-100">
-          <ShoppingCart size={25} />
+          <ShoppingCart size={20} />
           <Badge className="absolute -top-1.5 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-blue-600 text-white text-xs">
             {cart?.length || 0}
           </Badge>

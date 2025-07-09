@@ -9,6 +9,7 @@ import {
   LogOut,
   Settings,
   Package,
+  UserPenIcon,
 } from "lucide-react";
 
 import { useState } from "react";
@@ -31,7 +32,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
+import UpdateProfile from "./UpdateProfile";
+import CartDropdown from "./CartDropDown";
+import useCart from "@/hooks/useCart";
+import { toast } from "sonner";
 
 const powerGlassTypes = [
   {
@@ -57,29 +63,55 @@ const powerGlassTypes = [
 ];
 
 export default function AppBar() {
+  const { user, logOut, updateUserProfile, setLoading, loading } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cartItems, setCartItems] = useState(3); // Example cart count
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
+  const [cartItems, setCartItems] = useState(3);
+  const location = useLocation();
+  const [cart, cartLoading, refetch] = useCart();
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    toast.warning("Are you sure you want to log out?", {
+      duration: 5000,
+      description: "You will be logged out and redirected to the login page.",
+      action: {
+        label: "Logout",
+        onClick: async () => {
+          toast.promise(logOut(), {
+            loading: "Signing Out...",
+            success: () => {
+              refetch();
+              return <b>Logged Out Successfully!</b>;
+            },
+            error: (error) => error.message,
+          });
+        },
+      },
+    });
+  };
+
+  const pathname = location.pathname;
+
+  const listStyle = `text-sm font-medium  hover:text-primary before:w-0 hover:before:w-full before:bg-[#3B9DF8] before:h-[2px] before:transition-all before:duration-300 before:absolute relative before:rounded-full before:bottom-[-2px] dark:text-[#abc2d3] hover:text-[#3B9DF8] transition-all duration-300 before:left-0 cursor-pointer capitalize `;
+  const isActive = (path) => {
+    return pathname === path ? "text-[#3B9DF8] " : "";
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
-      <div className="px-4 md:px-6 lg:px-16 flex h-16 items-center justify-between ">
+    <header className=" w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
+      <div className="px-4 md:px-6   flex h-16 items-center justify-between lg:w-10/12 mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <Package className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold text-primary">Kashem Optical</span>
+          <Package className="h-6 w-6 text-indigo-600" />
+          <span className="text-xl font-bold text-indigo-600">
+            Kashem Optical
+          </span>
         </Link>
 
         {/* Search Bar - Hidden on mobile */}
-        <div className="hidden md:flex flex-1 max-w-md mx-8">
+        <div className="hidden md:flex flex-1 max-w-lg mx-8">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -94,16 +126,17 @@ export default function AppBar() {
         <div className="flex items-center space-x-4">
           {/* Desktop Navigation Menu */}
           <nav className="hidden lg:flex items-center space-x-6">
-            <Link
-              to="/"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
+            <Link to="/" className={`${listStyle} ${isActive("/")}`}>
               Home
             </Link>
 
             {/* Shop Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-sm font-medium transition-colors hover:text-primary">
+              <DropdownMenuTrigger
+                className={`flex items-center ${listStyle} ${isActive(
+                  "/shop"
+                )} `}
+              >
                 Shop
                 <ChevronRight className="ml-1 h-3 w-3 rotate-90" />
               </DropdownMenuTrigger>
@@ -223,34 +256,23 @@ export default function AppBar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link
-              to="/about"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
+            <Link to="/about" className={`${listStyle} ${isActive("/about")}`}>
               About Us
             </Link>
 
             <Link
               to="/contact"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className={`${listStyle} ${isActive("/contact")}`}
             >
               Contact Us
             </Link>
           </nav>
 
           {/* Shopping Cart */}
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingCart className="h-5 w-5" />
-            {cartItems > 0 && (
-              <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                {cartItems}
-              </Badge>
-            )}
-            <span className="sr-only">Shopping cart</span>
-          </Button>
+          <CartDropdown cart={cart}></CartDropdown>
 
           {/* User Profile / Login */}
-          {isLoggedIn ? (
+          {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -258,35 +280,31 @@ export default function AppBar() {
                   className="relative h-8 w-8 rounded-full"
                 >
                   <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src="/placeholder.svg?height=32&width=32"
-                      alt="User"
-                    />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarImage src={user?.photoURL} alt="User" />
+                    <AvatarFallback>KO</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">John Doe</p>
+                    <p className="text-sm font-medium leading-none">
+                      {" "}
+                      {user?.displayName || user?.name || "No User"}
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      john@example.com
+                      {user?.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
+                <DropdownMenuItem onClick={() => setIsModalOpen(true)}>
+                  <UserPenIcon className="mr-2 h-4 w-4" />
+                  <span>Update Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Package className="mr-2 h-4 w-4" />
                   <span>Orders</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
@@ -296,9 +314,9 @@ export default function AppBar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button onClick={handleLogin} size="sm">
-              Login
-            </Button>
+            <Link to="/login" className="hidden md:flex">
+              <Button size="">Login</Button>
+            </Link>
           )}
 
           {/* Mobile Menu Trigger */}
@@ -327,14 +345,17 @@ export default function AppBar() {
 
                 {/* Mobile User Section */}
                 <div className="flex items-center justify-between border-b pb-4">
-                  {isLoggedIn ? (
+                  {user ? (
                     <div className="flex items-center space-x-2">
                       <Avatar className="h-8 w-8">
                         <AvatarImage
-                          src="/placeholder.svg?height=32&width=32"
+                          src={
+                            user?.photoURL ||
+                            "/placeholder.svg?height=32&width=32"
+                          }
                           alt="User"
                         />
-                        <AvatarFallback>JD</AvatarFallback>
+                        <AvatarFallback>KO</AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="text-sm font-medium">John Doe</p>
@@ -344,9 +365,11 @@ export default function AppBar() {
                       </div>
                     </div>
                   ) : (
-                    <Button onClick={handleLogin} size="sm" className="w-full">
-                      Login
-                    </Button>
+                    <Link to="/login">
+                      <Button size="md" className="w-full">
+                        Login
+                      </Button>
+                    </Link>
                   )}
                 </div>
 
@@ -541,7 +564,7 @@ export default function AppBar() {
                   </Link>
 
                   {/* Mobile Logout */}
-                  {isLoggedIn && (
+                  {user && (
                     <Button
                       variant="outline"
                       onClick={() => {
@@ -560,6 +583,13 @@ export default function AppBar() {
           </Sheet>
         </div>
       </div>
+      {/* update profile modal */}
+      {isModalOpen && (
+        <UpdateProfile
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        ></UpdateProfile>
+      )}
     </header>
   );
 }

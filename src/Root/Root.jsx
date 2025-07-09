@@ -19,7 +19,7 @@ const Root = () => {
   return (
     <div className="flex flex-col min-h-screen ">
       <ScrollRestoration />
-      <nav className="h-[64px]">
+      <nav className="sticky top-0 z-50">
         {/* <Navbar></Navbar> */}
         <AppBar />
       </nav>
