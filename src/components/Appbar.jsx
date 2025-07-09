@@ -2,26 +2,14 @@
 
 import {
   ChevronRight,
-  Menu,
   Search,
-  ShoppingCart,
-  User,
   LogOut,
-  Settings,
   Package,
   UserPenIcon,
 } from "lucide-react";
-
 import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -31,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
 import { Link, useLocation } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import UpdateProfile from "./UpdateProfile";
@@ -66,10 +54,7 @@ const powerGlassTypes = [
 export default function AppBar() {
   const { user, logOut, updateUserProfile, setLoading, loading } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cartItems, setCartItems] = useState(3);
   const location = useLocation();
   const [cart, cartLoading, refetch] = useCart();
 
@@ -148,19 +133,19 @@ export default function AppBar() {
                     <h4 className="text-sm font-semibold">Sunglass</h4>
                     <div className="space-y-2">
                       <Link
-                        to="/shop/sunglass/baby"
+                        to="/shop?category=sunglass&gender=kids"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        Baby Sunglass
+                        Kids Sunglass
                       </Link>
                       <Link
-                        to="/shop/sunglass/ladies"
+                        to="/shop?category=sunglass&gender=ladies"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Ladies Sunglass
                       </Link>
                       <Link
-                        to="/shop/sunglass/mens"
+                        to="/shop/?category=sunglass&gender=mens"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Men's Sunglass
@@ -206,7 +191,7 @@ export default function AppBar() {
                       {powerGlassTypes.slice(0, 3).map((type) => (
                         <Link
                           key={type.name}
-                          to={`/shop/power-glass/${type.name
+                          to={`/shop?category=power-glass&subcategory=${type.name
                             .toLowerCase()
                             .replace(" ", "-")}`}
                           className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -228,25 +213,25 @@ export default function AppBar() {
                     <h4 className="text-sm font-semibold">Accessories</h4>
                     <div className="space-y-2">
                       <Link
-                        to="/shop/watch"
+                        to="/shop?category=watch"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Watch
                       </Link>
                       <Link
-                        to="/shop/ring"
+                        to="/shop?category=ring"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Ring
                       </Link>
                       <Link
-                        to="/shop/bracelet"
+                        to="/shop?category=bracelet"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Bracelet
                       </Link>
                       <Link
-                        to="/shop/moneybag"
+                        to="/shop?category=moneybag"
                         className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Moneybag

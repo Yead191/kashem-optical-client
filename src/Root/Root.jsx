@@ -16,6 +16,7 @@ const Root = () => {
   if (loading) {
     return <Spinner></Spinner>;
   }
+  
   return (
     <div className="flex flex-col min-h-screen ">
       <ScrollRestoration />
