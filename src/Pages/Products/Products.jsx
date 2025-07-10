@@ -141,25 +141,6 @@ const Products = () => {
     },
   });
 
-  // useEffect(() => {
-  //   const handler = setTimeout(() => {
-  //     refetch();
-  //   }, 500);
-
-  //   return () => clearTimeout(handler);
-  // }, [
-  //   searchTerm,
-  //   selectedCategory,
-  //   selectedGender,
-  //   selectedBrand,
-  //   selectedMaterial,
-  //   selectedType,
-  //   selectedColor,
-  //   sortPrice,
-  //   priceRange,
-  //   refetch,
-  // ]);
-
   const handleCategorySelect = (category) => {
     setSortPrice("");
     setSelectedCategory(category);
@@ -188,6 +169,12 @@ const Products = () => {
   // }
 
   // Filter Sidebar Component
+
+  useEffect(() => {
+    if (searchParams.get("search")) {
+      setSearchTerm(searchParams.get("search"));
+    }
+  }, [searchParams.get("search")]);
   const FilterSidebar = () => (
     <div className="w-full lg:w-64 shrink-0 lg:block hidden">
       <motion.aside className="w-full bg-white  p-6 h-fit sticky top-28 shadow-md border rounded-lg">

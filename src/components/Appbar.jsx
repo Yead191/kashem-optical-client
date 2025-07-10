@@ -7,7 +7,7 @@ import {
   Package,
   UserPenIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import UpdateProfile from "./UpdateProfile";
 import CartDropdown from "./CartDropDown";
@@ -57,6 +57,8 @@ export default function AppBar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const [cart, cartLoading, refetch] = useCart();
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     toast.warning("Are you sure you want to log out?", {
@@ -84,6 +86,16 @@ export default function AppBar() {
   const isActive = (path) => {
     return pathname === path ? "text-[#3B9DF8] " : "";
   };
+  const handleSearch = () => {
+    console.log("Searching for:", searchTerm);
+    // You can call an API or filter data here
+    navigate(`/shop?search=${searchTerm}`);
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchTerm.trim() !== "") {
+      handleSearch();
+    }
+  };
 
   return (
     <header className=" w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
@@ -99,8 +111,12 @@ export default function AppBar() {
         {/* Search Bar - Hidden on mobile */}
         <div className="hidden md:flex flex-1 max-w-lg mx-8">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search
+              className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2  text-muted-foreground`}
+            />
             <Input
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
               type="search"
               placeholder="Search for glasses, frames, watches..."
               className="pl-10 w-full"
