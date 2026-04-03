@@ -32,8 +32,8 @@ function GenderSection() {
   ];
 
   return (
-    <section className="w-full py-12 p-2 md:w-11/12 lg:w-10/12 mx-auto bg-white">
-      <div className="container mx-auto px-4">
+    <section className="w-full py-12  md:w-11/12 lg:w-10/12 mx-auto bg-white">
+      <div className="container mx-auto px-4 lg:px-0">
         <h2 className="text-3xl font-bold text-start mb-8">
           Who are you shopping for?
         </h2>
