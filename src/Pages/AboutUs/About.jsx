@@ -76,7 +76,7 @@ function AboutPage() {
         </div>
         <div className="relative h-[400px] rounded-lg overflow-hidden">
           <img
-            src="https://placehold.co/600x400"
+            src="/about.jpg"
             alt="Kashem Optical store"
             className="object-cover w-full h-full"
           />
