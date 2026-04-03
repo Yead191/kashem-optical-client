@@ -139,7 +139,8 @@ function ContactPage() {
             </Card>
 
             <div className="h-[400px] rounded-lg overflow-hidden border z-0">
-              <ContactMap latitude={22.94008} longitude={90.8285} />
+              {/* <ContactMap latitude={22.94008} longitude={90.8285} /> */}
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d386.21054446620457!2d90.82847127991386!3d22.940111265433412!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3754c3c384b70db3%3A0x4f0e7f1999266f57!2z4KaV4Ka-4Ka24KeH4KauIOCmheCmquCnjeCmn-Cmv-CmleCnjeCmr-CmvuCmsg!5e0!3m2!1sen!2sbd!4v1775193762644!5m2!1sen!2sbd" width="100%" height="400" style={{ border: 0 }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
           </div>
         </div>
